@@ -74,14 +74,7 @@ class SalesController extends Controller
         foreach($MGIConfig as $key => $value){
             $MGIs[$key] = $value[0];
         }
-
-		$TenorConfig = config('tenor');
-        $Tenors = [];
-        $Tenors[null] = "Select Tenor";
-        foreach($TenorConfig as $key => $value){
-            $Tenors[$key] = $value[0];
-        }
-        return view('sales.create', compact('sale', 'page_title', 'page_description', 'MGIs','Tenors','branch_offices'));
+        return view('sales.create', compact('sale', 'page_title', 'page_description', 'MGIs','branch_offices'));
     }
 
     /**
@@ -227,14 +220,9 @@ class SalesController extends Controller
             foreach($MGIConfig as $key => $value){
                 $MGIs[$key] = $value[0];
             }
-			$TenorConfig = config('tenor');
-            $Tenors = [];
-            foreach($TenorConfig as $key => $value){
-                $Tenors[$key] = $value[0];
-            }
 			$branchOfficeName = BranchOffice::getBranchOfficeFromId($sale->branch_office_id)->branch_name;
 			$customerName = Customer::getCustomerFromId($sale->customer_id)->name;
-            return view('sales.show', compact('sale', 'page_title', 'page_description', 'MGIs','Tenors','branchOfficeName','customerName'));
+            return view('sales.show', compact('sale', 'page_title', 'page_description', 'MGIs','branchOfficeName','customerName'));
 
         }else{
             Flash::error( trans('sales/general.error.no-data') );
@@ -263,17 +251,12 @@ class SalesController extends Controller
             foreach($MGIConfig as $key => $value){
                 $MGIs[$key] = $value[0];
             }
-			$TenorConfig = config('tenor');
-            $Tenors = [];
-            foreach($TenorConfig as $key => $value){
-                $Tenors[$key] = $value[0];
-            }
             $agents = Agent::getAgents_ForDropDown();
             if($sale->agent == null) $agents = ["-" => "None"] + Agent::getAgents_ForDropDown();
             $customers = Customer::getCustomers_ForDropDown();
             if($sale->customer == null) $customers = ["-" => "None"] + Customer::getCustomers_ForDropDown();
 
-            return view('sales.edit', compact('sale', 'agents', 'customers', 'page_title', 'page_description', 'MGIs','Tenors'));
+            return view('sales.edit', compact('sale', 'agents', 'customers', 'page_title', 'page_description', 'MGIs'));
 
         } else {
             if($sale == null) {
@@ -455,12 +438,7 @@ class SalesController extends Controller
         foreach($MGIConfig as $key => $value){
             $MGIs[$key] = $value[0];
         }
-		$TenorConfig = config('tenor');
-		$Tenors = [];
-		foreach($TenorConfig as $key => $value){
-			$Tenors[$key] = $value[0];
-		}
-        return view('sales.rollover', compact('sale', 'oldSale', 'reminder_id', 'page_title', 'page_description', 'MGIs','Tenors'));
+        return view('sales.rollover', compact('sale', 'oldSale', 'reminder_id', 'page_title', 'page_description', 'MGIs'));
     }
 
     public function interest($id){
