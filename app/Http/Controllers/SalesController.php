@@ -123,10 +123,20 @@ class SalesController extends Controller
                 $newSale->agent_commission = Sale::getSaleCommissionPercentage($newSale);
 				$custid = $newSale->customer_id;
 
-                $newSale->is_active = 2;
                 if(Auth::getUser()->hasRole('owner'))
                 {
                   $newSale->is_active = 1;
+                }
+                else {
+                  $newSale->is_active = 2;
+                  $branchName = BranchOffice::getBranchOfficeFromId($attributes["branch_office_id"])->branch_name;
+                  $approvalAttributes = [];
+                  $approvalAttributes["user_id"] = Auth::user()->id;
+                  $approvalAttributes["subject"] = "Add New Sales";
+                  $approvalAttributes["description"] = "<a href='/sales/'".$attributes["id"].">"$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
+                  $approvalAttributes["is_approved"] = 0;
+                  $newApproval = Approval::create($approvalAttributes);
+                  $newApproval->save($approvalAttributes);
                 }
 
                 $newSale->save($attributes);
@@ -165,10 +175,20 @@ class SalesController extends Controller
                 $newSale->customer_name = Customer::getCustomerFromId($newSale->customer_id)->name;
                 $newSale->agent_commission = Sale::getSaleCommissionPercentage($newSale);
 
-                $newSale->is_active = 2;
                 if(Auth::getUser()->hasRole('owner'))
                 {
                   $newSale->is_active = 1;
+                }
+                else {
+                  $newSale->is_active = 2;
+                  $branchName = BranchOffice::getBranchOfficeFromId($attributes["branch_office_id"])->branch_name;
+                  $approvalAttributes = [];
+                  $approvalAttributes["user_id"] = Auth::user()->id;
+                  $approvalAttributes["subject"] = "Add New Sales";
+                  $approvalAttributes["description"] = "<a href='/sales/".$attributes["id"]."''>".$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
+                  $approvalAttributes["is_approved"] = 0;
+                  $newApproval = Approval::create($approvalAttributes);
+                  $newApproval->save($approvalAttributes);
                 }
 
                 $newSale->save($attributes);

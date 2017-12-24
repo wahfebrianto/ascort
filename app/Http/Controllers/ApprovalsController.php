@@ -55,84 +55,94 @@ class ApprovalsController extends Controller
 
         Audit::log(Auth::user()->id, request()->ip(), trans('approval/general.audit-log.category'), trans('approval/general.audit-log.msg-approved', ['ID' => $id]), $approval->toArray());
 
-        if($approval->subject != "Insert Sale Backdate") {
-            $query = "update " . $approvalContentArr['table'] . ' set ';
-            $i = 0;
-            foreach ($approvalContentArr as $key => $value) {
-                if ($key != "table" && $key != "id") {
-                    $query .= $key . " = " . $value;
-                    if ($i < count($approvalContentArr) - 3) $query .= ", ";
-                }
-                $i++;
-            }
-            $query .= " where id = " . $approvalContentArr['id'];
+        if($approval->subject == "Add New Customer") {
+
+
+        } elseif($approval->subject == "Add New Agent") {
+
+        }
+        elseif($approval->subject == "Add New Sales") {
+
         }
 
-        if($approval->subject == "Sales Target Evaluation") {
-            //for Sales Target Evaluation, insert to table Action
-            Action::create([
-                'action' => $query,
-                'execution_date' => (Carbon::now()->month == 1 ? Carbon::create(Carbon::now()->year, 2, 1)->format('d/m/Y') : Carbon::create(Carbon::now()->year, 8, 1)->format('d/m/Y'))
-            ]);
-
-        } elseif($approval->subject == "Change Agent Parent") {
-            Action::create([
-                'action' => $query,
-                'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
-            ]);
-
-        } elseif($approval->subject == "Change Agent Position") {
-            Action::create([
-                'action' => $query,
-                'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
-            ]);
-            $agent = \App\Agent::find($approvalContentArr['id']);
-            $newAgentPositionId = $approvalContentArr['agent_position_id'];
-            $oldAgentPositionId = $agent->agent_position_id;
-            $old_agent_position = \App\AgentPosition::find($oldAgentPositionId);
-            $new_agent_position = \App\AgentPosition::find($newAgentPositionId);
-            if($old_agent_position->level > $new_agent_position->level) { // naik
-                $parent_agent_position = \App\AgentPosition::find($agent->parent->agent_position_id);
-                $to_be_parent_id = $agent->parent->parent_id;
-                if($new_agent_position->level > $parent_agent_position->level || $to_be_parent_id == null) {
-                    $to_be_parent_id = $agent->parent_id;
-                }
-                Action::create([
-                    'action' => "UPDATE agents SET parent_id = '$to_be_parent_id' WHERE id = '$id'",
-                    'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
-                ]);
-            } else if($old_agent_position->level < $new_agent_position->level){ // turun
-                Action::create([
-                    'action' => "UPDATE agents SET parent_id = '$agent->parent_id' WHERE parent_id = '$id' AND agent_position_id = '$newAgentPositionId'",
-                    'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
-                ]);
-            }
-            Action::create([
-                'action' => "UPDATE agents SET agent_position_id = '$newAgentPositionId' WHERE id = '$id'",
-                'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
-            ]);
-
-        } elseif($approval->subject == "Insert Sale Backdate"){
-            $attributes = json_decode($approvalContentArr["attributes"], true);
-
-            $sale = Sale::create($attributes);
-
-            $sale->customer_name = Customer::getCustomerFromId($sale->customer_id)->name;
-            $sale->customer_DOB = Customer::getCustomerFromId($sale->customer_id)->DOB;
-            $sale->agent_commission = Sale::getSaleCommissionPercentage($sale);
-            $sale->save();
-
-            Sale::updateMGIMonth($sale);
-
-        }elseif($approval->subject == "Change Sales MGI/Nominal"){
-            $sale = Sale::getSaleFromId($approvalContentArr["id"]);
-            $sale->update($approvalContentArr);
-            Sale::updateMGIMonth($sale);
-
-        } else {
-            //execute now
-            DB::raw($query);
-        }
+        // if($approval->subject != "Insert Sale Backdate") {
+        //     $query = "update " . $approvalContentArr['table'] . ' set ';
+        //     $i = 0;
+        //     foreach ($approvalContentArr as $key => $value) {
+        //         if ($key != "table" && $key != "id") {
+        //             $query .= $key . " = " . $value;
+        //             if ($i < count($approvalContentArr) - 3) $query .= ", ";
+        //         }
+        //         $i++;
+        //     }
+        //     $query .= " where id = " . $approvalContentArr['id'];
+        // }
+        //
+        // if($approval->subject == "Sales Target Evaluation") {
+        //     //for Sales Target Evaluation, insert to table Action
+        //     Action::create([
+        //         'action' => $query,
+        //         'execution_date' => (Carbon::now()->month == 1 ? Carbon::create(Carbon::now()->year, 2, 1)->format('d/m/Y') : Carbon::create(Carbon::now()->year, 8, 1)->format('d/m/Y'))
+        //     ]);
+        //
+        // } elseif($approval->subject == "Change Agent Parent") {
+        //     Action::create([
+        //         'action' => $query,
+        //         'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
+        //     ]);
+        //
+        // } elseif($approval->subject == "Change Agent Position") {
+        //     Action::create([
+        //         'action' => $query,
+        //         'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
+        //     ]);
+        //     $agent = \App\Agent::find($approvalContentArr['id']);
+        //     $newAgentPositionId = $approvalContentArr['agent_position_id'];
+        //     $oldAgentPositionId = $agent->agent_position_id;
+        //     $old_agent_position = \App\AgentPosition::find($oldAgentPositionId);
+        //     $new_agent_position = \App\AgentPosition::find($newAgentPositionId);
+        //     if($old_agent_position->level > $new_agent_position->level) { // naik
+        //         $parent_agent_position = \App\AgentPosition::find($agent->parent->agent_position_id);
+        //         $to_be_parent_id = $agent->parent->parent_id;
+        //         if($new_agent_position->level > $parent_agent_position->level || $to_be_parent_id == null) {
+        //             $to_be_parent_id = $agent->parent_id;
+        //         }
+        //         Action::create([
+        //             'action' => "UPDATE agents SET parent_id = '$to_be_parent_id' WHERE id = '$id'",
+        //             'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
+        //         ]);
+        //     } else if($old_agent_position->level < $new_agent_position->level){ // turun
+        //         Action::create([
+        //             'action' => "UPDATE agents SET parent_id = '$agent->parent_id' WHERE parent_id = '$id' AND agent_position_id = '$newAgentPositionId'",
+        //             'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
+        //         ]);
+        //     }
+        //     Action::create([
+        //         'action' => "UPDATE agents SET agent_position_id = '$newAgentPositionId' WHERE id = '$id'",
+        //         'execution_date' => CommissionReport::getNextPeriodStartDate()->format('d/m/Y')
+        //     ]);
+        //
+        // } elseif($approval->subject == "Insert Sale Backdate"){
+        //     $attributes = json_decode($approvalContentArr["attributes"], true);
+        //
+        //     $sale = Sale::create($attributes);
+        //
+        //     $sale->customer_name = Customer::getCustomerFromId($sale->customer_id)->name;
+        //     $sale->customer_DOB = Customer::getCustomerFromId($sale->customer_id)->DOB;
+        //     $sale->agent_commission = Sale::getSaleCommissionPercentage($sale);
+        //     $sale->save();
+        //
+        //     Sale::updateMGIMonth($sale);
+        //
+        // }elseif($approval->subject == "Change Sales MGI/Nominal"){
+        //     $sale = Sale::getSaleFromId($approvalContentArr["id"]);
+        //     $sale->update($approvalContentArr);
+        //     Sale::updateMGIMonth($sale);
+        //
+        // } else {
+        //     //execute now
+        //     DB::raw($query);
+        // }
 
         $approval->is_approved = 1;
         $approval->save();

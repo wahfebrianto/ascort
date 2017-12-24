@@ -15,6 +15,8 @@ use App\Http\Requests\CustomersExcelExport;
 use Flash;
 use Auth;
 use Input;
+use App\BranchOffice;
+use App\Approval;
 
 class CustomersController extends Controller
 {
@@ -77,10 +79,23 @@ class CustomersController extends Controller
 
         // prepare newCustomer, Customer instance
         $newCustomer = $this->customer->create($attributes);
-        $newCustomer->is_active = 2;
+
         if(Auth::getUser()->hasRole('owner'))
         {
           $newCustomer->is_active = 1;
+        }
+        else {
+          $newCustomer->is_active = 0;
+          $branchName = BranchOffice::getBranchOfficeFromId($newCustomer->branch_office_id)->branch_name;
+          $custID = $newCustomer->id;
+          $custName = $newCustomer->name;
+          $approvalAttributes = [];
+          $approvalAttributes["user_id"] = Auth::user()->id;
+          $approvalAttributes["subject"] = "Add New Customer";
+          $approvalAttributes["description"] = "<a href='/customer/".$custID."''>".$custID."-".$custName."</a> ($branchName)";
+          $approvalAttributes["is_approved"] = 0;
+          $newApproval = Approval::create($approvalAttributes);
+          $newApproval->save($approvalAttributes);
         }
         $newCustomer->save($attributes);
         Flash::success( trans('customers/general.audit-log.msg-store', ['NIK' => $attributes['NIK']]) );

@@ -89,10 +89,20 @@ class AgentsController extends Controller
         // prepare newCustomer, Customer instance
         $newAgent = $this->agent->create($attributes);
 
-        $newAgent->is_active = 2;
         if(Auth::getUser()->hasRole('owner'))
         {
           $newAgent->is_active = 1;
+        }
+        else {
+          $newAgent->is_active = 2;
+          $branchName = BranchOffice::getBranchOfficeFromId($attributes["branch_office_id"])->branch_name;
+          $approvalAttributes = [];
+          $approvalAttributes["user_id"] = Auth::user()->id;
+          $approvalAttributes["subject"] = "Add New Agent";
+          $approvalAttributes["description"] = "<a href='/agent/".$attributes["id"].">".$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
+          $approvalAttributes["is_approved"] = 0;
+          $newApproval = Approval::create($approvalAttributes);
+          $newApproval->save($approvalAttributes);
         }
         $newAgent->save($attributes);
         Flash::success( trans('agents/general.audit-log.msg-store', ['NIK' => $attributes['NIK']]) );
