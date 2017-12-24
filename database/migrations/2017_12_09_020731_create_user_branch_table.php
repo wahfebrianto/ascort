@@ -32,6 +32,6 @@ class CreateUserBranchTable extends Migration
      */
     public function down()
     {
-      Schema::drop('branch_users');
+      Schema::drop('branch_office_user');
     }
 }
