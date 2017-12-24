@@ -126,7 +126,7 @@ class SalesController extends Controller
                   $approvalAttributes = [];
                   $approvalAttributes["user_id"] = Auth::user()->id;
                   $approvalAttributes["subject"] = "Add New Sales";
-                  $approvalAttributes["description"] = "<a href='/sales/'".$attributes["id"].">"$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
+                  $approvalAttributes["description"] = "<a href='/sales/'".$attributes["id"].">".$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
                   $approvalAttributes["is_approved"] = 0;
                   $newApproval = Approval::create($approvalAttributes);
                   $newApproval->save($approvalAttributes);
