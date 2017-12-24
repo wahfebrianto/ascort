@@ -2,7 +2,7 @@
 
 # Laravel 5 #
 #############
-/vendor/
+vendor/
 .env
 storage/
 
