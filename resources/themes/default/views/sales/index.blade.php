@@ -170,16 +170,6 @@ use Nayjest\Grids\DataRow;
                                                 }
                                         )
 								,
-								(new FieldConfig)
-                                        ->setName('tenor')
-                                        ->setLabel('Tenor')
-                                        ->setSortable(true)
-                                        ->setCallback(
-                                                function($val, DataRow $row) {
-                                                    return \Html::link(route('sales.show', ['id' => $row->getCellValue('id')]), $val);
-                                                }
-                                        )
-                                ,
                                 (new FieldConfig)
                                     ->setName('action')
                                     ->setLabel('Actions')

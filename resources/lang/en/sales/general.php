@@ -75,7 +75,6 @@ return [
         'product_id'   =>  'Product',
         'number'   =>  'Number',
         'customer_id'   =>  'Customer',
-		'Tenor' => 'Tenor',
         'MGI'   =>  'MGI',
         'MGI_month'   =>  'MGI Month',
         'currency'   =>  'Currency',

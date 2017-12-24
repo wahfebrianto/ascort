@@ -68,17 +68,6 @@
                                         </div>
                                     </div>
                                 </div>
-								<div class="form-group">
-									{!! Form::label('tenor', trans('sales/general.columns.Tenor'), ['class' => 'control-label col-sm-2'] ) !!}
-									<div class="col-sm-10">
-										<div class="input-group select2-bootstrap-append">
-											{!! Form::select('Tenor', $Tenors, null, ['class' => 'form-control', 'id' => 'religion_select',  'style' => "width: 100%", 'tabindex' => 10, 'disabled']) !!}
-											<span class="input-group-addon">
-										<span class="fa fa-fw fa-fw fa-dollar"></span>
-									</span>
-										</div>
-									</div>
-								</div>
                                 <div class="form-group">
                                     {!! Form::label('MGI', trans('sales/general.columns.MGI'), ['class' => 'control-label col-sm-2'] ) !!}
                                     <div class="col-sm-10">
