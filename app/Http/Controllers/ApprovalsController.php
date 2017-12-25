@@ -22,7 +22,7 @@ use Nayjest\Grids\EloquentDataProvider;
 
 class ApprovalsController extends Controller
 {
-  //test
+
     /**
      * @var Approval
      */
