@@ -24,6 +24,8 @@
                     {{ $datum->formattedDOB }}
                 @elseif ($key == 'id_card_expiry_date')
                     {{ $datum->formattedIdCardExpiryDate }}
+				@elseif ($key == 'branch_office_id')
+					<td>{{ \App\BranchOffice::getBranchOfficeFromId($attribute)->branch_name }}</td>
                 @else
                     {{ $attribute }}
                 @endif

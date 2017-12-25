@@ -27,8 +27,13 @@ class SalesExcelExportHandler implements ExportHandler {
                     $datum['customer'] = $value;
                     unset($datum[$key]);
                 } elseif($key == 'MGI_start_date') {
-                    $value = \DateTime::createFromFormat('Y-m-d', $value)->format('m/d/Y'); // excel format
+					$value = date_format(date_create($value),'m/d/Y');
+					//$value = \DateTime::createFromFormat('Y-m-d', $value)->format('m-d-Y'); // excel format
                 }
+				else if($key == 'branch_office_id')
+				{
+					$value = \App\BranchOffice::getBranchOfficeFromId($datum['branch_office_id'])->branch_name;
+				}
             }
         }
         // work on the exportAgentsExcelExport

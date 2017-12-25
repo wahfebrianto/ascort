@@ -19,6 +19,7 @@ use PDF;
 use App\Approval;
 use App\Action;
 use App\CommissionReport;
+use App\Http\Requests\AgentsExcelExport;
 
 class AgentsController extends Controller
 {
@@ -391,7 +392,7 @@ class AgentsController extends Controller
         return view('agents.summary', compact('agents', 'agent_lists', 'agent_position_lists', 'page_title', 'page_description'));
     }
 
-    public function export(\App\Http\Requests\AgentsExcelExport $export)
+    public function export(AgentsExcelExport $export)
     {
         // TODO: change pdf generator to manual attribute printing, get agent position name
         if(Input::has('type')) {
@@ -399,10 +400,11 @@ class AgentsController extends Controller
 
             if(Input::has('created_at_filter1') && Input::has('created_at_filter2')) {
                 // apply join date filter
-                $builder->whereBetween('created_at', [
+				$builder->whereBetween('created_at',[date_format(date_create(Input::get('created_at_filter1')),'d/m/Y'),date_format(date_create(Input::get('created_at_filter2')),'d/m/Y')]);
+                /*$builder->whereBetween('created_at', [
                     \DateTime::createFromFormat('d/m/Y', Input::get('created_at_filter1')),
                     \DateTime::createFromFormat('d/m/Y', Input::get('created_at_filter2'))
-                ]);
+                ]);*/
             }
             if(Input::has('chkExp')) {
                 // apply checkbox column filter
@@ -413,7 +415,8 @@ class AgentsController extends Controller
                 $builder->where('agent_position_id', Input::get('agent_position_id'));
             }
 
-            $data = $builder->get();
+            $data = $builder->whereIn('branch_office_id',\App\BranchOffice::getBranchOfficesID())->get();
+			
             $columns = Input::get('chkExp');
             if($data->count() == 0) {
                 Flash::error( trans('agents/general.error.no-data') );
@@ -430,6 +433,7 @@ class AgentsController extends Controller
                     // return $mpdf->stream('agents.pdf');
 
                     $mpdf = new \mPDF("en", "A4-L", "12");
+					dd($html);
                     $mpdf->WriteHTML($html);
                     return $mpdf->Output();
                 case 'xlsx':

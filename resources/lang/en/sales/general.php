@@ -92,7 +92,9 @@ return [
 		'bank_branch' => 'Bank Branch',
 		'account_name' => 'Account Name',
 		'account_number' => 'Account Number',
-		'branch_office_name' => 'Branch Office'
+		'branch_office_name' => 'Branch Office',
+		'customer_name' => 'Customer Name',
+		'insurance_start_date' => 'Insurance'
     ],
 
     'tabs' => [

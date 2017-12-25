@@ -31,6 +31,8 @@
                     <td>{{ $attribute }}%</td>
                 @elseif ($key == 'nominal')
                     <td class="text-right">{{ \App\Money::format('%(.2n', $attribute) }}</td>
+				@elseif ($key == 'branch_office_id')
+					<td>{{ \App\BranchOffice::getBranchOfficeFromId($attribute)->branch_name }}</td>
                 @else
                     <td>{{ $attribute }}</td>
                 @endif

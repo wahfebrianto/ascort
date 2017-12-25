@@ -97,6 +97,7 @@ return [
         'last_transaction'      => 'Transaksi Terakhir',
         'correspondence_address'        => 'Alamat Korespondensi',
         'main_address'          => 'Alamat Utama',
+		'branch_office_id'		=>	'Branch Office'
     ],
 
     'tabs' => [

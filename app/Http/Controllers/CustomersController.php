@@ -299,17 +299,18 @@ class CustomersController extends Controller
 
             if(Input::has('created_at_filter1') && Input::has('created_at_filter2')) {
                 // apply join date filter
-                $builder->whereBetween('created_at', [
+                /*$builder->whereBetween('created_at', [
                     \DateTime::createFromFormat('d/m/Y', Input::get('created_at_filter1')),
                     \DateTime::createFromFormat('d/m/Y', Input::get('created_at_filter2'))
-                ]);
+                ]);*/
+				$builder->whereBetween('created_at',[date_format(date_create(Input::get('created_at_filter1')),'d/m/Y'),date_format(date_create(Input::get('created_at_filter2')),'d/m/Y')]);
             }
             if(Input::has('chkExp')) {
                 // apply checkbox column filter
                 $builder->select(Input::get('chkExp'));
             }
 
-            $data = $builder->get();
+            $data = $builder->whereIn('branch_office_id',\App\BranchOffice::getBranchOfficesID())->get();
             $columns = Input::get('chkExp');
             if($data->count() == 0) {
                 Flash::error( trans('customers/general.error.no-data') );
@@ -324,7 +325,7 @@ class CustomersController extends Controller
                     // $pdf->loadHtml($html);
                     // $pdf->setPaper('A4', 'landscape');
                     // return $pdf->stream('customers.pdf');
-
+					dd($html);
                     $mpdf = new \mPDF("en", "A4-L", "12");
                     $mpdf->WriteHTML($html);
                     return $mpdf->Output();

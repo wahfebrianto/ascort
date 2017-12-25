@@ -301,12 +301,12 @@ use Nayjest\Grids\DataRow;
                         <div class="col-md-8">
                             <label>Filters</label>
                             <div class="border-decor"></div>
-                            <div class="form-group">
+                            <!--div class="form-group">
                                 {!! Form::label('NBRO', trans('sales/general.columns.NBRO'), ['class' => 'control-label col-sm-4'] ) !!}
                                 <div class="col-sm-8">
                                     {!! Form::select('NBRO', ['all' => 'All', 'NB' => 'NB', 'RO' => 'RO'], 'all', ['class' => 'form-control', 'id' => 'NBRO_select',  'style' => "width: 100%", 'tabindex' => 2]) !!}
                                 </div>
-                            </div>
+                            </div-->
                             <div class="form-group">
                                 {!! Form::label('MGI_start_date', trans('sales/general.columns.MGI_start_date'), ['class' => 'control-label col-sm-4'] ) !!}
                                 <div class="col-sm-8">
@@ -317,7 +317,7 @@ use Nayjest\Grids\DataRow;
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <!--div class="form-group">
                                 {!! Form::label('insurance_start_date', trans('sales/general.columns.insurance_start_date'), ['class' => 'control-label col-sm-4'] ) !!}
                                 <div class="col-sm-8">
                                     <div class="input-group">
@@ -326,7 +326,7 @@ use Nayjest\Grids\DataRow;
                                         {!! Form::text('insurance_start_date_filter2', '01/12/2099', ['class' => 'datepicker form-control',  'style' => "width: 100%", 'tabindex' => 6]) !!}
                                     </div>
                                 </div>
-                            </div>
+                            </div-->
                         </div>
                     </div>
                 </div>

@@ -104,7 +104,12 @@ return [
         'parent_id'             =>  'Parent',
         'agent_code'                  =>  'Agent Code',
         'join_date'             =>  'Join Date',
-        'account_name'          =>  'Nama Pemilik Rekening'
+        'account_name'          =>  'Nama Pemilik Rekening',
+		'zipcode'				=>	'ZIP',
+		'phone_number'			=>	'Phone Number',
+		'handphone_number'		=>	'Handphone',
+		'email'					=>	'Email',
+		'branch_office_id'		=>	'Branch Office'
     ],
 
     'tabs' => [

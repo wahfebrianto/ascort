@@ -58,7 +58,6 @@ class Customer extends Model
         return Customer::where('is_active', '=', 1)->get();
     }
 
-
     public static function getCustomers_ForDropDown(){
         $customers = [];
         $allCustomers = Customer::getCustomers();

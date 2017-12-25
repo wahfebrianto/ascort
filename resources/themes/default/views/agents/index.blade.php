@@ -157,6 +157,11 @@ use Nayjest\Grids\DataRow;
                                     )
                                 ,
                                 (new FieldConfig)
+                                    ->setName('branchOffice.branch_name')
+                                    ->setLabel('Branch Office')
+                                    ->setSortable(false)
+                                ,
+                                (new FieldConfig)
                                     ->setName('action')
                                     ->setLabel('Actions')
                                     ->setSortable(false)
