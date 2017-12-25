@@ -107,7 +107,7 @@ use Nayjest\Grids\DataRow;
                 <div class="box-body">
 
                     @foreach($reminderApproval as $rem)
-                        @include('partials._reminder_approval_approved', ['reminder' => $rem])
+                        @include('partials._reminder_approval_approved', ['reminder' => $rem, 'branch_offices_id' => $branch_offices])
                     @endforeach
                     @foreach($reminderEval as $rem)
                         @include('partials._reminder_agent_position', ['reminder' => $rem])

@@ -100,7 +100,7 @@ class AgentsController extends Controller
           $approvalAttributes = [];
           $approvalAttributes["user_id"] = Auth::user()->id;
           $approvalAttributes["subject"] = "Add New Agent";
-          $approvalAttributes["description"] = "<a href='/agent/".$attributes["id"].">".$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
+          $approvalAttributes["description"] = "<a href='".route('agents.show', ['id' => $attributes["id"]]).">".$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
           $approvalAttributes["is_approved"] = 0;
           $newApproval = Approval::create($approvalAttributes);
           $newApproval->save($approvalAttributes);

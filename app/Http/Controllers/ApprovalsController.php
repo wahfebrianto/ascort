@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Agent;
 use Illuminate\Support\Facades\DB;
 use Nayjest\Grids\EloquentDataProvider;
 
@@ -55,14 +56,25 @@ class ApprovalsController extends Controller
 
         Audit::log(Auth::user()->id, request()->ip(), trans('approval/general.audit-log.category'), trans('approval/general.audit-log.msg-approved', ['ID' => $id]), $approval->toArray());
 
+        $targetID = explode('-',explode('>', $approval->description)[1])[0];
+        $target = null;
         if($approval->subject == "Add New Customer") {
-
+          $customer = Customer::getCustomerFromId($targetID);
+          $customer->is_active = 1;
+          $customer->save();
+          $target = $customer;
 
         } elseif($approval->subject == "Add New Agent") {
-
+          $agent = Agent::getAgentFromId($targetID);
+          $agent->is_active = 1;
+          $agent->save();
+          $target = $agent;
         }
         elseif($approval->subject == "Add New Sales") {
-
+          $sales = Sale::getSaleFromId($targetID);
+          $sales->is_active = 1;
+          $sales->save();
+          $target = $sales;
         }
 
         // if($approval->subject != "Insert Sale Backdate") {
@@ -147,24 +159,33 @@ class ApprovalsController extends Controller
         $approval->is_approved = 1;
         $approval->save();
 
-        if($approval->subject != "Insert Sale Backdate") {
-            $content = [
-                'table' => $approvalContentArr['table'],
-                'id' => $approvalContentArr['id'],
-                'message' => 'Approval for <b>' . $approval->subject .
-                    '</b> (' . $approvalContentArr['table'] . ' <b>#' . $approvalContentArr['id'] .'</b>)' .
-                    ' approved at ' .  Carbon::now()->toDateTimeString() . '.'
-            ];
+        // if($approval->subject != "Insert Sale Backdate") {
+        //     $content = [
+        //         'table' => $approvalContentArr['table'],
+        //         'id' => $approvalContentArr['id'],
+        //         'message' => 'Approval for <b>' . $approval->subject .
+        //             '</b> (' . $approvalContentArr['table'] . ' <b>#' . $approvalContentArr['id'] .'</b>)' .
+        //             ' approved at ' .  Carbon::now()->toDateTimeString() . '.'
+        //     ];
+        //
+        // }else{
+        //     $content = [
+        //         'table' => $approvalContentArr['table'],
+        //         'id' => $sale->id,
+        //         'message' => 'Approval for <b>' . $approval->subject .
+        //             '</b> (' . $approvalContentArr['table'] . ' number <b>#' . $sale->number .'</b>)' .
+        //             ' approved at ' .  Carbon::now()->toDateTimeString() . '.'
+        //     ];
+        // }
 
-        }else{
-            $content = [
-                'table' => $approvalContentArr['table'],
-                'id' => $sale->id,
+        $content = [
+                'table' => $target,
+                'id' => $targetID,
                 'message' => 'Approval for <b>' . $approval->subject .
-                    '</b> (' . $approvalContentArr['table'] . ' number <b>#' . $sale->number .'</b>)' .
-                    ' approved at ' .  Carbon::now()->toDateTimeString() . '.'
+                    '</b> (' . $approval->description . ')' .
+                    ' approved at ' .  Carbon::now()->toDateTimeString() . '.',
+                'branch_office_id' => $target->branch_office_id
             ];
-        }
 
         Reminder::create([
             'title' => 'Approval Approved',
@@ -185,6 +206,44 @@ class ApprovalsController extends Controller
         $approval = $this->approval->find($id);
 
         Audit::log(Auth::user()->id, request()->ip(), trans('approval/general.audit-log.category'), trans('approval/general.audit-log.msg-disabled', ['ID' => $id]), $approval->toArray());
+
+        $targetID = explode('-',explode('>', $approval->description)[1])[0];
+        $targetDesc = explode('<',explode('>', $approval->description)[1])[0];
+        $target = null;
+        if($approval->subject == "Add New Customer") {
+          $customer = Customer::getCustomerFromId($targetID);
+          $customer->delete();
+          $target = $customer;
+
+        } elseif($approval->subject == "Add New Agent") {
+          $agent = Agent::getAgentFromId($targetID);
+          $agent->delete();
+          $target = $agent;
+        }
+        elseif($approval->subject == "Add New Sales") {
+          $sales = Sale::getSaleFromId($targetID);
+          $sales->delete();
+          $target = $sales;
+        }
+
+        $content = [
+                'table' => $target,
+                'id' => $targetID,
+                'message' => 'Approval for <b>' . $approval->subject .
+                    '</b> (' . $targetDesc . ')' .
+                    ' declined at ' .  Carbon::now()->toDateTimeString() . '.',
+                'branch_office_id' => $target->branch_office_id
+            ];
+
+        Reminder::create([
+            'title' => 'Approval Declined',
+            'reminder_for' => 'admin',
+            'start_date' => Carbon::now()->format('d/m/Y'),
+            'end_date' => Carbon::now()->addDays(2)->format('d/m/Y'),
+            'subject' => 'approval',
+            'content' => json_encode($content),
+            'respond_link' => '#'
+        ]);
 
         $approval->delete();
 

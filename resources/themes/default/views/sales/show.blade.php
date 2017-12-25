@@ -110,7 +110,7 @@
                                         {!! Form::text('additional', $sale->formattedAdditional, ['class' => 'form-control', 'tabindex' => 2, 'disabled']) !!}
                                     </div>
                                 </div>
-								
+
 								<div class="form-group">
 									{!! Form::label('bank', trans('sales/general.columns.bank'), ['class' => 'control-label col-sm-2'] ) !!}
 									<div class="col-sm-10">
@@ -144,9 +144,14 @@
 
                     <div class="form-group">
                         <div class="col-sm-10 col-sm-offset-2">
+                          @if (Auth::getUser()->hasRole('otor'))
+                            {!! Html::link(route('approvals.index'), trans('general.button.close'), ['class' => 'btn btn-primary']) !!}
+                          @else
                             {!! Form::submit(trans('general.button.close'), ['class' => 'btn btn-primary btn-submit']) !!}
                             <a href="{!! route('sales.edit', $sale->id) !!}" title="{{ trans('general.button.edit') }}" class='btn btn-default'><span class="fa fa-fw fa-edit"></span> {{ trans('general.button.edit') }}</a>
                             <a href="{!! route('sales.interest', $sale->id) !!}" title="{{ trans('general.button.interest') }}" class='btn btn-success pull-right'><span class="fa fa-fw fa-print"></span> {{ trans('general.button.interest') }}</a>
+                          @endif
+
                         </div>
                     </div>
 

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Doctrine\DBAL\Driver\IBMDB2\DB2Statement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class Customer extends Model
 {
@@ -50,7 +51,13 @@ class Customer extends Model
     }
 
     public static function getCustomerFromId($id){
-        $found = Customer::where('id', '=', $id)->where('is_active', '=', 1)->get();
+        if(Auth::getUser()->hasRole('otor'))
+        {
+          $found = Customer::where('id', '=', $id)->where('is_active', '=', 0)->get();
+        }
+        else {
+          $found = Customer::where('id', '=', $id)->where('is_active', '=', 1)->get();
+        }
         return (count($found)>0 ? $found[0] : null);
     }
 
