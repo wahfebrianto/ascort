@@ -426,8 +426,13 @@ use Nayjest\Grids\DataRow;
 
                     <div class="form-group">
                         <div class="col-sm-12">
+                          @if (Auth::getUser()->hasRole('otor'))
+                            {!! Html::link(route('approvals.index'), trans('general.button.close'), ['class' => 'btn btn-primary']) !!}
+                          @else
                             {!! Html::link(route('agents.index'), trans('general.button.close'), ['class' => 'btn btn-primary']) !!}
                             <a href="{!! route('agents.edit', $agent->id) !!}" title="{{ trans('general.button.edit') }}" class='btn btn-default'><span class="fa fa-fw fa-edit"></span> {{ trans('general.button.edit') }}</a>
+                          @endif
+
                         </div>
                     </div>
 

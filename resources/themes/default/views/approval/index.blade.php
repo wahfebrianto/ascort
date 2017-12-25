@@ -77,6 +77,16 @@ use Nayjest\Grids\DataRow;
                                     )
                                 ,
                                 (new FieldConfig)
+                                    ->setName('subject')
+                                    ->setLabel('Subject')
+                                    ->setSortable(false)
+                                    ->setCallback(
+                                            function($val, DataRow $row) {
+                                                return $row->getCellValue('subject');
+                                            }
+                                    )
+                                ,
+                                (new FieldConfig)
                                     ->setName('description')
                                     ->setLabel('Description')
                                     ->setSortable(false)

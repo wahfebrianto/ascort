@@ -43,8 +43,7 @@ class DashboardController extends Controller
         foreach($holidays as $holiday) $holidays_arr[] = $holiday['date'];
         $holidays_date_json = json_encode($holidays_arr);
         $dataProvider = \App\Sale::getDashboardDataProvider();
-
-
+        $branch_offices = \App\BranchOffice::getBranchOfficesID();
         if(Auth::user()->hasRole('admin')){
             $reminderEval = Reminder::getEvalReminders();
             $reminderRollover = Reminder::getRolloverReminders();
@@ -60,7 +59,7 @@ class DashboardController extends Controller
 
 
         return view('dashboard', compact('page_title', 'page_description', 'reminderEval', 'totalApproval', 'reminder_count',
-            'reminderRollover', 'reminderApproval', 'count_customers', 'count_agents', 'count_sales', 'current_period', 'holidays_date_json', 'dataProvider'));
+            'reminderRollover', 'reminderApproval', 'count_customers', 'count_agents', 'count_sales', 'current_period', 'branch_offices', 'holidays_date_json', 'dataProvider'));
     }
 
     public function changeagent(Request $request){
