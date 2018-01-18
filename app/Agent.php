@@ -12,7 +12,7 @@ class Agent extends Model
     protected $table = "agents";
         protected $fillable = ['agent_code', 'NIK', 'name', 'birth_place', 'DOB', 'gender', 'address', 'state', 'city',
         'zipcode', 'phone_number', 'handphone_number', 'email', 'agent_position_id', 'join_date',
-        'NPWP', 'bank', 'bank_branch', 'account_name', 'account_number', 'branch_office_id', 'parent_id'];
+        'NPWP', 'bank', 'bank_branch', 'account_name', 'account_number', 'branch_office_id', 'parent_id','type'];
     protected $dates = ['DOB'];
     protected $appends = ['parent_name', 'agent_position_name'];
     protected $hidden = ['childrenRecursive', 'sales'];

@@ -224,6 +224,18 @@
                                         </div>
                                     </div>
                                 </div>
+								<div class="form-group">
+									{!! Form::label('type', trans('agents/general.columns.type'), ['class' => 'control-label col-sm-2'] ) !!}
+									<div class="col-sm-10">
+										<div class="input-group select2-bootstrap-append">
+											{!! Form::select('type', $types, null, ['class' => 'form-control', 'style' => "width: 100%", 'tabindex' => 6]) !!}
+											<span class="input-group-addon">
+										<span class="fa fa-fw fa-fw fa-dollar"></span>
+									</span>
+										</div>
+									</div>
+								</div>
+							</div>
                             </div><!-- /.tab-pane -->
 
                         </div><!-- /.tab-content -->

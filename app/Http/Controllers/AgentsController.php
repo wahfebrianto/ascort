@@ -68,8 +68,13 @@ class AgentsController extends Controller
 
         $current_agent_count = \App\Agent::isActive()->whereIn('agents.branch_office_id', \App\BranchOffice::getBranchOfficesID())->count();
         $agent_lists = ['none' => 'None'] + \App\Agent::getAgentsWithPositionName_ForDropDown();
-
-        return view('agents.create', compact('agent', 'agent_position_lists', 'agent_lists', 'page_title', 'page_description'));
+		$typeConfig = config('types');
+        $types = [];
+        $types[null] = "Pilih Tipe";
+        foreach($typeConfig as $key => $value){
+            $types[$key] = $value;
+        }
+        return view('agents.create', compact('agent', 'agent_position_lists', 'agent_lists', 'page_title', 'page_description','types'));
     }
 
     /**
@@ -131,7 +136,7 @@ class AgentsController extends Controller
             $agent_lists = ['none' => 'None'] + \App\Agent::getAgentsWithPositionName_ForDropDown();
             $agent_sales_provider = new EloquentDataProvider(\App\Sale::where('agent_id', $id));
             $child_agent_provider = new EloquentDataProvider(\App\Agent::with('agent_position')->where('parent_id', $id));
-
+			$typeConfig = config('types');
             return view('agents.show', compact('agent', 'agent_lists', 'agent_position_lists', 'agent_sales_provider', 'child_agent_provider', 'page_title', 'page_description'));
 
         } else {
@@ -157,8 +162,13 @@ class AgentsController extends Controller
             $page_description = trans('agents/general.page.edit.description', ['name' => $agent->name]);
             $agent_position_lists = \App\AgentPosition::lists('name', 'id');
             $agent_lists = ['none' => 'None'] + \App\Agent::getAgentsWithPositionName_ForDropDown();
-
-            return view('agents.edit', compact('agent', 'agent_position_lists', 'agent_lists', 'page_title', 'page_description'));
+			$typeConfig = config('types');
+			$types = [];
+			$types[null] = "Pilih Tipe";
+			foreach($typeConfig as $key => $value){
+				$types[$key] = $value;
+			}
+            return view('agents.edit', compact('agent', 'agent_position_lists', 'agent_lists', 'page_title', 'page_description','types'));
 
         }else{
             Flash::error( trans('agents/general.error.no-data') );
