@@ -5,10 +5,12 @@ use Maatwebsite\Excel\Files\ExportHandler;
 class AgentsExcelExportHandler implements ExportHandler {
 
     public function handle($file)
-    {
+    {$ctr=0;
         // change all data that need to be formatted
         foreach($file->data as &$datum) {
+			
             foreach ($datum as $key => &$value) {
+				//dd($datum);
                 if ($key == 'agent_position_id') {
                     $value = $datum['agent_position']['name'];
                     // change key
@@ -27,7 +29,20 @@ class AgentsExcelExportHandler implements ExportHandler {
 				{
 					$value = \App\BranchOffice::getBranchOfficeFromId($datum['branch_office_id'])->branch_name;
 				}
+				else if($key == 'parent_id')
+				{
+					$value = $datum['parent_name'];
+				}
             }
+			unset($datum["parent_name"]);
+			//unset($datum["agent_position_name"]);
+			$columnLang = trans('agents/general.columns');
+			$newdatum = array();
+			foreach($datum as $key => $value){
+				$newdatum[$columnLang[$key]] = $datum[$key];
+			}
+			$datum = $newdatum;
+			
         }
         // work on the exportAgentsExcelExport
         return $file->sheet('agents', function($sheet) use($file)
