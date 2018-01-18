@@ -70,7 +70,7 @@ class AgentsController extends Controller
         $agent_lists = ['none' => 'None'] + \App\Agent::getAgentsWithPositionName_ForDropDown();
 		$typeConfig = config('types');
         $types = [];
-        $types[null] = "Pilih Tipe";
+        //$types[null] = "Pilih Tipe";
         foreach($typeConfig as $key => $value){
             $types[$key] = $value;
         }
@@ -164,7 +164,7 @@ class AgentsController extends Controller
             $agent_lists = ['none' => 'None'] + \App\Agent::getAgentsWithPositionName_ForDropDown();
 			$typeConfig = config('types');
 			$types = [];
-			$types[null] = "Pilih Tipe";
+			//$types[null] = "Pilih Tipe";
 			foreach($typeConfig as $key => $value){
 				$types[$key] = $value;
 			}
