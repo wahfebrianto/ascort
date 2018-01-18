@@ -42,7 +42,7 @@ class CreateAgentRequest extends Request
     public function rules()
     {
         return [
-            'agent_code'            =>  'required|digits:6|unique:agents',
+            'agent_code'            =>  'required|string|size:8|unique:agents',
             'NIK'                   =>  'required|digits:16|unique:agents,NIK',
             'name'                  =>  'required|string|min:3|max:200',
             'birth_place'           =>  'required|string|max:50',

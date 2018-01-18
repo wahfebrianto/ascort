@@ -25,9 +25,8 @@ class EditAgentPositionRequest extends Request
     {
         return [
             'name'     =>  'required|string|min:2|max:100',
-            'parent_id'     =>  'unique:agent_positions,parent_id',
             'acronym'     =>  'required|string|min:2|max:10',
-            'level'     => 'required|unique:agent_positions,level'
+            'level'     => 'required'
         ];
     }
 }
