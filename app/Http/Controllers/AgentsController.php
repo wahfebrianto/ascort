@@ -48,7 +48,8 @@ class AgentsController extends Controller
         $dataProvider = \App\Agent::getIndexDataProvider($enabledOnly);
         $modelColumns = \App\Agent::getColumnsArray();
         $agent_position_lists = \App\AgentPosition::lists('name', 'id');
-        return view('agents.index', compact('dataProvider', 'page_title', 'modelColumns', 'agent_position_lists', 'page_description', 'enabledOnly'));
+		$branch_office_id_lists = \App\BranchOffice::lists('branch_name','id');
+        return view('agents.index', compact('dataProvider', 'page_title', 'modelColumns', 'agent_position_lists', 'page_description', 'enabledOnly','branch_office_id_lists'));
     }
 
     /**
@@ -410,11 +411,11 @@ class AgentsController extends Controller
 
             if(Input::has('created_at_filter1') && Input::has('created_at_filter2')) {
                 // apply join date filter
-				$builder->whereBetween('created_at',[date_format(date_create(Input::get('created_at_filter1')),'d/m/Y'),date_format(date_create(Input::get('created_at_filter2')),'d/m/Y')]);
-                /*$builder->whereBetween('created_at', [
+				//$builder->whereBetween('created_at',[date_format(date_create(Input::get('created_at_filter1')),'d/m/Y'),date_format(date_create(Input::get('created_at_filter2')),'d/m/Y')]);
+                $builder->whereBetween('created_at', [
                     \DateTime::createFromFormat('d/m/Y', Input::get('created_at_filter1')),
                     \DateTime::createFromFormat('d/m/Y', Input::get('created_at_filter2'))
-                ]);*/
+                ]);
             }
             if(Input::has('chkExp')) {
                 // apply checkbox column filter
@@ -425,8 +426,24 @@ class AgentsController extends Controller
                 $builder->where('agent_position_id', Input::get('agent_position_id'));
             }
 
-            $data = $builder->whereIn('branch_office_id',\App\BranchOffice::getBranchOfficesID())->get();
+            $builder->whereIn('branch_office_id',\App\BranchOffice::getBranchOfficesID());
+			if(Input::has('branch_office_id') && Input::get('branch_office_id') != 'all') {
+				$builder->where('branch_office_id',Input::get('branch_office_id'));
+			}
+			if(Input::has('agent_name_filter')) {
+                // apply checkbox column filter
+                $builder->where('name', 'like', '%' . Input::get('agent_name_filter') . '%');
+            }
+			if(Input::has('leader_name_filter')) {
+                // apply checkbox column filter
+				$parentname = Input::get('leader_name_filter');
+				$parent = \App\Agent::getAgentFromName($parentname)->lists('id');
+				//dd($parent);
+                $builder->whereIn('parent_id',$parent);
+            }
 			
+			$data = $builder->get();
+			//dd($data);
             $columns = Input::get('chkExp');
             if($data->count() == 0) {
                 Flash::error( trans('agents/general.error.no-data') );
@@ -436,16 +453,16 @@ class AgentsController extends Controller
                 case 'pdf':
                 default:
                     $html = \View::make('pdf.agents', compact('data', 'columns', 'enabledOnly'))->render();
-                    // $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
-                    // $pdf = \App::make('dompdf.wrapper');
-                    // $pdf->loadHtml($html);
-                    // $pdf->setPaper('A4', 'landscape');
-                    // return $mpdf->stream('agents.pdf');
+                    $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
+                    $pdf = \App::make('dompdf.wrapper');
+                    $pdf->loadHtml($html);
+                    $pdf->setPaper('A4', 'landscape');
+                    return $pdf->stream('agents.pdf');
 
-                    $mpdf = new \mPDF("en", "A4-L", "12");
-					dd($html);
-                    $mpdf->WriteHTML($html);
-                    return $mpdf->Output();
+                    //$mpdf = new \mPDF("en", "A4-L", "12");
+					//dd($html);
+                    //$mpdf->WriteHTML($html);
+                    //return $mpdf->Output();
                 case 'xlsx':
                     $dataArray = $data->toArray();
                     $export->data = $dataArray;

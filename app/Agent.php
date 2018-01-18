@@ -10,9 +10,9 @@ use Nayjest\Grids\EloquentDataProvider;
 class Agent extends Model
 {
     protected $table = "agents";
-        protected $fillable = ['agent_code', 'NIK', 'name', 'birth_place', 'DOB', 'gender', 'address', 'state', 'city',
-        'zipcode', 'phone_number', 'handphone_number', 'email', 'agent_position_id', 'join_date',
-        'NPWP', 'bank', 'bank_branch', 'account_name', 'account_number', 'branch_office_id', 'parent_id','type'];
+        protected $fillable = ['agent_code', 'type','branch_office_id', 'name','NIK', 'NPWP','agent_position_id','email','birth_place', 'DOB', 'gender', 'address', 'state', 'city',
+        'zipcode', 'phone_number', 'handphone_number',   'join_date',
+         'bank', 'bank_branch', 'account_name', 'account_number',  'parent_id'];
     protected $dates = ['DOB'];
     protected $appends = ['parent_name', 'agent_position_name'];
     protected $hidden = ['childrenRecursive', 'sales'];
@@ -214,6 +214,10 @@ class Agent extends Model
         $found = Agent::where('id', '=', $id)->where('is_active', '=', 1)->get();
         return (count($found)>0 ? $found[0] : null);
     }
+	public static function getAgentFromName($name)
+	{
+		return Agent::where('name', 'like', '%' . $name . '%');
+	}
 
     public static function getAgents()
     {
