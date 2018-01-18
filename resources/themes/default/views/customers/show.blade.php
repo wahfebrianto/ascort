@@ -58,6 +58,13 @@ use Nayjest\Grids\DataRow;
                                     </div>
                                 </div>
 
+								<div class="form-group">
+									{!! Form::label('NPWP', trans('customers/general.columns.NPWP'), ['class' => 'control-label col-sm-2'] ) !!}
+									<div class="col-sm-10">
+										{!! Form::text('NPWP', null, ['class' => 'form-control', 'tabindex' => 2, 'disabled']) !!}
+									</div>
+								</div>
+								
                                 <div class="form-group">
                                     {!! Form::label('name', trans('customers/general.columns.name'), ['class' => 'control-label col-sm-2'] ) !!}
                                     <div class="col-sm-10">

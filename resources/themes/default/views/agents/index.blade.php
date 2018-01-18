@@ -307,6 +307,24 @@ use Nayjest\Grids\DataRow;
                                     </div>
                                 </div>
                             </div>
+							<div class="form-group">
+                                {!! Form::label('agent_name_filter', trans('agents/general.columns.name'), ['class' => 'control-label col-sm-4'] ) !!}
+                                <div class="col-sm-8">
+                                    {!! Form::text('agent_name_filter', '', ['class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
+                                </div>
+                            </div>
+							<div class="form-group">
+                                {!! Form::label('leader_name_filter', trans('agents/general.columns.parent_name'), ['class' => 'control-label col-sm-4'] ) !!}
+                                <div class="col-sm-8">
+                                    {!! Form::text('leader_name_filter', '', ['class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
+                                </div>
+                            </div>
+							<div class="form-group">
+                                {!! Form::label('branch_office_id', trans('branch_office/general.columns.name'), ['class' => 'control-label col-sm-4'] ) !!}
+                                <div class="col-sm-8">
+                                    {!! Form::select('branch_office_id', array_add($branch_office_id_lists, 'all', 'All'), 'all', ['class' => 'form-control', 'id' => 'branch_office_id_select',  'style' => "width: 100%", 'tabindex' => 2]) !!}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

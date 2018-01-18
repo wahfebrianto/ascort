@@ -32,31 +32,38 @@
                         </div>
                     </div>
 
+					<div class="form-group">
+                        {!! Form::label('NPWP', trans('customers/general.columns.NPWP'), ['class' => 'control-label col-sm-2'] ) !!}
+                        <div class="col-sm-10">
+                            {!! Form::text('NPWP', null, ['class' => 'form-control', 'tabindex' => 2]) !!}
+                        </div>
+                    </div>
+					
                     <div class="form-group">
                         {!! Form::label('name', trans('customers/general.columns.name'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
-                            {!! Form::text('name', null, ['class' => 'form-control', 'tabindex' => 2]) !!}
+                            {!! Form::text('name', null, ['class' => 'form-control', 'tabindex' => 3]) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('phone_number', trans('customers/general.columns.phone_number'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
-                            {!! Form::text('phone_number', null, ['class' => 'form-control', 'tabindex' => 3]) !!}
+                            {!! Form::text('phone_number', null, ['class' => 'form-control', 'tabindex' => 4]) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('handphone_number', trans('customers/general.columns.handphone_number'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
-                            {!! Form::text('handphone_number', null, ['class' => 'form-control', 'tabindex' => 4]) !!}
+                            {!! Form::text('handphone_number', null, ['class' => 'form-control', 'tabindex' => 5]) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         {!! Form::label('email', trans('customers/general.columns.email'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
-                            {!! Form::text('email', null, ['class' => 'form-control', 'tabindex' => 5]) !!}
+                            {!! Form::text('email', null, ['class' => 'form-control', 'tabindex' => 6]) !!}
                         </div>
                     </div>
 
@@ -73,7 +80,7 @@
                     <div class="form-group">
                         {!! Form::label('address', trans('customers/general.columns.address'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
-                            {!! Form::text('address', null, ['class' => 'form-control', 'tabindex' => 6]) !!}
+                            {!! Form::text('address', null, ['class' => 'form-control', 'tabindex' => 7]) !!}
                         </div>
                     </div>
 
@@ -81,7 +88,7 @@
                         {!! Form::label('state', trans('customers/general.columns.state'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
                             <div class="input-group select2-bootstrap-append">
-                                {!! Form::select('state', array_keys(config('cities')), null, ['class' => 'form-control', 'id' => 'state',  'style' => "width: 100%", 'tabindex' => 7]) !!}
+                                {!! Form::select('state', array_keys(config('cities')), null, ['class' => 'form-control', 'id' => 'state',  'style' => "width: 100%", 'tabindex' => 8]) !!}
                                 <span class="input-group-addon">
                                     <span class="fa fa-fw fa-globe"></span>
                                 </span>
@@ -93,7 +100,7 @@
                         {!! Form::label('city', trans('customers/general.columns.city'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
                             <div class="input-group select2-bootstrap-append">
-                                {!! Form::select('city', [], null, ['class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 8]) !!}
+                                {!! Form::select('city', [], null, ['class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 9]) !!}
                                 <span class="input-group-addon">
                                     <span class="fa fa-fw fa-map-marker"></span>
                                 </span>
@@ -104,7 +111,7 @@
                     <div class="form-group">
                         {!! Form::label('zipcode', trans('customers/general.columns.zipcode'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
-                            {!! Form::text('zipcode', null, ['class' => 'form-control', 'tabindex' => 9]) !!}
+                            {!! Form::text('zipcode', null, ['class' => 'form-control', 'tabindex' => 10]) !!}
                         </div>
                     </div>
 
@@ -120,7 +127,7 @@
                 <div class="form-group">
                     {!! Form::label('cor_address', trans('customers/general.columns.cor_address'), ['class' => 'control-label col-sm-2'] ) !!}
                     <div class="col-sm-10">
-                        {!! Form::text('cor_address', null, ['class' => 'form-control', 'tabindex' => 10]) !!}
+                        {!! Form::text('cor_address', null, ['class' => 'form-control', 'tabindex' => 11]) !!}
                     </div>
                 </div>
 
@@ -128,7 +135,7 @@
                     {!! Form::label('cor_state', trans('customers/general.columns.cor_state'), ['class' => 'control-label col-sm-2'] ) !!}
                     <div class="col-sm-10">
                         <div class="input-group select2-bootstrap-append">
-                            {!! Form::select('cor_state', array_keys(config('cities')), null, ['class' => 'form-control', 'id' => 'cor_state',  'style' => "width: 100%", 'tabindex' => 11]) !!}
+                            {!! Form::select('cor_state', array_keys(config('cities')), null, ['class' => 'form-control', 'id' => 'cor_state',  'style' => "width: 100%", 'tabindex' => 12]) !!}
                             <span class="input-group-addon">
                                 <span class="fa fa-fw fa-globe"></span>
                             </span>
@@ -140,7 +147,7 @@
                     {!! Form::label('cor_city', trans('customers/general.columns.cor_city'), ['class' => 'control-label col-sm-2'] ) !!}
                     <div class="col-sm-10">
                         <div class="input-group select2-bootstrap-append">
-                            {!! Form::select('cor_city', [], null, ['class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 12]) !!}
+                            {!! Form::select('cor_city', [], null, ['class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 13]) !!}
                             <span class="input-group-addon">
                                 <span class="fa fa-fw fa-map-marker"></span>
                             </span>
@@ -151,7 +158,7 @@
                 <div class="form-group">
                     {!! Form::label('cor_zipcode', trans('customers/general.columns.cor_zipcode'), ['class' => 'control-label col-sm-2'] ) !!}
                     <div class="col-sm-10">
-                        {!! Form::text('cor_zipcode', null, ['class' => 'form-control', 'tabindex' => 13]) !!}
+                        {!! Form::text('cor_zipcode', null, ['class' => 'form-control', 'tabindex' => 14]) !!}
                     </div>
                 </div>
               </div>

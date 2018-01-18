@@ -25,6 +25,7 @@ class CreateCustomerRequest extends Request
     {
         return [
             'NIK'                   =>  'required|digits:16|unique:customers,NIK',
+			'NPWP'                   =>  'required|numeric',
             'name'                  =>  'required|string|min:3|max:200',
             'gender'                =>  'required|string|size:1',
             'address'               =>  'required|string|min:5',
@@ -39,5 +40,15 @@ class CreateCustomerRequest extends Request
             'cor_city'                  =>  'required|string',
             'cor_zipcode'               =>  'required|string|digits:5',
         ];
+    }
+	
+	protected function getValidatorInstance(){
+        $validator = parent::getValidatorInstance();
+
+        $validator->sometimes('NPWP', 'digits:15', function($input)
+        {
+            if($input['NPWP'] == "0") return false; else return true;
+        });
+        return $validator;
     }
 }

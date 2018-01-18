@@ -66,7 +66,7 @@ return [
 
     'columns'             => [
         'NIK'                   =>  'NIK',
-        'SPAJ'                  =>  'SPAJ',
+        'NPWP'                  =>  'NPWP',
         'name'                  =>  'Nama',
         'phone_number'          =>  'Telepon',
         'handphone_number'      =>  'Handphone',

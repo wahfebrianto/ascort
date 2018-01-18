@@ -26,6 +26,7 @@ class EditCustomerRequest extends Request
     {
         return [
           'NIK'                   =>  'required|digits:16',
+		  'NPWP'                  =>  'required|numeric',
           'name'                  =>  'required|string|min:3|max:200',
           'gender'                =>  'required|string|size:1',
           'address'               =>  'required|string|min:5',
@@ -56,6 +57,11 @@ class EditCustomerRequest extends Request
             return $new_NIK != $old_NIK;
         });
 
+		$validator->sometimes('NPWP', 'digits:15', function($input)
+        {
+            if($input['NPWP'] == "0") return false; else return true;
+        });
+		
         return $validator;
     }
 }
