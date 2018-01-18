@@ -30,7 +30,7 @@
 								{!! Form::label('branch_office_id', trans('sales/general.columns.branch_office_id'), ['class' => 'control-label col-sm-3'] ) !!}
 								<div class="col-sm-9">
 									<div class="input-group select2-bootstrap-append">
-										{!! Form::select('branch_office_id', App\BranchOffice::getBranchOffices_ForDropDown(), null, ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 5]) !!}
+										{!! Form::select('branch_office_id', App\BranchOffice::getBranchOffices_ForDropDown(), null, ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 999]) !!}
 										<span class="input-group-addon">
 									<span class="fa fa-fw fa-fw fa-building-o"></span>
 								</span>
