@@ -95,8 +95,6 @@ return [
         'updated_at'            =>  'Terakhir diubah',
         'saved_image'            => 'Gambar ID Card tersimpan',
         'agent_position_id'     =>  'Posisi Agen',
-        'agent_position'     =>  'Posisi Agen',
-        'agent_position_name'     =>  'Posisi Agen',
         'dist_channel'          =>  'Dist. Channel',
         'team_name'             =>  'Nama Tim',
         'NPWP'                  =>  'NPWP',

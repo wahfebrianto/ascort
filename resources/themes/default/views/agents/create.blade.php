@@ -9,6 +9,7 @@
 @section('content')
     {!! Form::open( ['route' => 'agents.store', 'id' => 'form_create_agent', 'files' => true, 'class' => 'form-horizontal'] ) !!}
     {!! Form::hidden('id', null, ['class' => 'form-control', 'id' => 'id']) !!}
+    {!! Form::hidden('branch_office_id', 1, ['class' => 'form-control', 'id' => 'id']) !!}
     <div class="box box-primary fa-bg fa-bg-briefcase">
         <div class="box-header with-border">
             <i class="fa fa-briefcase"></i>
@@ -26,17 +27,7 @@
                             <h3 class="box-title">{{ trans('agents/general.page.create.general-info') }}</h3>
                         </div>
                         <div class="box-body">
-							<div class="form-group">
-								{!! Form::label('branch_office_id', trans('sales/general.columns.branch_office_id'), ['class' => 'control-label col-sm-3'] ) !!}
-								<div class="col-sm-9">
-									<div class="input-group select2-bootstrap-append">
-										{!! Form::select('branch_office_id', App\BranchOffice::getBranchOffices_ForDropDown(), null, ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 5]) !!}
-										<span class="input-group-addon">
-									<span class="fa fa-fw fa-fw fa-building-o"></span>
-								</span>
-									</div>
-								</div>
-							</div>
+
                             <div class="form-group">
                                 {!! Form::label('agent_code', trans('agents/general.columns.agent_code'), ['class' => 'control-label col-sm-3'] ) !!}
                                 <div class="col-sm-9">

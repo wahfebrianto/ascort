@@ -428,11 +428,7 @@ class AgentsController extends Controller
 
             $builder->whereIn('branch_office_id',\App\BranchOffice::getBranchOfficesID());
 			if(Input::has('branch_office_id') && Input::get('branch_office_id') != 'all') {
-<<<<<<< HEAD
 				$builder->whereIn('branch_office_id',Input::get('branch_office_id'));
-=======
-				$builder->where('branch_office_id',Input::get('branch_office_id'));
->>>>>>> fc682a1bbb0a7fcc4bb4e9de80b45f537f631471
 			}
 			if(Input::has('agent_name_filter')) {
                 // apply checkbox column filter
@@ -441,21 +437,12 @@ class AgentsController extends Controller
 			if(Input::has('leader_name_filter')) {
                 // apply checkbox column filter
 				$parentname = Input::get('leader_name_filter');
-<<<<<<< HEAD
 				$parent = \App\Agent::getAgentFromName($parentname);
-=======
-				$parent = \App\Agent::getAgentFromName($parentname)->lists('id');
-				//dd($parent);
->>>>>>> fc682a1bbb0a7fcc4bb4e9de80b45f537f631471
                 $builder->whereIn('parent_id',$parent);
             }
 			
 			$data = $builder->get();
-<<<<<<< HEAD
 			dd($data);
-=======
-			//dd($data);
->>>>>>> fc682a1bbb0a7fcc4bb4e9de80b45f537f631471
             $columns = Input::get('chkExp');
             if($data->count() == 0) {
                 Flash::error( trans('agents/general.error.no-data') );
@@ -465,16 +452,16 @@ class AgentsController extends Controller
                 case 'pdf':
                 default:
                     $html = \View::make('pdf.agents', compact('data', 'columns', 'enabledOnly'))->render();
-                    $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
-                    $pdf = \App::make('dompdf.wrapper');
-                    $pdf->loadHtml($html);
-                    $pdf->setPaper('A4', 'landscape');
-                    return $pdf->stream('agents.pdf');
+                    // $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
+                    // $pdf = \App::make('dompdf.wrapper');
+                    // $pdf->loadHtml($html);
+                    // $pdf->setPaper('A4', 'landscape');
+                    // return $mpdf->stream('agents.pdf');
 
-                    //$mpdf = new \mPDF("en", "A4-L", "12");
-					//dd($html);
-                    //$mpdf->WriteHTML($html);
-                    //return $mpdf->Output();
+                    $mpdf = new \mPDF("en", "A4-L", "12");
+					dd($html);
+                    $mpdf->WriteHTML($html);
+                    return $mpdf->Output();
                 case 'xlsx':
                     $dataArray = $data->toArray();
                     $export->data = $dataArray;
