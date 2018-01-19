@@ -503,18 +503,19 @@ class SalesController extends Controller
         // TODO: change pdf generator to manual attribute printing, get agent position name
         if(Input::has('type')) {
             $builder = \App\Sale::with('agent')->with('customer')->with('product')->where('is_active', 1);
-
+			
             if(Input::has('NBRO') && Input::get('NBRO') != 'all') {
                 // apply join date filter
                 $builder->where('NBRO', Input::get('NBRO'));
             }
+			
             if(Input::has('MGI_start_date_filter1') && Input::has('MGI_start_date_filter2')) {
                 // apply join date filter
-                /*$builder->whereBetween('MGI_start_date', [
+                $builder->whereBetween('MGI_start_date', [
                     \DateTime::createFromFormat('d/m/Y', Input::get('MGI_start_date_filter1')),
                     \DateTime::createFromFormat('d/m/Y', Input::get('MGI_start_date_filter2'))
-                ]);*/
-				$builder->whereBetween('created_at',[date_format(date_create(Input::get('MGI_start_date_filter1')),'d/m/Y'),date_format(date_create(Input::get('MGI_start_date_filter2')),'d/m/Y')]);
+                ]);
+				//$builder->whereBetween('MGI_start_date',[date_format(date_create(Input::get('MGI_start_date_filter1')),'d/m/Y'),date_format(date_create(Input::get('MGI_start_date_filter2')),'d/m/Y')]);
             }
             /*if(Input::has('insurance_start_date_filter1') && Input::has('insurance_start_date_filter2')) {
                 // apply join date filter
@@ -528,32 +529,37 @@ class SalesController extends Controller
                 $builder->select(Input::get('chkExp'));
             }
             $data = $builder->whereIn('branch_office_id',\App\BranchOffice::getBranchOfficesID())->get();
-
+			
             $columns = Input::get('chkExp');
             if($data->count() == 0) {
                 Flash::error( trans('sales/general.error.no-data') );
                 return redirect()->back();
             }
-            switch(Input::get('type')) {
-                case 'pdf':
-                default:
-                    $html = \View::make('pdf.sales', compact('data', 'columns', 'enabledOnly'))->render();
-                    $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
-					//dd($html);
-					set_time_limit(3600);
-					/*
-					$pdf = \App::make('dompdf.wrapper');
-					$pdf->setPaper('A4','landscape');
-					$pdf->loadHTML($html);
-					return $pdf->stream('invoice.pdf');*/
-					$mpdf = new \mPDF("en", "A4-L", "12");
-                    $mpdf->WriteHTML($html);
-                    return $mpdf->Output();
-                case 'xlsx':
-                    $dataArray = $data->toArray();
-                    $export->data = $dataArray;
-                    return $export->handleExport();
-            }
+			\Config::set('global.export_type',Input::get('type'));
+			$dataArray = $data->toArray();
+			$export->data = $dataArray;
+			return $export->handleExport();
+            //switch(Input::get('type')) {
+            //    case 'pdf':
+            //    default:
+            //        $html = \View::make('pdf.sales', compact('data', 'columns', 'enabledOnly'))->render();
+            //        $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
+			//		//dd($html);
+			//		set_time_limit(3600);
+			//		/*
+			//		$pdf = \App::make('dompdf.wrapper');
+			//		$pdf->setPaper('A4','landscape');
+			//		$pdf->loadHTML($html);
+			//		return $pdf->stream('invoice.pdf');*/
+			//		$mpdf = new \mPDF("en", "A4-L", "12");
+            //        $mpdf->WriteHTML($html);
+            //        return $mpdf->Output();
+            //    case 'xlsx':
+            //        $dataArray = $data->toArray();
+            //        $export->data = $dataArray;
+            //        return $export->handleExport();
+            //}
+			
         } else {
             Flash::error( trans('sales/general.error.no-data') );
             return redirect()->back();

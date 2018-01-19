@@ -11,7 +11,7 @@ use Auth;
 class Customer extends Model
 {
     protected $table = "customers";
-    protected $fillable = ['NIK', 'NPWP', 'name', 'phone_number', 'handphone_number', 'email', 'gender', 'address', 'state', 'city', 'zipcode',
+    protected $fillable = ['name','NIK', 'NPWP',  'address','email','phone_number', 'handphone_number',  'gender',  'state', 'city', 'zipcode',
         'cor_address', 'cor_state', 'cor_city', 'cor_zipcode', 'last_transaction', 'branch_office_id'];
     protected $dates = ['last_transaction'];
 

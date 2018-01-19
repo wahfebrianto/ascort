@@ -9,8 +9,7 @@ use Nayjest\Grids\EloquentDataProvider;
 class Sale extends Model
 {
     protected $table = "sales";
-    protected $fillable = ['agent_id', 'agent_commission', 'product_id', 'number',
-                            'customer_id', 'customer_name',
+    protected $fillable = ['customer_id','agent_id', 'agent_commission', 'product_id', 'number','customer_name',
                             'MGI', 'MGI_month', 'MGI_start_date', 'nominal', 'interest', 'additional',
                             'bank', 'bank_branch', 'account_name', 'account_number', 'branch_office_id'];
     protected $dates = ['MGI_start_date'];
