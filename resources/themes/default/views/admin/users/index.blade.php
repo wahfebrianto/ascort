@@ -91,7 +91,7 @@
                                             @endif
 
                                             @if ( $user->isDeletable() )
-                                                <a href="{!! route('admin.users.confirm-delete', $user->id) !!}" data-toggle="modal" data-target="#modal_dialog" title="{{ trans('general.button.delete') }}"  class="btn btn-sm btn-danger btn-action">
+                                                <a href="{!! route('admin.users.delete', $user->id) !!}"  class="btn btn-sm btn-danger btn-action" onclick = "return confirm('{{ trans('general.confirm.delete',['ID' => $user->id]) }}')">
                                                     <i class="fa fa-trash-o"></i> {{ trans('general.button.delete') }}
                                                 </a>
                                             @else

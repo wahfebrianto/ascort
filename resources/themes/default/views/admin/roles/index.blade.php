@@ -90,9 +90,9 @@
                                                 @endif
 
                                                 @if ( $role->isDeletable() )
-                                                    <a href="{!! route('admin.roles.confirm-delete', $role->id) !!}" data-toggle="modal" data-target="#modal_dialog" title="{{ trans('general.button.delete') }}" class="btn btn-sm btn-danger btn-action">
-                                                        <i class="fa fa-trash-o"></i> {{ trans('general.button.delete') }}
-                                                    </a>
+                                                    <a href="{!! route('admin.roles.delete', $role->id) !!}"  class="btn btn-sm btn-danger btn-action" onclick = "return confirm('{{ trans('general.confirm.delete',['ID' => $role->id]) }}')">
+                                                    <i class="fa fa-trash-o"></i> {{ trans('general.button.delete') }}
+                                                </a>
                                                 @else
                                                     <a class="btn btn-sm btn-default btn-action disabled">
                                                         <i class="fa fa-trash-o" title="{{ trans('admin/roles/general.error.cant-delete-this-role') }}"></i> {{ trans('general.button.delete') }}
