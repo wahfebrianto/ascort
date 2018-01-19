@@ -23,6 +23,10 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_details">
+							<div class="form-group">
+                                {!! Form::label('branch_office_name', trans('admin/roles/general.columns.branch_office_name')) !!}
+                                {!! Form::text('branch_office_name', null, ['class' => 'form-control', 'readonly']) !!}
+                            </div>
                             <div class="form-group">
                                 {!! Form::label('name', trans('admin/roles/general.columns.name')) !!}
                                 {!! Form::text('name', null, ['class' => 'form-control', 'readonly']) !!}

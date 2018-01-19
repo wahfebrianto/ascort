@@ -7,8 +7,8 @@ class Role extends EntrustRole {
     /**
      * @var array
      */
-    protected $fillable = ['name', 'display_name', 'description', 'resync_on_login', 'enabled'];
-
+    protected $fillable = ['name', 'display_name', 'description', 'branch_office_id', 'resync_on_login', 'enabled'];
+	protected $appends = ['branch_office_name'];
 
     /**
      * @return bool
@@ -120,6 +120,12 @@ class Role extends EntrustRole {
             $this->users()->detach();
         }
     }
-
-
+	
+	public function getBranchOfficeNameAttribute(){
+        return ($this->branch_office_id == NULL)?"All":\App\BranchOffice::find($this->branch_office_id)->branch_name;
+    }
+	
+	public function branchOffice(){
+        return $this->belongsTo('App\BranchOffice', 'branch_office_id');
+    }
 }

@@ -57,9 +57,10 @@ return [
 
     'columns'           => [
         'id'                        =>  'ID',
-        'name'                      =>  'Name',
-        'display_name'              =>  'Display name',
-        'description'               =>  'Description',
+        'name'                      =>  'Nama',
+		'branch_office_name'        =>  'Kantor Cabang',
+        'display_name'              =>  'Nama Tampilan',
+        'description'               =>  'Deskripsi',
         'permissions'               =>  'Permissions',
         'resync_on_login'           =>  'Re-sync on login',
         'options'                   =>  'Options',
