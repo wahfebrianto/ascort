@@ -113,7 +113,7 @@ class RolesController extends Controller {
         $role = $this->role->create($attributes);
 
         $role->savePermissions($request->get('perms'));
-        $role->forcePermission('basic-authenticated');
+        //$role->forcePermission('basic-authenticated');
         $role->saveUsers($attributes['users']);
 
         Flash::success( trans('admin/roles/general.status.created') ); // 'Role successfully created');
@@ -180,7 +180,7 @@ class RolesController extends Controller {
             $role->savePermissions($request->get('perms'));
         }
 
-        $role->forcePermission('basic-authenticated');
+        //$role->forcePermission('basic-authenticated');
 
         if ($role->canChangeMembership())
         {

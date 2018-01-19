@@ -33,7 +33,6 @@ class DashboardController extends Controller
     public function index() {
         $page_title = "Dashboard";
         $page_description = "This is the dashboard";
-
         $count_customers = \App\Customer::isActive()->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID())->count();
         $count_agents = \App\Agent::isActive()->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID())->count();
         $current_period = \App\CommissionReport::getCurrentPeriodCode();

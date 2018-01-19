@@ -9,6 +9,7 @@
     <div class="tab-content">
 
         <div class="tab-pane active" id="tab_details">
+		
             <div class="form-group">
                 {!! Form::label('first_name', trans('admin/users/general.columns.first_name')) !!}
                 {!! Form::text('first_name', null, ['class' => 'form-control']) !!}
@@ -43,6 +44,7 @@
                 {!! Form::label('auth_type', trans('admin/users/general.columns.type')) !!}
                 {!! Form::text('auth_type', null, ['class' => 'form-control', 'readonly']) !!}
             </div>
+			
         </div><!-- /.tab-pane -->
 
         <div class="tab-pane" id="tab_options">
@@ -101,7 +103,6 @@
 
             </div>
         </div><!-- /.tab-pane -->
-
         <div class="tab-pane" id="tab_perms">
             <div class="form-group">
                 <div class="box-body table-responsive no-padding">

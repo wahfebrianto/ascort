@@ -228,7 +228,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function belongToBranch($name, $requireAll = false, $mustBeEnabled = true)
     {
-        foreach ($this->branchOffice as $office) {
+		$branchOfficeList = array();
+		foreach ($this->roles as $roles) {
+			if($roles->branch_office_id == null)
+			{
+				$branchOfficeList = \App\BranchOffice::all();
+				break;
+			}
+			else 
+			{
+				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
+			}
+		}
+        foreach ($branchOfficeList as $office) {
             if ($office->branch_name == $name) {
                 if ( $mustBeEnabled ) {
                     if ($office->is_active) {
@@ -340,8 +352,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Approval', 'user_id');
     }
 
-    public function branchOffices(){
-        return $this->belongsToMany('App\BranchOffice');
-    }
+    
 
 }

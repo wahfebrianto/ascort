@@ -12,6 +12,18 @@
     <div class="tab-content">
 
         <div class="tab-pane active" id="tab_details">
+			<div class="form-group">
+				{!! Form::label('branch_office_id', trans('sales/general.columns.branch_office_id')) !!}
+				<div>
+					<div class="input-group select2-bootstrap-append">
+						{!! Form::select('branch_office_id', App\BranchOffice::getBranchOffices_ForDropDown(true), null, ['class' => 'form-control select2', 'style' => "width: 100%"]) !!}
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-fw fa-building-o"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+		
             <div class="form-group">
                 {!! Form::label('name', trans('admin/roles/general.columns.name') ) !!}
                 {!! Form::text('name', null, ['class' => 'form-control', $readonly]) !!}

@@ -24,8 +24,8 @@ class BranchOffice extends Model
         return $this->hasMany('App\Sale', 'branch_office_id');
     }
 
-    public function users(){
-        return $this->hasMany('App\User');
+    public function role(){
+        return $this->hasMany('App\Models\Role', 'branch_office_id');
     }
 
     // ------------------------------------------ END OF RELATIONSHIP -----------------------------------------------
@@ -38,11 +38,26 @@ class BranchOffice extends Model
         return (count($found)>0 ? $found[0] : null);
     }
 
-    public static function getBranchOffices_forDropDown()
+    public static function getBranchOffices_forDropDown($nullable = false)
     {
       $branch_offices = [];
-      $allbranches = Auth::user()->branchOffices;
-      foreach ($allbranches as $a) {
+	  $branchOfficeList = array();
+		foreach (Auth::user()->roles as $roles) {
+			if($roles->branch_office_id == null)
+			{
+				$branchOfficeList = \App\BranchOffice::all();
+				break;
+			}
+			else 
+			{
+				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
+			}
+		}
+		if($nullable)
+		{
+			$branch_offices[null] = "All";
+		}
+      foreach ($branchOfficeList as $a) {
         $branch_offices[$a->id] = $a->branch_name;
       }
       return $branch_offices;
@@ -51,8 +66,19 @@ class BranchOffice extends Model
     public static function getBranchOfficesID()
     {
       $branch_offices = [];
-      $allbranches = Auth::user()->branchOffices;
-      foreach ($allbranches as $a) {
+	  $branchOfficeList = array();
+		foreach (Auth::user()->roles as $roles) {
+			if($roles->branch_office_id == null)
+			{
+				$branchOfficeList = \App\BranchOffice::all();
+				break;
+			}
+			else 
+			{
+				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
+			}
+		}
+      foreach ($branchOfficeList as $a) {
         $branch_offices[] = $a->id;
       }
       return $branch_offices;
