@@ -20,6 +20,7 @@ use App\Approval;
 use App\Action;
 use App\CommissionReport;
 use App\Http\Requests\AgentsExcelExport;
+use App\Http\Requests\AgentsCommissionExcelExport;
 
 class AgentsController extends Controller
 {
@@ -447,7 +448,11 @@ class AgentsController extends Controller
                 Flash::error( trans('agents/general.error.no-data') );
                 return redirect()->back();
             }
-            switch(Input::get('type')) {
+			\Config::set('global.export_type',Input::get('type'));
+			$dataArray = $data->toArray();
+			$export->data = $dataArray;
+			return $export->handleExport();
+            /*switch(Input::get('type')) {
                 case 'pdf':
                 default:
                     $html = \View::make('pdf.agents', compact('data', 'columns', 'enabledOnly'))->render();
@@ -466,12 +471,42 @@ class AgentsController extends Controller
                     $export->data = $dataArray;
                     return $export->handleExport();
             }
-        } else {
+			*/
+        }
+		else {
             Flash::error( trans('agents/general.error.no-data') );
             return redirect()->back();
         }
     }
-
+	public function export_commission(AgentsCommissionExcelExport $export)
+    {
+		$list_ = array(
+			0=>[Input::get('created_at_filter1'),Input::get('created_at_filter2'),Input::get('agent_name_filter'),Input::get('leader_name_filter')],
+			1=>[]);
+		$parentID = \App\Agent::where('name','LIKE','%'.Input::get('leader_name_filter').'%')->lists('id');
+        $builder = \App\Agent::with('agent_position')
+			->where('is_active', 1)
+			->where('name','LIKE','%'.Input::get('agent_name_filter').'%')
+			->whereIn('parent_id',$parentID);
+		$agents = $builder->get();
+		foreach($agents as $agent){
+			$threeTopAgent = array($agent);
+			$now = $agent;
+			for($i=0;$i<3;$i++){
+				if($now->hasParent()){
+					$threeTopAgent[] = $now->getParent();
+					$now = $now->getParent();
+				}
+				else{
+					break;
+				}
+			}
+			$list_[1][] = $threeTopAgent;
+		}
+		\Config::set('global.export_type',Input::get('type'));
+		$export->data = $list_;
+		return $export->handleExport();
+    }
     public function summary_export()
     {
         $builder = \App\Agent

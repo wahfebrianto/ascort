@@ -259,6 +259,7 @@ Route::group(['middleware' => 'authorize'], function () {
         Route::get('enableSelected',    ['as' => 'agents.enable-selected',       'uses' => 'AgentsController@enableSelected']);
         Route::get('disableSelected',   ['as' => 'agents.disable-selected',      'uses' => 'AgentsController@disableSelected']);
         Route::get('export',            ['as' => 'agents.export',                'uses' => 'AgentsController@export']);
+        Route::get('export_commission',            ['as' => 'agents.export_commission',                'uses' => 'AgentsController@export_commission']);
         Route::get('{id}',              ['as' => 'agents.show',                  'uses' => 'AgentsController@show']);
         Route::get('{id}/edit',         ['as' => 'agents.edit',                  'uses' => 'AgentsController@edit']);
         Route::patch('{id}/edit',       ['as' => 'agents.update',                'uses' => 'AgentsController@update']);
@@ -354,7 +355,6 @@ Route::group(['middleware' => 'authorize'], function () {
         Route::get('index',             ['as' => 'slips.finalsummary.index',                 'uses' => 'FinalSummaryController@index']);
         Route::get('export',            ['as' => 'slips.finalsummary.export',                'uses' => 'FinalSummaryController@export']);
     });
-
     // TODO: Remove this before release...
     if ($this->app->environment('development')) {
         // TEST-ACL routes

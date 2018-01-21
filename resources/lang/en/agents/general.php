@@ -91,7 +91,7 @@ return [
         'id_card_image_filename' => 'ID Card Nama File Gambar',
         'id_card_image'         =>  'ID Card Gambar',
         'is_active'             =>  'Aktif',
-        'created_at'            =>  'Terbuat',
+        'created_at'            =>  'Periode',
         'updated_at'            =>  'Terakhir diubah',
         'saved_image'            => 'Gambar ID Card tersimpan',
         'agent_position_id'     =>  'Posisi Agen',

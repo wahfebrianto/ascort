@@ -299,11 +299,11 @@ class CustomersController extends Controller
 
             if(Input::has('created_at_filter1') && Input::has('created_at_filter2')) {
                 // apply join date filter
-                /*$builder->whereBetween('created_at', [
+                $builder->whereBetween('created_at', [
                     \DateTime::createFromFormat('d/m/Y', Input::get('created_at_filter1')),
                     \DateTime::createFromFormat('d/m/Y', Input::get('created_at_filter2'))
-                ]);*/
-				$builder->whereBetween('created_at',[date_format(date_create(Input::get('created_at_filter1')),'d/m/Y'),date_format(date_create(Input::get('created_at_filter2')),'d/m/Y')]);
+                ]);
+				//$builder->whereBetween('created_at',[date_format(date_create(Input::get('created_at_filter1')),'d/m/Y'),date_format(date_create(Input::get('created_at_filter2')),'d/m/Y')]);
             }
             if(Input::has('chkExp')) {
                 // apply checkbox column filter
@@ -316,24 +316,10 @@ class CustomersController extends Controller
                 Flash::error( trans('customers/general.error.no-data') );
                 return redirect()->back();
             }
-            switch(Input::get('type')) {
-                case 'pdf':
-                default:
-                    $html = \View::make('pdf.customers', compact('data', 'columns', 'enabledOnly'))->render();
-                    // $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
-                    // $pdf = \App::make('dompdf.wrapper');
-                    // $pdf->loadHtml($html);
-                    // $pdf->setPaper('A4', 'landscape');
-                    // return $pdf->stream('customers.pdf');
-					dd($html);
-                    $mpdf = new \mPDF("en", "A4-L", "12");
-                    $mpdf->WriteHTML($html);
-                    return $mpdf->Output();
-                case 'xlsx':
-                    $dataArray = $data->toArray();
-                    $export->data = $dataArray;
-                    return $export->handleExport();
-            }
+            \Config::set('global.export_type',Input::get('type'));
+			$dataArray = $data->toArray();
+			$export->data = $dataArray;
+			return $export->handleExport();
         } else {
             Flash::error( trans('customers/general.error.no-data') );
             return redirect()->back();

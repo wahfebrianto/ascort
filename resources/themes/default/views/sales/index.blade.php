@@ -285,7 +285,7 @@ use Nayjest\Grids\DataRow;
                 </div>
                 <div class="modal-body fa-bg fa-bg-export">
                     <div class="row">
-                        <div class="col-md-4">
+                        <!--div class="col-md-4">
                             <label>Columns to be exported</label>
                             <div class="border-decor"></div>
                             <div class="form-group">
@@ -297,8 +297,8 @@ use Nayjest\Grids\DataRow;
                                     </div>
                                 @endforeach
                             </div>
-                        </div>
-                        <div class="col-md-8">
+                        </div-->
+                        <div class="col-md-12">
                             <label>Filters</label>
                             <div class="border-decor"></div>
                             <!--div class="form-group">
@@ -308,8 +308,8 @@ use Nayjest\Grids\DataRow;
                                 </div>
                             </div-->
                             <div class="form-group">
-                                {!! Form::label('MGI_start_date', trans('sales/general.columns.MGI_start_date'), ['class' => 'control-label col-sm-4'] ) !!}
-                                <div class="col-sm-8">
+                                {!! Form::label('MGI_start_date', trans('sales/general.columns.MGI_start_date'), ['class' => 'control-label col-sm-2'] ) !!}
+                                <div class="col-sm-10">
                                     <div class="input-group">
                                         {!! Form::text('MGI_start_date_filter1', '01/01/1970', ['class' => 'datepicker form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
                                         <span class="input-group-addon">to</span>

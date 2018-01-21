@@ -323,4 +323,14 @@ class Agent extends Model
             }
         }
     }
+	public function getParent(){
+		return $this->parent()->get()[0];
+	}
+	public function hasParent(){
+		return $this->parent()->get()->count()!=0;
+	}
+	public function getORCommission($childAgent,$totalPersonalSelling){
+		$thisAgentPosition = $this->agent_position()->get()[0];
+		$childAgentPosition = $childAgent->agent_position()->get()[0];
+	}
 }

@@ -5,7 +5,7 @@ use Maatwebsite\Excel\Files\ExportHandler;
 class AgentsExcelExportHandler implements ExportHandler {
 
     public function handle($file)
-    {$ctr=0;
+    {$ctr=1;
         // change all data that need to be formatted
         foreach($file->data as &$datum) {
 			
@@ -41,18 +41,29 @@ class AgentsExcelExportHandler implements ExportHandler {
 			foreach($datum as $key => $value){
 				$newdatum[$columnLang[$key]] = $datum[$key];
 			}
-			$datum = $newdatum;
+			$datum = array('No'=>$ctr++);
+			$datum = array_merge($datum,$newdatum);
 			
         }
         // work on the exportAgentsExcelExport
         return $file->sheet('agents', function($sheet) use($file)
         {
+			$columnCount = count($file->data[0]);
             $sheet->cells('1', function($cells) {
                 $cells->setFontSize(12);
                 $cells->setFontWeight('bold');
             });
+			$sheet->setBorder('A1:'.chr(64+$columnCount).strval(sizeof($file->data)+1),'solid');
+			$sheet->setFontSize(12);
+			if(config('global.export_type') == 'pdf'){$sheet->setOrientation('landscape');}
             $sheet->fromArray($file->data, null, 'A1', true, true);
-        })->export('xlsx');
+			$sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
+			$sheet->cells('A1:'.chr(64+$columnCount).'1', function($cells) {
+                //$cells->setFontSize(8);
+				$cells->setBackground('#AAAAAA');
+				$cells->setAlignment('center');
+            });
+        })->export(config('global.export_type'));
     }
 
 }

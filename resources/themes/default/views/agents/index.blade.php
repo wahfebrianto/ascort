@@ -45,12 +45,12 @@ use Nayjest\Grids\DataRow;
                             <span class="fa fa-download"></span> Export <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a data-toggle="modal" data-target="#exportModal" onclick="document.getElementById('export_type').value='pdf'">
+                            <li><a data-toggle="modal" data-target="#exportModal" onclick="document.getElementById('export_type').value='pdf';document.getElementById('export_type2').value='pdf'">
                                     <span class="fa fa fa-file-pdf-o"></span>{{ trans('general.export.pdf') }}
                                 </a>
                             </li>
                             <li>
-                                <a data-toggle="modal" data-target="#exportModal" onclick="document.getElementById('export_type').value='xlsx'">
+                                <a data-toggle="modal" data-target="#exportModal" onclick="document.getElementById('export_type').value='xlsx';document.getElementById('export_type2').value='xlsx'">
                                     <span class="fa fa fa-file-excel-o"></span>{{ trans('general.export.excel') }}
                                 </a>
                             </li>
@@ -279,10 +279,13 @@ use Nayjest\Grids\DataRow;
                             <label>Columns to be exported</label>
                             <div class="border-decor"></div>
                             <div class="form-group">
+								<?php
+									$default_columns = array('No','agent_code','type','branch_office_id','name','NIK','NPWP','agent_position_id','email');
+								?>
                                 @foreach($modelColumns as $column)
                                 <div class="checkbox">
                                     <label>
-                                        {!! Form::checkbox('chkExp[]', $column, true) !!} &nbsp;{!! trans('agents/general.columns.' . $column) !!}
+                                        {!! Form::checkbox('chkExp[]', $column, in_array($column,$default_columns)) !!} &nbsp;{!! trans('agents/general.columns.' . $column) !!}
                                     </label>
                                 </div>
                                 @endforeach
@@ -301,22 +304,22 @@ use Nayjest\Grids\DataRow;
                                 {!! Form::label('created_at_filter', trans('agents/general.columns.created_at'), ['class' => 'control-label col-sm-4'] ) !!}
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        {!! Form::text('created_at_filter1', '01/01/1970', ['class' => 'datepicker form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
+                                        {!! Form::text('created_at_filter1', '01/01/1970', ['id'=>'caf1','class' => 'datepicker form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
                                         <span class="input-group-addon">to</span>
-                                        {!! Form::text('created_at_filter2', '01/12/2099', ['class' => 'datepicker form-control',  'style' => "width: 100%", 'tabindex' => 4]) !!}
+                                        {!! Form::text('created_at_filter2', '01/12/2099', ['id'=>'caf2','class' => 'datepicker form-control',  'style' => "width: 100%", 'tabindex' => 4]) !!}
                                     </div>
                                 </div>
                             </div>
 							<div class="form-group">
                                 {!! Form::label('agent_name_filter', trans('agents/general.columns.name'), ['class' => 'control-label col-sm-4'] ) !!}
                                 <div class="col-sm-8">
-                                    {!! Form::text('agent_name_filter', '', ['class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
+                                    {!! Form::text('agent_name_filter', '', ['id'=>'anf1','class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
                                 </div>
                             </div>
 							<div class="form-group">
                                 {!! Form::label('leader_name_filter', trans('agents/general.columns.parent_name'), ['class' => 'control-label col-sm-4'] ) !!}
                                 <div class="col-sm-8">
-                                    {!! Form::text('leader_name_filter', '', ['class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
+                                    {!! Form::text('leader_name_filter', '', ['id'=>'lnf1','class' => 'form-control',  'style' => "width: 100%", 'tabindex' => 3]) !!}
                                 </div>
                             </div>
 							<div class="form-group">
@@ -330,9 +333,20 @@ use Nayjest\Grids\DataRow;
                 </div>
                 <div class="modal-footer">
                     <a type="button" class="btn btn-danger" data-dismiss="modal" href="#"><span class="fa fa-times"></span> Cancel</a>
-                    <button type="submit" class="btn btn-primary"><span class="fa fa-download"></span> Export</button>
+                    <button type="submit" class="btn btn-primary"><span class="fa fa-download"></span> Export Agents List</button>
+				</div>
+					{!! Form::close() !!}	
+					{!! Form::open( ['route' => 'agents.export_commission', 'id' => 'form_export_agents_commission', 'method' => 'GET'] ) !!}
+					{!! Form::hidden('created_at_filter1', '01/01/1970', ['class' => 'form-control', 'id' => 'caf11']) !!}
+					{!! Form::hidden('created_at_filter2', '01/12/2099', ['class' => 'form-control', 'id' => 'caf12']) !!}
+					{!! Form::hidden('agent_name_filter', '', ['class' => 'form-control', 'id' => 'anf2']) !!}
+					{!! Form::hidden('leader_name_filter', '', ['class' => 'form-control', 'id' => 'lnf2']) !!}
+					{!! Form::hidden('type', 'pdf', ['class' => 'form-control', 'id' => 'export_type2']) !!}
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary"><span class="fa fa-download"></span> Export Recapitulation of commissions</button>
+					{!! Form::close() !!}
                 </div>
-                {!! Form::close() !!}
+                
             </div>
         </div>
     </div>
@@ -348,6 +362,19 @@ use Nayjest\Grids\DataRow;
             });
             $.fn.datepicker.defaults.format = "dd/mm/yyyy";
             $('.datepicker').datepicker().attr('placeholder', 'dd/mm/yyyy');
+			$('#caf1').change(function(){
+				$('#caf11').val($('#caf1').val());
+			});
+			$('#caf2').change(function(){
+				$('#caf12').val($('#caf2').val());
+			});
+			$('#lnf1').change(function(){
+				$('#lnf2').val($('#lnf1').val());
+			});
+			$('#anf1').change(function(){
+				$('#anf2').val($('#anf1').val());
+			});
+			
         });
     </script>
 

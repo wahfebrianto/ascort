@@ -72,12 +72,13 @@ class SalesExcelExportHandler implements ExportHandler {
         // work on the exportAgentsExcelExport
         return $file->sheet('sales', function($sheet) use($file)
         {
-            $sheet->cells('A1:L1', function($cells) {
+			$columnCount = count($file->data[0]);
+            $sheet->cells('A1:'.chr(64+$columnCount).'1', function($cells) {
                 //$cells->setFontSize(8);
                 $cells->setFontWeight('bold');
 				$cells->setBackground('#CCCCCC');
             });
-			$sheet->setBorder('A1:L'.strval(sizeof($file->data)+1),'solid');
+			$sheet->setBorder('A1:'.chr(64+$columnCount).strval(sizeof($file->data)+1),'solid');
 			$sheet->setFontSize(10);
 			if(config('global.export_type') == 'pdf'){$sheet->setOrientation('landscape');}
             $sheet->fromArray($file->data, null, 'A1', true, true);

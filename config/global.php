@@ -1,7 +1,8 @@
 <?php
 
 return [
-	'export_type' => 'xlsx'
+	'export_type' => 'xlsx',
+	'zpercentage'	=> 1
 ];
 
 ?>
