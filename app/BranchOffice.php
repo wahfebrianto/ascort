@@ -9,6 +9,7 @@ class BranchOffice extends Model
 {
     protected $table = "branch_offices";
     protected $fillable = ['branch_name', 'address', 'state', 'city', 'zipcode', 'phone_number'];
+    protected $appends = ['state_city'];
 
     // ---------------------------------------------- RELATIONSHIP --------------------------------------------------
 
@@ -38,25 +39,30 @@ class BranchOffice extends Model
         return (count($found)>0 ? $found[0] : null);
     }
 
+    public function getStateCityAttribute()
+    {
+        return "$this->city, $this->state";
+    }
+
     public static function getBranchOffices_forDropDown($nullable = false)
     {
       $branch_offices = [];
-	  $branchOfficeList = array();
-		foreach (Auth::user()->roles as $roles) {
-			if($roles->branch_office_id == null)
-			{
-				$branchOfficeList = \App\BranchOffice::all();
-				break;
-			}
-			else 
-			{
-				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
-			}
-		}
-		if($nullable)
-		{
-			$branch_offices[null] = "All";
-		}
+  	  $branchOfficeList = array();
+  		foreach (Auth::user()->roles as $roles) {
+  			if($roles->branch_office_id == null)
+  			{
+  				$branchOfficeList = \App\BranchOffice::where('is_active', '=', 1)->get();
+  				break;
+  			}
+  			else if($roles->is_active == 1)
+  			{
+  				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
+  			}
+  		}
+  		if($nullable)
+  		{
+  			$branch_offices[null] = "All";
+  		}
       foreach ($branchOfficeList as $a) {
         $branch_offices[$a->id] = $a->branch_name;
       }
@@ -66,18 +72,18 @@ class BranchOffice extends Model
     public static function getBranchOfficesID()
     {
       $branch_offices = [];
-	  $branchOfficeList = array();
-		foreach (Auth::user()->roles as $roles) {
-			if($roles->branch_office_id == null)
-			{
-				$branchOfficeList = \App\BranchOffice::all();
-				break;
-			}
-			else 
-			{
-				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
-			}
-		}
+  	  $branchOfficeList = array();
+  		foreach (Auth::user()->roles as $roles) {
+  			if($roles->branch_office_id == null)
+  			{
+  				$branchOfficeList = \App\BranchOffice::where('is_active', '=', 1)->get();
+  				break;
+  			}
+  			else if($roles->is_active == 1)
+  			{
+  				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
+  			}
+  		}
       foreach ($branchOfficeList as $a) {
         $branch_offices[] = $a->id;
       }

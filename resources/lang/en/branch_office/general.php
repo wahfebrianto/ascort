@@ -3,18 +3,18 @@
 return [
 
     'audit-log'           => [
-        'category'          => 'Master Agen',
-        'msg-index'         => 'Akses Master Agen.',
-        'msg-show'          => 'Detail Master Agen telah diakses.',
-        'msg-create'        => 'Halaman Agen baru telah diakses.',
-        'msg-store'         => 'Agen baru telah terbuat dengan NIK #:NIK.',
-        'msg-edit'         => 'Terakses halaman edit agen dengan ID #:ID.',
-        'msg-update'         => 'Telah terubah agen dengan ID #:ID.',
+        'category'          => 'Master Kantor Cabang',
+        'msg-index'         => 'Akses Master Kantor Cabang.',
+        'msg-show'          => 'Detail Master Kantor Cabang telah diakses.',
+        'msg-create'        => 'Halaman Kantor Cabang baru telah diakses.',
+        'msg-store'         => 'Kantor Cabang baru telah terbuat dengan nama :name.',
+        'msg-edit'         => 'Terakses halaman edit Kantor Cabang dengan ID #:ID.',
+        'msg-update'         => 'Telah terubah Kantor Cabang dengan ID #:ID.',
         'msg-update-delay'         => 'Change for attribute :key is cannot be executed directly and delayed.',
         'msg-update-approval'         => 'Change for attribute :key is waiting for owner approval.',
-        'msg-enabled-selected'  => 'Enabled multiple agent.',
-        'msg-disabled-selected' => 'Disabled multiple agent.',
-        'msg-summarypage' => 'Accessed Agent summary page',
+        'msg-enabled-selected'  => 'Enabled multiple Branch Office.',
+        'msg-disabled-selected' => 'Disabled multiple Branch Office.',
+        'msg-summarypage' => 'Accessed Branch Office summary page',
     ],
 
     'status'              => [
@@ -37,45 +37,39 @@ return [
 
     'page'              => [
         'index'              => [
-            'title'             => 'Agents | Agents list',
-            'description'       => 'Lists of Agents',
-            'table-title'       => 'Lists of Agents',
+            'title'             => 'Kantor Cabang | Daftar Kantor Cabang',
+            'description'       => 'Daftar Kantor Cabang',
+            'table-title'       => 'Daftar Kantor Cabang',
         ],
         'show'              => [
-            'title'             => 'Agents | Agent details',
-            'description'       => 'Agent details (:name)',
-            'section-title'     => 'Agent details',
+            'title'             => 'Kantor Cabang | Detail Kantor Cabang',
+            'description'       => 'Detail Kantor Cabang (:name)',
+            'section-title'     => 'Detail Kantor Cabang',
             'pic-enlarge'       => 'Click the image to enlarge'
         ],
         'create'              => [
-            'title'             => 'Agents | New Agent',
-            'description'       => 'Create new Agent',
-            'section-title'     => 'Create new Agent',
+            'title'             => 'Kantor Cabang | Kantor Cabang Baru',
+            'description'       => 'Kantor Cabang Baru',
+            'section-title'     => 'Kantor Cabang Baru',
             'general-info'      => 'Basic Info',
             'idcard-info'       => 'ID Card Info',
             'agent-info'        => 'Agent Detailed Info',
         ],
         'edit'              => [
-            'title'             => 'Agents | Edit Agent',
-            'description'       => 'Edit existing Agent (:name). Beware! After saving, any update is not reversible.',
-            'section-title'     => 'Edit Agent',
+            'title'             => 'Kantor Cabang | Edit Kantor Cabang',
+            'description'       => 'Edit Kantor Cabang (:name). Hati-hati! Setelah tersimpan, data tidak dapat dikembalikan.',
+            'section-title'     => 'Edit Kantor Cabang',
             'pic-enlarge'       => 'Click the image to enlarge'
-        ],
-        'summary'              => [
-            'title'             => 'Agents | Summary and Hierarchical View',
-            'description'       => 'View all agents in summary view. Filter applied to PARENT agent only!',
-            'hierarchy-title'   => 'Hierarchical Table',
-            'exportdetail'      => 'Filter parent agents to show all child agents.',
-        ],
-        'history'              => [
-            'title'             => 'Agents | Agents Positions History',
-            'description'       => 'Lists of Agent Position History',
-            'table-title'       => 'Lists of Agent Position History',
         ],
     ],
 
     'columns'             => [
-        'name'	=>	'Nama Kantor Cabang'
+        'name'	=>	'Nama Kantor Cabang',
+        'branch_name'	=>	'Nama Kantor Cabang',
+        'address'	=>	'Alamat',
+        'state'	=>	'Provinsi',
+        'city'	=>	'Kota',
+        'phone_number'	=>	'Telepon'
     ],
 
     'tabs' => [
@@ -88,7 +82,7 @@ return [
     ],
 
     'button'              => [
-        'create'               => 'New Agent',
+        'create'               => 'Tambah Kantor Cabang',
     ],
 
 ];

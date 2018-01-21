@@ -749,9 +749,22 @@ class ProductionSeeder extends Seeder
         ]);
 
         Menu::create([
+            'name' => 'branch_office',
+            'label' => 'Branch Office',
+            'position' => 5,
+            'icon' => 'fa fa-cogs',
+            'separator' => false,
+            'url' => '/admin/branchoffice',                // Get URL from route.
+            'enabled' => true,
+            'parent_id' => $menuSettings->id,      // Parent is setting.
+            'route_id' => 'admin.mgi.index',
+            'permission_id' => $permAdminSettings->id,                // Get permission from route.
+        ]);
+
+        Menu::create([
             'name' => 'holiday',
             'label' => 'Holidays',
-            'position' => 5,
+            'position' => 6,
             'icon' => 'fa fa-cogs',
             'separator' => false,
             'url' => '/admin/holidays',                // Get URL from route.
