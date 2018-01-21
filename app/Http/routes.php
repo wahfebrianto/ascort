@@ -213,6 +213,21 @@ Route::group(['middleware' => 'authorize'], function () {
             Route::get('delete/{code}',     ['as' => 'admin.mgi.delete',      'uses' => 'MGISettingController@delete']);
         });
 
+        Route::group(['prefix' => 'branchoffice'], function () {
+            Route::post('index',            ['as' => 'admin.branchoffice.store',                 'uses' => 'BranchOfficesController@store']);
+            Route::get('/',                 ['as' => 'admin.branchoffice.index',                 'uses' => 'BranchOfficesController@index']);
+            Route::get('index',             ['as' => 'admin.branchoffice.index',                 'uses' => 'BranchOfficesController@index']);
+            Route::get('index/{enabledOnly?}',['as' => 'admin.branchoffice.index',               'uses' => 'BranchOfficesController@index']);
+            Route::get('create',            ['as' => 'admin.branchoffice.create',                'uses' => 'BranchOfficesController@create']);
+            Route::get('enableSelected',    ['as' => 'admin.branchoffice.enable-selected',       'uses' => 'BranchOfficesController@enableSelected']);
+            Route::get('disableSelected',   ['as' => 'admin.branchoffice.disable-selected',      'uses' => 'BranchOfficesController@disableSelected']);
+            Route::get('{id}',              ['as' => 'admin.branchoffice.show',                  'uses' => 'BranchOfficesController@show']);
+            Route::get('{id}/edit',         ['as' => 'admin.branchoffice.edit',                  'uses' => 'BranchOfficesController@edit']);
+            Route::patch('{id}/edit',       ['as' => 'admin.branchoffice.update',                'uses' => 'BranchOfficesController@update']);
+            Route::get('enable/{id}',       ['as' => 'admin.branchoffice.enable',                'uses' => 'BranchOfficesController@enable']);
+            Route::get('disable/{id}',      ['as' => 'admin.branchoffice.disable',               'uses' => 'BranchOfficesController@disable']);
+        });
+
         Route::group(['prefix' => 'holidays'], function () {
             // admin/mgi routes
             Route::get('/',                 ['as' => 'admin.holidays.index',                 'uses' => 'HolidaysController@index']);
