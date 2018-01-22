@@ -54,9 +54,9 @@ class BranchOffice extends Model
   				$branchOfficeList = \App\BranchOffice::where('is_active', '=', 1)->get();
   				break;
   			}
-  			else if($roles->is_active == 1)
+  			else if($roles->enabled == 1)
   			{
-  				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
+  				$branchOfficeList[] = \App\BranchOffice::find($roles->branch_office_id);
   			}
   		}
   		if($nullable)
@@ -79,7 +79,7 @@ class BranchOffice extends Model
   				$branchOfficeList = \App\BranchOffice::where('is_active', '=', 1)->get();
   				break;
   			}
-  			else if($roles->is_active == 1)
+  			else if($roles->enabled == 1)
   			{
   				array_push($branchOfficeList, \App\BranchOffice::find($roles->branch_office_id));
   			}
