@@ -17,6 +17,7 @@ use Auth;
 use Input;
 use PDF;
 use App\Approval;
+use App\BranchOffice;
 use App\Action;
 use App\CommissionReport;
 use App\Http\Requests\AgentsExcelExport;
@@ -104,10 +105,11 @@ class AgentsController extends Controller
         else {
           $newAgent->is_active = 2;
           $branchName = BranchOffice::getBranchOfficeFromId($attributes["branch_office_id"])->branch_name;
+          $agentID = $newAgent->id;
           $approvalAttributes = [];
           $approvalAttributes["user_id"] = Auth::user()->id;
           $approvalAttributes["subject"] = "Add New Agent";
-          $approvalAttributes["description"] = "<a href='".route('agents.show', ['id' => $attributes["id"]]).">".$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
+          $approvalAttributes["description"] = "<a href='".route('agents.show', ['id' => $agentID])."'>".$agentID."-".$attributes["name"]."</a> ($branchName)";
           $approvalAttributes["is_approved"] = 0;
           $newApproval = Approval::create($approvalAttributes);
           $newApproval->save($approvalAttributes);
@@ -441,7 +443,7 @@ class AgentsController extends Controller
 				$parent = \App\Agent::getAgentFromName($parentname)->lists('id');
                 $builder->whereIn('parent_id',$parent);
             }
-			
+
 			$data = $builder->get();
             $columns = Input::get('chkExp');
             if($data->count() == 0) {

@@ -30,6 +30,7 @@ return [
         'show-active'       => 'Show Active Data',
         'export'            => 'Export',
         'approve'           => 'Approve',
+        'decline'           => 'Decline',
         'add'               => 'Add',
         'next'              => 'Next >',
         'interest'          => 'Print Interest',

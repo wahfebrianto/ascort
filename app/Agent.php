@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Nayjest\Grids\EloquentDataProvider;
+use Auth;
 
 class Agent extends Model
 {
@@ -211,7 +212,17 @@ class Agent extends Model
     // ----------------------------------------------- GET AGENT ----------------------------------------------------
     public static function getAgentFromId($id)
     {
-        $found = Agent::where('id', '=', $id)->where('is_active', '=', 1)->get();
+        if(Auth::getUser()->hasRole('otor'))
+        {
+          $found = Agent::where('id', '=', $id)->where('is_active', '!=', 1)->get();
+        }
+        else if(Auth::getUser()->hasRole('owner'))
+        {
+          $found = Agent::where('id', '=', $id)->get();
+        }
+        else {
+          $found = Agent::where('id', '=', $id)->where('is_active', '=', 1)->get();
+        }
         return (count($found)>0 ? $found[0] : null);
     }
 	public static function getAgentFromName($name)

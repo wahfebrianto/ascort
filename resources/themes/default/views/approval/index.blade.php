@@ -114,7 +114,7 @@ use Nayjest\Grids\DataRow;
                                                         ])
                                                 ) . ' ';
                                             $enableAction = html_entity_decode(
-                                                \Html::link(route('approvals.delete', $id), '<span class="fa fa-trash"></span> ' . trans('general.button.delete'), [
+                                                \Html::link(route('approvals.delete', $id), '<span class="fa fa-trash"></span> ' . trans('general.button.decline'), [
                                                         'class' => 'btn btn-sm btn-danger btn-action',
                                                         'onclick' => 'return confirm(\''. trans('general.confirm.delete', ['ID' => $id]) .'\')',
                                                 ])

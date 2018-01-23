@@ -123,10 +123,11 @@ class SalesController extends Controller
                 else {
                   $newSale->is_active = 2;
                   $branchName = BranchOffice::getBranchOfficeFromId($attributes["branch_office_id"])->branch_name;
+                  $saleID = $newSale->id;
                   $approvalAttributes = [];
                   $approvalAttributes["user_id"] = Auth::user()->id;
                   $approvalAttributes["subject"] = "Add New Sales";
-                  $approvalAttributes["description"] = "<a href='".route('sales.show', ['id' => $attributes["id"]]).">".$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
+                  $approvalAttributes["description"] = "<a href='".route('sales.show', ['id' => $saleID])."'>".$saleID."-".$attributes["name"]."</a> ($branchName)";
                   $approvalAttributes["is_approved"] = 0;
                   $newApproval = Approval::create($approvalAttributes);
                   $newApproval->save($approvalAttributes);
@@ -503,12 +504,12 @@ class SalesController extends Controller
         // TODO: change pdf generator to manual attribute printing, get agent position name
         if(Input::has('type')) {
             $builder = \App\Sale::with('agent')->with('customer')->with('product')->where('is_active', 1);
-			
+
             if(Input::has('NBRO') && Input::get('NBRO') != 'all') {
                 // apply join date filter
                 $builder->where('NBRO', Input::get('NBRO'));
             }
-			
+
             if(Input::has('MGI_start_date_filter1') && Input::has('MGI_start_date_filter2')) {
                 // apply join date filter
                 $builder->whereBetween('MGI_start_date', [
@@ -529,7 +530,7 @@ class SalesController extends Controller
                 $builder->select(Input::get('chkExp'));
             }
             $data = $builder->whereIn('branch_office_id',\App\BranchOffice::getBranchOfficesID())->get();
-			
+
             $columns = Input::get('chkExp');
             if($data->count() == 0) {
                 Flash::error( trans('sales/general.error.no-data') );
@@ -559,7 +560,7 @@ class SalesController extends Controller
             //        $export->data = $dataArray;
             //        return $export->handleExport();
             //}
-			
+
         } else {
             Flash::error( trans('sales/general.error.no-data') );
             return redirect()->back();

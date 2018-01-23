@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Nayjest\Grids\EloquentDataProvider;
+use Auth;
 
 class Sale extends Model
 {
@@ -148,7 +149,17 @@ class Sale extends Model
 
     public static function getSaleFromId($id)
     {
-        $found = Sale::where('id', '=', $id)->where('is_active', '=', 1)->get();
+        if(Auth::getUser()->hasRole('otor'))
+        {
+          $found = Sale::where('id', '=', $id)->where('is_active', '!=', 1)->get();
+        }
+        else if(Auth::getUser()->hasRole('owner'))
+        {
+          $found = Sale::where('id', '=', $id)->get();
+        }
+        else {
+          $found = Sale::where('id', '=', $id)->where('is_active', '=', 1)->get();
+        }
         return (count($found)>0 ? $found[0] : null);
     }
 

@@ -85,14 +85,14 @@ class CustomersController extends Controller
           $newCustomer->is_active = 1;
         }
         else {
-          $newCustomer->is_active = 0;
+          $newCustomer->is_active = 2;
           $branchName = BranchOffice::getBranchOfficeFromId($newCustomer->branch_office_id)->branch_name;
           $custID = $newCustomer->id;
           $custName = $newCustomer->name;
           $approvalAttributes = [];
           $approvalAttributes["user_id"] = Auth::user()->id;
           $approvalAttributes["subject"] = "Add New Customer";
-          $approvalAttributes["description"] = "<a href='".route('customers.show', ['id' => $custID]).">".$custID."-".$custName."</a> ($branchName)";
+          $approvalAttributes["description"] = "<a href='".route('customers.show', ['id' => $custID])."'>".$custID."-".$custName."</a> ($branchName)";
           $approvalAttributes["is_approved"] = 0;
           $newApproval = Approval::create($approvalAttributes);
           $newApproval->save($approvalAttributes);

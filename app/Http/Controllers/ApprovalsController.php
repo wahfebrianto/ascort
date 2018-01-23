@@ -46,7 +46,6 @@ class ApprovalsController extends Controller
         $page_description = trans('approval/general.page.index.description');
 
         $dataProvider = new EloquentDataProvider(Approval::with('user')->where('is_approved', 0));
-
         return view('approval.index', compact('dataProvider', 'page_title', 'page_description', 'enabledOnly'));
     }
 
