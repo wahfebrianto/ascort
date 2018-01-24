@@ -71,7 +71,7 @@ use Nayjest\Grids\DataRow;
                             )
                             ->setName('agents_index')
                             // ->setCachingTime(10)
-                            ->setPageSize(100)
+                            ->setPageSize(10)
                             ->setColumns([
                                 (new FieldConfig)
                                     ->setName('checkbox')
@@ -84,17 +84,21 @@ use Nayjest\Grids\DataRow;
                                     )
                                 ,
                                 (new FieldConfig)
-                                        ->setName('agent_code')
+                                        ->setName('agents.agent_code')
                                         ->setLabel('Agent Code')
                                         ->setSortable(true)
+                                        ->addFilter(
+                                            (new FilterConfig)
+                                                ->setOperator(FilterConfig::OPERATOR_LIKE)
+                                        )
                                         ->setCallback(
                                                 function($val, DataRow $row) {
-                                                    return \Html::link(route('agents.show', ['id' => $row->getCellValue('id')]), $val);
+                                                    return \Html::link(route('agents.show', ['id' => $row->getCellValue('id')]), $row->getCellValue('agent_code'));
                                                 }
                                         )
                                 ,
                                 (new FieldConfig)
-                                    ->setName('NIK')
+                                    ->setName('agents.NIK')
                                     ->setLabel('NIK')
                                     ->setSortable(true)
                                     ->addFilter(
@@ -103,12 +107,12 @@ use Nayjest\Grids\DataRow;
                                     )
                                     ->setCallback(
                                             function($val, DataRow $row) {
-                                                return \Html::link(route('agents.show', ['id' => $row->getCellValue('id')]), $val);
+                                                return \Html::link(route('agents.show', ['id' => $row->getCellValue('id')]), $row->getCellValue('NIK'));
                                             }
                                     )
                                 ,
                                 (new FieldConfig)
-                                    ->setName('name')
+                                    ->setName('agents.name')
                                     ->setLabel('Name')
                                     ->setSortable(true)
                                     ->addFilter(
@@ -335,7 +339,7 @@ use Nayjest\Grids\DataRow;
                     <a type="button" class="btn btn-danger" data-dismiss="modal" href="#"><span class="fa fa-times"></span> Cancel</a>
                     <button type="submit" class="btn btn-primary"><span class="fa fa-download"></span> Export Agents List</button>
 				</div>
-					{!! Form::close() !!}	
+					{!! Form::close() !!}
 					{!! Form::open( ['route' => 'agents.export_commission', 'id' => 'form_export_agents_commission', 'method' => 'GET'] ) !!}
 					{!! Form::hidden('created_at_filter1', '01/01/1970', ['class' => 'form-control', 'id' => 'caf11']) !!}
 					{!! Form::hidden('created_at_filter2', '01/12/2099', ['class' => 'form-control', 'id' => 'caf12']) !!}
@@ -346,7 +350,7 @@ use Nayjest\Grids\DataRow;
 					<button type="submit" class="btn btn-primary"><span class="fa fa-download"></span> Export Recapitulation of commissions</button>
 					{!! Form::close() !!}
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -374,7 +378,7 @@ use Nayjest\Grids\DataRow;
 			$('#anf1').change(function(){
 				$('#anf2').val($('#anf1').val());
 			});
-			
+
         });
     </script>
 
