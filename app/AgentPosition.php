@@ -95,7 +95,9 @@ class AgentPosition extends Model
                     $parents[$pos->id] = $pos->name;
                 }
             }else{
+				if($pos->id == $commission){
                 $parents[$pos->id] = $pos->name;
+				}
             }
 
         }

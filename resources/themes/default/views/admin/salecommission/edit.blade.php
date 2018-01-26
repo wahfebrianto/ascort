@@ -30,7 +30,7 @@
                                 {!! Form::label('agent_position_id', trans('admin/salecommission/general.columns.agent_position_id'), ['class' => 'control-label col-sm-2'] ) !!}
                                 <div class="col-sm-10">
                                     <div class="input-group select2-bootstrap-append">
-                                        {!! Form::select('agent_position_id', App\AgentPosition::getAgentPositions_ForDropDownCommission("sale"), null, ['class' => 'form-control', 'style' => "width: 100%", 'tabindex' => 1]) !!}
+                                        {!! Form::select('agent_position_id', App\AgentPosition::getAgentPositions_ForDropDownCommission($commission->id), null, ['class' => 'form-control', 'style' => "width: 100%", 'tabindex' => 1,'readonly'=>'true']) !!}
                                         <span class="input-group-addon">
                                             <span class="fa fa-briefcase"></span>
                                         </span>

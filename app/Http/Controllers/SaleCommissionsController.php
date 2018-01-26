@@ -40,7 +40,6 @@ class SaleCommissionsController extends Controller
         $page_description = trans('admin/salecommission/general.page.index.description');
 
         $dataProvider = new EloquentDataProvider(SaleCommissionPercentage::query()->with('agent_position')->where('is_active', $enabledOnly));
-
         return view('admin.salecommission.index', compact('dataProvider', 'page_title', 'page_description', 'enabledOnly'));
     }
 
@@ -57,7 +56,7 @@ class SaleCommissionsController extends Controller
         $page_description = trans('admin/salecommission/general.page.create.description');
 
         $commission = new SaleCommissionPercentage();
-
+		
         return view('admin.salecommission.create', compact('commission', 'page_title', 'page_description'));
     }
 
@@ -115,7 +114,6 @@ class SaleCommissionsController extends Controller
     {
         $commission = \App\SaleCommissionPercentage::getSaleCommissionPercentageFromId($id);
         if($commission != null){
-
             Audit::log(Auth::user()->id, request()->ip(), trans('admin/salecommission/general.audit-log.category'), trans('admin/salecommission/general.audit-log.msg-edit', ['ID' => $commission->id]));
 
             $page_title = trans('admin/salecommission/general.page.edit.title');
@@ -138,6 +136,7 @@ class SaleCommissionsController extends Controller
      */
     public function update(EditSaleCommissionRequest $request, $id)
     {
+		//dd("a");
         $commission = $this->commission->find($id);
         $attributes = $request->all();
 
