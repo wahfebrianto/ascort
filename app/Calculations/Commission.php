@@ -52,7 +52,7 @@ class Commission extends Slips
             if ($this->agent->NPWP == "0") $this->tax *= 1.2; //if agent doesn't have NPWP, add 20%
             */
             $this->tax = 0;
-            
+
             $this->data = [
                 'agent' => $this->agent,
                 'sales' => $this->sales

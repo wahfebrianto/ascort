@@ -146,7 +146,6 @@ class CommissionSlipsController extends Controller
             }
             $commissions[$agent->id]->calculate($recalc);
         }
-
         $html = \View::make('pdf.slips.commission', compact('agents', 'commissions', 'period', 'month', 'year'))->render();
         // $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
         return $html;

@@ -227,7 +227,7 @@ return [
         'Theme'       => YAAP\Theme\Facades\Theme::class,
         'Entrust'     => Zizaco\Entrust\EntrustFacade::class,
         'MenuBuilder' => App\Facades\MenuBuilderFacade::class,
-		'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
+		    'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
         'Grids'       => Nayjest\Grids\Grids::class,
         'Excel'       => Maatwebsite\Excel\Facades\Excel::class,
     ],

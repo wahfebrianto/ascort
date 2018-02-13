@@ -4,9 +4,8 @@
     @foreach($commissions as $ctr => $commission)
         @if(count($commission->sales) != 0)
             @include('partials._pdf_logo_header')
-            <h3><strong>Marketing Commission Slip</strong></h3>
-            <p><em>Printed on: {{ $commission->process_date }}</em></p>
-            <p>Period: {{ $month }} {{ $year }} / {{ $period }}</p>
+            <h3><strong>SLIP KOMISI MARKETING</strong></h3>
+            <p><em>Tanggal Proses: {{ $commission->process_date }}</em></p>
             <br />
             <table class="info">
                 <tr>
@@ -50,18 +49,14 @@
                 <!--<thead>-->
                 <tr>
                     <th rowspan="2">No.</th>
-                    <th rowspan="2">No. Penjualan</th>
-                    <th rowspan="2">Nama Customer</th>
-                    <th rowspan="2">Produk</th>
-                    <th rowspan="2">MGI</th>
-                    <th rowspan="2">Tgl. MGI Awal</th>
-                    <th>Nominal</th>
-                    <th colspan="3">Komisi</th>
+                    <th rowspan="2">Nama Investor</th>
+                    <th rowspan="2">Tenor</th>
+                    <th rowspan="2">Tgl Transaksi</th>
+                    <th rowspan="2">Nominal</th>
+                    <th colspan="2">Komisi</th>
                 </tr>
                 <tr>
-                    <th>AUMP</th>
-                    <th>Selisih</th>
-                    <th>Persen</th>
+                    <th>%</th>
                     <th>Nilai</th>
                 </tr>
                 <!--</thead>-->
@@ -74,49 +69,35 @@
 
                 @foreach($commission->sales as $ctr_sale => $sale)
                     <tr>
-                        <td rowspan="2">{{ $ctr_sale+1 }}</td>
-                        <td rowspan="2">{{ $sale->number }}</td>
-                        <td rowspan="2">{{ $sale->customer_name }}</td>
-                        <td rowspan="2">{{ $sale->product_name }}<br />{{ $sale->product_code }}</td>
-                        <td rowspan="2" class="text-center">{{ $sale->MGI }}</td>
-                        <td rowspan="2" class="text-center">{{ $sale->MGI_start_date }}</td>
+                        <td >{{ $ctr_sale+1 }}</td>
+                        <td >{{ $sale->customer_name }}</td>
+                        <td class="text-center">{{ $sale->MGI }}</td>
+                        <td class="text-center">{{ $sale->MGI_start_date }}</td>
                         <td class="text-right">{{ \App\Money::format('%(.2n', $sale->nominal) }}</td>
-                        <td rowspan="2">-</td>
-                        <td rowspan="2" class="text-center">{{ number_format($sale->agent_commission,2,',','.') }}%</td>
-                        <td rowspan="2" class="text-right">{{ \App\Money::format('%(.2n', $sale->agent_commission_value) }}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-right">{{ \App\Money::format('%(.2n', $sale->FYP) }}</td>
+                        <td class="text-center">{{ number_format($sale->agent_commission,2,',','.') }}</td>
+                        <td class="text-right">{{ \App\Money::format('%(.2n', $sale->agent_commission_value) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
             <table class="info">
                 <tr>
-                    <td colspan="3" class="border-bottom-decor" style="width:20%"><strong>Transfer ke:</strong></td>
+                    <td colspan="3" class="border-bottom-decor" style="width:30%"><strong>Transfer ke:</strong></td>
 
-                    <td style="width:100px;">&nbsp;</td>
 
-                    <td colspan="3" class="border-bottom-decor" style="width:30%"><strong>Penentuan Tarif Pajak:</strong></td>
+                    <td style="width:300px;">&nbsp;</td>
 
-                    <td style="width:100px;">&nbsp;</td>
-
-                    <td colspan="3" class="border-bottom-decor" style="width:30%"><strong>Pendapatan:</strong></td>
+                    <td colspan="3" class="border-bottom-decor" style="width:40%"><strong>Pendapatan:</strong></td>
                 </tr>
                 <tr>
                     <td style="width:10%;">Bank</td>
                     <td style="width:1%;">:</td>
                     <td>{{ $commission->agent->bank }}</td>
 
-                    <td>&nbsp;</td>
-
-                    <td style="width:18%;">Pendapatan YTD Sebelumnya</td>
-                    <td style="width:1%;">:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->last_YTD) }}</td>
 
                     <td>&nbsp;</td>
 
-                    <td style="width:15%;">Total Nominal</td>
+                    <td style="width:15%;">Total Produksi</td>
                     <td style="width:1%;">:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_nominal) }}</td>
                 </tr>
@@ -127,13 +108,7 @@
 
                     <td></td>
 
-                    <td>Pendapatan Saat Ini</td>
-                    <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_commission) }}</td>
-
-                    <td></td>
-
-                    <td>Total AUMP</td>
+                    <td>Total AUM</td>
                     <td>:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_FYP) }}</td>
                 </tr>
@@ -144,13 +119,8 @@
 
                     <td></td>
 
-                    <td>Total YTD Saat Ini</td>
-                    <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->last_YTD + $commission->gross_commission) }}</td>
 
-                    <td></td>
-
-                    <td>Total Komisi</td>
+                    <td>Total Komisi Bruto</td>
                     <td>:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_commission) }}</td>
                 </tr>
@@ -161,103 +131,73 @@
 
                     <td></td>
 
-                    <td></td>
-                    <td></td>
-                    <td></td>
 
-                    <td></td>
-
-                    <td>Komisi Hold</td>
+                    <td>Pajak</td>
                     <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->commission_hold) }}</td>
+                    <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $commission->tax) }}</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td></td>
                     <td></td>
                     <td></td>
 
-                    <td></td>
-
-                    <td></td>
-                    <td></td>
-                    <td></td>
 
                     <td></td>
                     <td>Potongan Minus</td>
                     <td>:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $commission->minus * -1) }}</td>
-                </tr>
-                <tr>
+                </tr> -->
+                <!-- <tr>
                     <td></td>
                     <td></td>
                     <td></td>
 
-                    <td></td>
-
-                    <td></td>
-                    <td></td>
-                    <td></td>
 
                     <td></td>
 
                     <td>Additional</td>
                     <td>:</td>
                     <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $commission->additional) }}</td>
-                </tr>
-                <tr>
+                </tr> -->
+                <!-- <tr>
                     <td></td>
                     <td></td>
                     <td></td>
 
-                    <td></td>
-
-                    <td></td>
-                    <td></td>
-                    <td></td>
 
                     <td></td>
 
                     <td>Komisi Bruto</td>
                     <td>:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $commission->gross_commission) }}</td>
-                </tr>
-                <tr>
+                </tr> -->
+                <!-- <tr>
                     <td></td>
                     <td></td>
                     <td></td>
 
-                    <td></td>
-
-                    <td></td>
-                    <td></td>
-                    <td></td>
 
                     <td></td>
 
-                    <!--
+
                     <td>Pajak</td>
                     <td>:</td>
-                    <td class="text-right border-bottom-decor">{ { \App\Money::format('%(.2n', $commission->tax) }}</td>
-                    -->
-                </tr>
+                    <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $commission->tax) }}</td>
+
+                </tr> -->
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
 
-                    <td></td>
-
-                    <td></td>
-                    <td></td>
-                    <td></td>
 
                     <td></td>
 
-                    <!--
+
                     <td>Pendapatan Setelah Pajak</td>
                     <td>:</td>
-                    <td class="text-right">{ { \App\Money::format('%(.2n', $commission->nett_commission) }}</td>
-                    -->
+                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->nett_commission) }}</td>
+
                 </tr>
             </table>
             <div class="page-break"></div>

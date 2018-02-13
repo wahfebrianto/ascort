@@ -1,7 +1,8 @@
 <?php
 return [
-    'perusahaan' => 'PT Ridean Finance',
-    'alamat' => 'Graha Bumi Surabaya GBS03-06. Jl. Basuki Rahmat 105-128 Surabaya.',
-    'email' => 'admin@rideanfinance.com',
-    'telepon' => '031-535 5005-6, 031-538 2824',
+    'perusahaan' => 'PT. ASCORT PREMIER GROUP',
+    'keterangan_perusahaan' => '( a member of ASCORT ASIA GROUP )',
+    'alamat' => 'Jl. Embong Malang No 1 - 5',
+    'kota' => 'Surabaya',
+    'telepon' => '',
 ];
