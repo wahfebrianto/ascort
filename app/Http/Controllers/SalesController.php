@@ -86,7 +86,6 @@ class SalesController extends Controller
     public function store(CreateSaleRequest $request)
     {
         $attributes = $request->all();
-
         if($request->reminder_id == null){
             //create new
 
@@ -114,7 +113,8 @@ class SalesController extends Controller
                 $newSale = $this->sale->create($attributes);
                 $newSale->customer_name = Customer::getCustomerFromId($newSale->customer_id)->name;
                 $newSale->agent_commission = Sale::getSaleCommissionPercentage($newSale);
-				$custid = $newSale->customer_id;
+				        $custid = $newSale->customer_id;
+                $custname = Customer::getCustomerFromId($custid)->name;
 
                 if(Auth::getUser()->hasRole('owner'))
                 {
@@ -127,7 +127,7 @@ class SalesController extends Controller
                   $approvalAttributes = [];
                   $approvalAttributes["user_id"] = Auth::user()->id;
                   $approvalAttributes["subject"] = "Add New Sales";
-                  $approvalAttributes["description"] = "<a href='".route('sales.show', ['id' => $saleID])."'>".$saleID."-".$attributes["name"]."</a> ($branchName)";
+                  $approvalAttributes["description"] = "<a href='".route('sales.show', ['id' => $saleID])."'>".$saleID."-".$custname."</a> ($branchName)";
                   $approvalAttributes["is_approved"] = 0;
                   $newApproval = Approval::create($approvalAttributes);
                   $newApproval->save($approvalAttributes);
@@ -168,6 +168,8 @@ class SalesController extends Controller
 
                 $newSale->customer_name = Customer::getCustomerFromId($newSale->customer_id)->name;
                 $newSale->agent_commission = Sale::getSaleCommissionPercentage($newSale);
+                $custid = $newSale->customer_id;
+                $custname = Customer::getCustomerFromId($custid)->name;
 
                 if(Auth::getUser()->hasRole('owner'))
                 {
@@ -179,7 +181,7 @@ class SalesController extends Controller
                   $approvalAttributes = [];
                   $approvalAttributes["user_id"] = Auth::user()->id;
                   $approvalAttributes["subject"] = "Add New Sales";
-                  $approvalAttributes["description"] = "<a href='".route('sales.show', ['id' => $attributes["id"]]).">".$attributes["id"]."-".$attributes["name"]."</a> ($branchName)";
+                  $approvalAttributes["description"] = "<a href='".route('sales.show', ['id' => $attributes["id"]]).">".$attributes["id"]."-".$custname."</a> ($branchName)";
                   $newApproval = Approval::create($approvalAttributes);
                   $newApproval->save($approvalAttributes);
                 }

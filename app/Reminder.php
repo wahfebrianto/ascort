@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class Reminder extends Model
 {
@@ -43,7 +44,7 @@ class Reminder extends Model
 
     public static function getActiveRemindersForAdminBuilder(){
         return Reminder::getActiveRemindersBuilder()
-            ->where('reminder_for', '=', 'admin');
+            ->where('reminder_for', '=', Auth::user()->id);
     }
 
     public static function getActiveRemindersForOwnerBuilder(){
@@ -65,7 +66,7 @@ class Reminder extends Model
 
     public static function getIgnoredRolloverReminders(){
         return Reminder::where('is_active', '=', 1)
-            ->where('reminder_for', '=', 'admin')
+            ->where('reminder_for', '=', Auth::user()->id)
             ->where('subject', '=', 'rollover')
             ->where('end_date', '=', Carbon::now()->format('Y-m-d'))
             ->get();
