@@ -56,7 +56,6 @@ class DashboardController extends Controller
         }
         $reminder_count = count($reminderApproval) + count($reminderRollover) + count($reminderEval) + $totalApproval;
 
-
         return view('dashboard', compact('page_title', 'page_description', 'reminderEval', 'totalApproval', 'reminder_count',
             'reminderRollover', 'reminderApproval', 'count_customers', 'count_agents', 'count_sales', 'current_period', 'branch_offices', 'holidays_date_json', 'dataProvider'));
     }

@@ -32,7 +32,7 @@ Route::get( '/',    ['as' => 'backslash',   'uses' => 'HomeController@index']);
 Route::get( 'home', ['as' => 'home',        'uses' => 'HomeController@index']);
 
 // Routes in this group must be authorized.
-Route::group(['middleware' => 'authorize'], function () {
+Route::group(['middleware' => ['auth', 'authorize']], function () {
     // Application routes...
     Route::get( 'dashboard',                      ['as' => 'dashboard', 'uses' => 'DashboardController@index']);
     Route::post( 'dashboard/changeagentposition', ['as' => 'dashboard.changeagent', 'uses' => 'DashboardController@changeagent']);
