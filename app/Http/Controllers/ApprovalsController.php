@@ -236,7 +236,7 @@ class ApprovalsController extends Controller
 
         Reminder::create([
             'title' => 'Approval Declined',
-            'reminder_for' => 'admin',
+            'reminder_for' => $approval->user_id,
             'start_date' => Carbon::now()->format('d/m/Y'),
             'end_date' => Carbon::now()->addDays(2)->format('d/m/Y'),
             'subject' => 'approval',

@@ -43,7 +43,7 @@ class DashboardController extends Controller
         $holidays_date_json = json_encode($holidays_arr);
         $dataProvider = \App\Sale::getDashboardDataProvider();
         $branch_offices = \App\BranchOffice::getBranchOfficesID();
-        if(Auth::user()->hasRole('admin')){
+        if(!Auth::user()->hasRole('otor') && !Auth::user()->hasRole('owner')){
             $reminderEval = Reminder::getEvalReminders();
             $reminderRollover = Reminder::getRolloverReminders();
             $reminderApproval = Reminder::getApprovalReminders();
