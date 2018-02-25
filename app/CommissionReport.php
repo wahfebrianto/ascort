@@ -13,8 +13,8 @@ class CommissionReport extends Model
         'minus', 'cuts', 'tax_adjustment', 'current_YTD', 'last_YTD', 'total_nominal', 'gross_commission',
         'total_FYP', 'total_commission', 'tax', 'nett_commission', 'data'];
 
-    const START_DAYS    = ['1' =>  1, '2' => 16];
-    const END_DAYS      = ['1' => 15, '2' =>  0];
+    const START_DAYS    = ['1' =>  1, '2' =>  8, '3' => 15, '4' => 22];
+    const END_DAYS      = ['1' =>  7, '2' => 14, '3' => 21, '4' =>  0];
     const SUB_MONTHS    = ['1' =>  0, '2' => -1];
 
     // ---------------------------------------------- RELATIONSHIP --------------------------------------------------
@@ -56,7 +56,7 @@ class CommissionReport extends Model
         $last_report = CommissionReport::where('agent_id', '=', $agent_id)->where('type', '=', $type)
             ->whereRaw("month_year = (select max(month_year) from commission_reports where agent_id = " . $agent_id . " and month_year < '" . $month_year . "' and month_year like '%" . substr($month_year, 0, 4) . "%')")
             ->first();
-        
+
         $totalYTDNow = $last_report == null ? 0 : $last_report->current_YTD + $last_report->last_YTD;
 
         return $totalYTDNow;
@@ -87,7 +87,7 @@ class CommissionReport extends Model
 
     public static function getDatesOfPeriod($period, $month, $year) {
         $start_date = Carbon::create($year, $month, self::START_DAYS[$period], 0, 0, 0);
-		if($period == 2) 
+		if($period == 4)
 			$end_date = Carbon::create($year, $month+1, self::END_DAYS[$period], 23, 59, 59);
 		else
 			$end_date = Carbon::create($year, $month, self::END_DAYS[$period], 23, 59, 59);
@@ -98,8 +98,8 @@ class CommissionReport extends Model
     }
 
     public static function getPeriodFromDate(Carbon $date) {
-        $period = 3;
-        for($i=1;$i<=2;$i++) {
+        $period = 5;
+        for($i=1;$i<=4;$i++) {
             $dates = self::getDatesOfPeriod($i, $date->month, $date->year);
             if($date->between($dates['start_date'], $dates['end_date'])) {
                 $period = $i;
@@ -112,7 +112,7 @@ class CommissionReport extends Model
     public static function getPeriodCodeFromDate(Carbon $date) {
         $date_p = $date->copy();
         $period = self::getPeriodFromDate($date_p);
-        if($period == 3) {
+        if($period == 5) {
             $date_p->addMonth(1);
             $period = 1;
         }
@@ -131,8 +131,8 @@ class CommissionReport extends Model
         $current = Carbon::create($year, $month, 1, 0, 0, 0);
 
         // add period
-        if($period == 1) $period++;
-        if($period == 2) {
+        if($period < 4) $period++;
+        if($period == 4) {
             $current->addMonth(1);
             $period = 1;
         }

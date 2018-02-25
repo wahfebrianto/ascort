@@ -149,17 +149,7 @@ class Sale extends Model
 
     public static function getSaleFromId($id)
     {
-        if(Auth::getUser()->hasRole('otor'))
-        {
-          $found = Sale::where('id', '=', $id)->where('is_active', '!=', 1)->get();
-        }
-        else if(Auth::getUser()->hasRole('owner'))
-        {
-          $found = Sale::where('id', '=', $id)->get();
-        }
-        else {
-          $found = Sale::where('id', '=', $id)->where('is_active', '=', 1)->get();
-        }
+        $found = Sale::where('id', '=', $id)->get();
         return (count($found)>0 ? $found[0] : null);
     }
 

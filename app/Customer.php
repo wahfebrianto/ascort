@@ -51,17 +51,7 @@ class Customer extends Model
     }
 
     public static function getCustomerFromId($id){
-        if(Auth::getUser()->hasRole('otor'))
-        {
-          $found = Customer::where('id', '=', $id)->where('is_active', '!=', 1)->get();
-        }
-        else if(Auth::getUser()->hasRole('owner'))
-        {
-          $found = Customer::where('id', '=', $id)->get();
-        }
-        else {
-          $found = Customer::where('id', '=', $id)->where('is_active', '=', 1)->get();
-        }
+        $found = Customer::where('id', '=', $id)->get();
         return (count($found)>0 ? $found[0] : null);
     }
 

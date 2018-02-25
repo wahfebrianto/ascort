@@ -13,18 +13,21 @@
                     <td style="width:10px;">:</td>
                     <td>{{ $commission->agent->NIK }}</td>
                     <td style="width:300px;">&nbsp;</td>
-                    <td style="width:150px;">Dist. Channel</td>
+                    <!-- <td style="width:150px;">Dist. Channel</td>
                     <td style="width:10px;">:</td>
-                    <td>{{ $commission->agent->dist_channel }}</td>
+                    <td>{{ $commission->agent->dist_channel }}</td> -->
+                    <td style="width:150px;">Reporting to</td>
+                    <td style="width:10px;">:</td>
+                    <td>{{ $commission->agent->parent_name }}</td>
                 </tr>
                 <tr>
                     <td>Nama Agen</td>
                     <td>:</td>
                     <td>{{ $commission->agent->name }}</td>
                     <td></td>
-                    <td>Reporting to</td>
+                    <!-- <td>Reporting to</td>
                     <td>:</td>
-                    <td>{{ $commission->agent->parent_name }}</td>
+                    <td>{{ $commission->agent->parent_name }}</td> -->
                 </tr>
                 <tr>
                     <td>Jabatan Agen</td>

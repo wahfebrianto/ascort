@@ -6,7 +6,7 @@
 
 @section('content')
     <div class='row'>
-        <div class='col-md-3'>
+        <div class='col-md-3 hidden'>
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">{{ trans('slips/commission/general.page.index.info-title') }}</h3>
@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <div class='col-md-9'>
+        <div class='col-md-12'>
             <div class="box box-primary fa-bg fa-bg-export fa-bg-small">
                 <div class="box-header with-border">
                     <h3 class="box-title">{{ trans('slips/commission/general.page.index.export-title') }}</h3>
@@ -34,13 +34,13 @@
                 <div class="box-body" id="form-container">
                     <label class="control-label">Filter</label>
                     <div class="border-decor"></div>
-                    {!! Form::open( ['route' => 'slips.commission.minus', 'id' => 'form_export_sales', 'method' => 'GET', 'class' => 'form-horizontal'] ) !!}
+                    {!! Form::open( ['route' => 'slips.commission.export', 'id' => 'form_export_sales', 'method' => 'GET', 'class' => 'form-horizontal'] ) !!}
                     <div class="form-group">
                         {!! Form::label('month', trans('slips/overriding/general.columns.date'), ['class' => 'control-label col-sm-4'] ) !!}
                         <div class="col-sm-8">
                             <div class="input-group">
                                 <span class="input-group-addon">period</span>
-                                {!! Form::select('period', ['1' => '1', '2' => '2'], '1', ['class' => 'form-control', 'id' => 'agent_position_id_select',  'style' => "width: 100%"]) !!}
+                                {!! Form::select('period', ['1' => '1', '2' => '2', '3' => '3', '4' => '4'], '1', ['class' => 'form-control', 'id' => 'agent_position_id_select',  'style' => "width: 100%"]) !!}
                                 <span class="input-group-addon">month</span>
                                 {!! Form::select('month', $month_lists, date('m'), ['class' => 'form-control', 'id' => 'agent_position_id_select',  'style' => "width: 100%"]) !!}
                                 <span class="input-group-addon">year</span>
@@ -71,17 +71,17 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group hidden">
                         {!! Form::label('dist_channel', "Dist. Channel", ['class' => 'control-label col-sm-4'] ) !!}
                         <div class="col-sm-8">
                             {!! Form::text('dist_channel', null, ['class' => 'form-control select2', 'style' => "width: 100%", 'placeholder' => 'All']) !!}
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group hidden">
                         <div class="col-sm-8 col-sm-offset-4">
                             <div class="checkbox">
                                 <label>
-                                    {!! Form::checkbox('recalc', 'yes', false) !!} &nbsp; Recalculate
+                                    {!! Form::checkbox('recalc', 'yes', true) !!} &nbsp; Recalculate
                                 </label>
                             </div>
                         </div>

@@ -212,17 +212,7 @@ class Agent extends Model
     // ----------------------------------------------- GET AGENT ----------------------------------------------------
     public static function getAgentFromId($id)
     {
-        if(Auth::getUser()->hasRole('otor'))
-        {
-          $found = Agent::where('id', '=', $id)->where('is_active', '!=', 1)->get();
-        }
-        else if(Auth::getUser()->hasRole('owner'))
-        {
-          $found = Agent::where('id', '=', $id)->get();
-        }
-        else {
-          $found = Agent::where('id', '=', $id)->where('is_active', '=', 1)->get();
-        }
+        $found = Agent::where('id', '=', $id)->get();
         return (count($found)>0 ? $found[0] : null);
     }
 	public static function getAgentFromName($name)
