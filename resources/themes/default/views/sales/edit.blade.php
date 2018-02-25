@@ -129,7 +129,7 @@
 										{!! Form::hidden('additional', null, ['id' => 'additional']) !!}
 									</div>
 								</div>
-								
+
 								<div class="form-group">
 									{!! Form::label('bank', trans('sales/general.columns.bank'), ['class' => 'control-label col-sm-2'] ) !!}
 									<div class="col-sm-10">
@@ -145,7 +145,7 @@
 								<div class="form-group">
 									{!! Form::label('account_name', trans('sales/general.columns.account_name'), ['class' => 'control-label col-sm-2'] ) !!}
 									<div class="col-sm-10">
-										{!! Form::text('account_name', null, ['class' => 'form-control', 'tabindex' => 1]) !!}
+										{!! Form::text('account_name', null, ['class' => 'form-control', 'tabindex' => 1, 'readonly' => 'readonly']) !!}
 									</div>
 								</div>
 								<div class="form-group">
@@ -199,6 +199,10 @@
                 $('#additional').val($('#m_additional').maskMoney('unmasked')[0]);
             });
             $('#m_additional').maskMoney('mask');
+
+            $('#customer_id').on('change', function(){
+                $('#account_name').val($('#select2-customer_id-container').html().split(' [')[0]);
+            });
         });
     </script>
     <script type="text/javascript" src="{!! asset('vendor/jsvalidation/js/jsvalidation.js') !!}"></script>
