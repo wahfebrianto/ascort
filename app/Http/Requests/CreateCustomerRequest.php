@@ -29,7 +29,7 @@ class CreateCustomerRequest extends Request
             'name'                  =>  'required|string|min:3|max:200',
             'gender'                =>  'required|string|size:1',
             'address'               =>  'required|string|min:5',
-            'phone_number'          =>  'required|string|digits_between:5,15',
+            'phone_number'          =>  'string',
             'handphone_number'      =>  'required|string|digits_between:7,15',
             'email'                 =>  'required|string|min:5|email',
             'state'                 =>  'required|string',

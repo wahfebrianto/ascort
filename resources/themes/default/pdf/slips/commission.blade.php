@@ -100,7 +100,7 @@
 
                     <td>&nbsp;</td>
 
-                    <td style="width:15%;">Total Produksi</td>
+                    <td style="width:15%;">Total AUM</td>
                     <td style="width:1%;">:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_nominal) }}</td>
                 </tr>
@@ -111,9 +111,13 @@
 
                     <td></td>
 
-                    <td>Total AUM</td>
+                    <td>Total Komisi Bruto</td>
                     <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_FYP) }}</td>
+                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_commission) }}</td>
+
+                    <!--<td>Total AUM</td>
+                    <td>:</td>
+                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_FYP) }}</td>-->
                 </tr>
                 <tr>
                     <td>No. Rekening</td>
@@ -122,10 +126,13 @@
 
                     <td></td>
 
-
-                    <td>Total Komisi Bruto</td>
+		    <td>Pajak</td>
                     <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_commission) }}</td>
+                    <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $commission->tax) }}</td>
+
+                    <!--<td>Total Komisi Bruto</td>
+                    <td>:</td>
+                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_commission) }}</td>-->
                 </tr>
                 <tr>
                     <td>Atas Nama</td>
@@ -134,10 +141,9 @@
 
                     <td></td>
 
-
-                    <td>Pajak</td>
+     	 		<td>Pendapatan Setelah Pajak</td>
                     <td>:</td>
-                    <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $commission->tax) }}</td>
+                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->nett_commission) }}</td>
                 </tr>
                 <!-- <tr>
                     <td></td>
@@ -188,7 +194,7 @@
                     <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $commission->tax) }}</td>
 
                 </tr> -->
-                <tr>
+                <!--<tr>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -201,7 +207,7 @@
                     <td>:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $commission->nett_commission) }}</td>
 
-                </tr>
+                </tr>-->
             </table>
             <div class="page-break"></div>
         @endif

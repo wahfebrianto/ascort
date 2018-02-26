@@ -34,7 +34,6 @@ class EditSaleRequest extends Request
             'nominal'                   =>  'required|numeric',
             'interest'                  =>  'required|numeric',
             'branch_office_id'			=>	'required|integer',
-            'tenor'						=>	'required',
             'bank'						=>	'required|string',
             'bank_branch'				=>	'required|string',
             'account_name'				=>	'required|string',

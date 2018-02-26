@@ -71,7 +71,7 @@
 									{!! Form::label('customer_id', trans('sales/general.columns.customer_id'), ['class' => 'control-label col-sm-2'] ) !!}
 									<div class="col-sm-10">
 										<div class="input-group select2-bootstrap-append">
-											{!! Form::select('customer_id', [null => "Select Customer"] + App\Customer::getCustomers_ForDropDown(), null, ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 5]) !!}
+											{!! Form::select('customer_id', App\Customer::getCustomers_ForDropDown(), null, ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 5]) !!}
 											<span class="input-group-addon">
 										<span class="fa fa-fw fa-fw fa-users"></span>
 									</span>
@@ -122,7 +122,7 @@
 									</div>
 								</div>
 
-								<div class="form-group">
+								<div class="form-group hidden">
 									{!! Form::label('additional', trans('sales/general.columns.additional'), ['class' => 'control-label col-sm-2'] ) !!}
 									<div class="col-sm-10">
 										{!! Form::text('m_additional', $sale->additional * 100, ['class' => 'form-control maskmoney', 'tabindex' => 13, 'id' => 'm_additional']) !!}

@@ -32,7 +32,7 @@ class Commission extends Slips
             //$this->rounding();
             $this->load();
         } else {
-            $this->sales = $this->agent->sales()->isActive()->ofPeriod($this->period, $this->month, $this->year)->get();
+            $this->sales = $this->agent->sales()->isActive()->MGIBetween($this->period, $this->month, $this->year)->get();
             $this->total_nominal = 0;
             $this->total_FYP = 0;
             $this->total_commission = 0;

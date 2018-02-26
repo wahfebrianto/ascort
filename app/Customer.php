@@ -58,10 +58,23 @@ class Customer extends Model
     public static function getCustomers(){
         return Customer::where('is_active', '=', 1)->get();
     }
+    
+    public static function getCustomersByBranch(){
+        return Customer::where('is_active', '=', 1)->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID())->get();
+    }
 
     public static function getCustomers_ForDropDown(){
         $customers = [];
         $allCustomers = Customer::getCustomers();
+        foreach($allCustomers as $a){
+            $customers[$a->id] = $a->name . " [" . $a->branchOffice->branch_name . "]";
+        }
+        return $customers;
+    }
+    
+    public static function getCustomers_ForDropDown_ByBranch(){
+        $customers = [];
+        $allCustomers = Customer::getCustomersByBranch();
         foreach($allCustomers as $a){
             $customers[$a->id] = $a->name . " [" . $a->branchOffice->branch_name . "]";
         }

@@ -166,7 +166,7 @@ use Nayjest\Grids\DataRow;
                                         ,
                                             (new FieldConfig)
                                                     ->setName('agents.name')
-                                                    ->setLabel('Agent Name')
+                                                    ->setLabel('Nama Agen')
                                                     ->setSortable(false)
                                                     ->addFilter(
                                                             (new FilterConfig)
@@ -180,7 +180,7 @@ use Nayjest\Grids\DataRow;
                                         ,
                                             (new FieldConfig)
                                                     ->setName('customer_name')
-                                                    ->setLabel('Customer Name')
+                                                    ->setLabel('Nama Investor')
                                                     ->setSortable(false)
                                                     ->addFilter(
                                                             (new FilterConfig)
@@ -194,7 +194,7 @@ use Nayjest\Grids\DataRow;
                                         ,
                                             (new FieldConfig)
                                                     ->setName('MGI_start_date')
-                                                    ->setLabel('MGI Start Date')
+                                                    ->setLabel('Tanggal Mulai')
                                                     ->setSortable(false)
                                                     ->setCallback(
                                                             function($val, DataRow $row) {
@@ -218,7 +218,7 @@ use Nayjest\Grids\DataRow;
                                         ,
                                             (new FieldConfig)
                                                     ->setName('MGI')
-                                                    ->setLabel('MGI')
+                                                    ->setLabel('Tenor')
                                                     ->setSortable(false)
                                                     ->setCallback(
                                                             function($val, DataRow $row) {

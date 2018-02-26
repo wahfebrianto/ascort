@@ -242,7 +242,7 @@ class Agent extends Model
 
     public static function getAgentsWithPositionName_ForDropDown()
     {
-        $agents = Agent::with('agent_position')->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID())->get();
+        $agents = Agent::with('agent_position')->get();
         $arr = [];
         foreach ($agents as $agent) {
             $arr[$agent->id] = $agent->name . ' (' . $agent->agentPositionAcronym . ')';
@@ -250,6 +250,16 @@ class Agent extends Model
         return $arr;
     }
 
+
+    public static function getAgentsWithPositionName_ForDropDown_ByBranch()
+    {
+        $agents = Agent::with('agent_position')->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID())->get();
+        $arr = [];
+        foreach ($agents as $agent) {
+            $arr[$agent->id] = $agent->name  . " [" . $agent->branchOffice->branch_name . "]";
+        }
+        return $arr;
+    }
     // ------------------------------------------- END OF GET AGENT --------------------------------------------------
 
 
@@ -267,8 +277,7 @@ class Agent extends Model
             ->select('agents.*')
             ->addSelect('agent_positions.name as apname')
             ->addSelect('a.name as aname')
-            ->where('agents.is_active', $enabledOnly)
-            ->whereIn('agents.branch_office_id', \App\BranchOffice::getBranchOfficesID()));
+            ->where('agents.is_active', $enabledOnly));
     }
 
 

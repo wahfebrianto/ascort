@@ -104,7 +104,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group hidden">
                                     {!! Form::label('additional', trans('sales/general.columns.additional'), ['class' => 'control-label col-sm-2'] ) !!}
                                     <div class="col-sm-10">
                                         {!! Form::text('additional', $sale->formattedAdditional, ['class' => 'form-control', 'tabindex' => 2, 'disabled']) !!}

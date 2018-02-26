@@ -70,7 +70,7 @@ class SalesController extends Controller
 
         $MGIConfig = config('MGIs');
         $MGIs = [];
-        $MGIs[null] = "Select MGI";
+        $MGIs[null] = "Pilih Tenor";
         foreach($MGIConfig as $key => $value){
             $MGIs[$key] = $value[0];
         }
@@ -253,8 +253,8 @@ class SalesController extends Controller
             foreach($MGIConfig as $key => $value){
                 $MGIs[$key] = $value[0];
             }
-            $agents = Agent::getAgents_ForDropDown();
-            if($sale->agent == null) $agents = ["-" => "None"] + Agent::getAgents_ForDropDown();
+            $agents = Agent::getAgentsWithPositionName_ForDropDown_ByBranch();
+            if($sale->agent == null) $agents = ["-" => "None"] + Agent::getAgentsWithPositionName_ForDropDown_ByBranch();
             $customers = Customer::getCustomers_ForDropDown();
             if($sale->customer == null) $customers = ["-" => "None"] + Customer::getCustomers_ForDropDown();
 

@@ -61,9 +61,9 @@ class EditAgentRequest extends Request
             'bank'                  =>  'required|string|max:150',
             'bank_branch'           =>  'required|string|max:150',
             'account_number'        =>  'required|string|max:50',
-            'account_name'          =>  'required|string|min:3|max:200|same:name',
+            'account_name'          =>  'required|string|min:3|max:200',
             'parent_id'             =>  'required|parent',
-			         'type'					=>	'required|string|max:50'
+			'type'					=>	'required|string|max:50'
         ];
     }
 

@@ -96,7 +96,7 @@ use Nayjest\Grids\DataRow;
                                 ,
                                 (new FieldConfig)
                                     ->setName('agents.name')
-                                    ->setLabel('Agent Name')
+                                    ->setLabel('Nama Agen')
                                     ->setSortable(true)
                                     ->addFilter(
                                             (new FilterConfig)
@@ -109,8 +109,8 @@ use Nayjest\Grids\DataRow;
                                     )
                                 ,
                                 (new FieldConfig)
-                                    ->setName('customer_name')
-                                    ->setLabel('Customer Name')
+                                    ->setName('customer.name')
+                                    ->setLabel('Nama Investor')
                                     ->setSortable(true)
                                     ->addFilter(
                                             (new FilterConfig)
@@ -124,7 +124,7 @@ use Nayjest\Grids\DataRow;
                                 ,
                                 (new FieldConfig)
                                     ->setName('product_name')
-                                    ->setLabel('Product')
+                                    ->setLabel('Produk')
                                     ->setSortable(true)
                                     ->addFilter(
                                         (new FilterConfig)
@@ -138,7 +138,7 @@ use Nayjest\Grids\DataRow;
                                 ,
                                 (new FieldConfig)
                                     ->setName('MGI_start_date')
-                                    ->setLabel('MGI Start Date')
+                                    ->setLabel('Tanggal Mulai')
                                     ->setSortable(true)
                                     ->setCallback(
                                             function($val, DataRow $row) {
@@ -162,7 +162,7 @@ use Nayjest\Grids\DataRow;
                                 ,
                                 (new FieldConfig)
                                         ->setName('MGI')
-                                        ->setLabel('MGI')
+                                        ->setLabel('Tenor')
                                         ->setSortable(true)
                                         ->setCallback(
                                                 function($val, DataRow $row) {
