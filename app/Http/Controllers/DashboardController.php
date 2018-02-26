@@ -59,7 +59,7 @@ class DashboardController extends Controller
         return view('dashboard', compact('page_title', 'page_description', 'reminderEval', 'totalApproval', 'reminder_count',
             'reminderRollover', 'reminderApproval', 'count_customers', 'count_agents', 'count_sales', 'current_period', 'branch_offices', 'holidays_date_json', 'dataProvider'));
     }
-
+	
     public function changeagent(Request $request){
         $details = [];
         $details["table"] = "agents";

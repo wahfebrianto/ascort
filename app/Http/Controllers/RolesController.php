@@ -11,6 +11,7 @@ use Flash;
 use DB;
 use App\Repositories\AuditRepository as Audit;
 use Auth;
+use App\Repositories\AgentRepository as Agent;
 
 class RolesController extends Controller {
 
@@ -53,6 +54,25 @@ class RolesController extends Controller {
 
         $roles = $this->role->pushCriteria(new RolesWithPermissions())->pushCriteria(new RolesByNamesAscending())->paginate(10);
         return view('admin.roles.index', compact('roles', 'page_title', 'page_description'));
+        /*$stringjson = '{"id":"59","agent_code":"A2310790","parent_id":"58","NIK":"3578016310790003","name":"Anna Lisayani","birth_place":"Pamekasan","DOB":"1979-10-23 00:00:00","gender":"F","address":"Kemlaten 12\/1, RT 002 \/ RW 007, Kebraon, Karang Pilang","state":"Jawa Timur","city":"Surabaya","zipcode":"60222","phone_number":"123456","handphone_number":"08563091870","email":"m25498039@yahoo.com","type":"Individu","agent_position_id":"3","join_date":"14\/12\/2017","NPWP":"674951157618000","bank":"BCA","bank_branch":"Delta Plaza, Surabaya","account_name":"Anna Lisayani","account_number":"384-202778-8","branch_office_id":"6","is_active":1,"created_at":"2018-01-31 10:59:31","updated_at":"2018-01-31 11:33:24"}';
+        $json = (array)json_decode($stringjson);
+        DB::table('agents')->insert(
+			    $json
+			);
+			echo 'sukses';
+	$result = DB::select(DB::raw("select content from reminders where title like '%Approval Approved%' and ( content like '%\"id\":\"58%' or content like '%\"id\":\"128%' or content like '%\"id\":\"69%' or content like '%\"id\":\"82%' or content like '%\"id\":\"77%' or content like '%\"id\":\"92%' or content like '%\"id\":\"111%' or content like '%\"id\":\"110%' or content like '%\"id\":\"113%' or content like '%\"id\":\"116%' or content like '%\"id\":\"114%' or content like '%\"id\":\"123%' or content like '%\"id\":\"124%' ) "));
+	foreach($result as $r){
+		$ob = (array)json_decode($r->content);
+		$ob = $ob['table'];
+		print_r(json_encode($ob));
+		echo '<br><br>';
+	}
+        //$newAgent->is_active = 2;
+//dd($newAgent);
+//        $newAgent->save($json);
+	//SUBSTR(content, 17, LOCATE('\"',content,17)-17)
+	//$ob = DB::select(DB::raw("select * from reminders where title = 'Approval Approved' and content like '%Add New Agent%' and SUBSTR(content, 17, LOCATE('\"',content,17)-17) not in (select id from agents)"));
+	//dd($ob);*/
     }
 
     /**
