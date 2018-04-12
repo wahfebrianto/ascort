@@ -44,9 +44,8 @@ class OverridingSlipsController extends Controller
 
     public function minus(Request $request)
     {
-        $period = Input::get('period');
-        $month = Input::get('month');
-        $year = Input::get('year');
+        $start_date = Input::get('start_date');
+        $end_date = Input::get('end_date');
         $isCalculated = CommissionReport::isSlipCalculated($period, $month, $year, Overriding::TYPE);
         if(!CommissionReport::isAllowedToView($period, $month, $year)) {
             \Flash::error("Overriding report for period $period, $month $year is not available.");
@@ -109,6 +108,7 @@ class OverridingSlipsController extends Controller
 
     public function export()
     {
+
         Audit::log(Auth::user()->id, request()->ip(), trans('slips/overriding/general.audit-log.category'), trans('slips/overriding/general.audit-log.msg-export'));
         $agent_position_lists = \App\AgentPosition::withoutLowest()->lists('name', 'id')->all();
         $builder = \App\Agent
@@ -117,11 +117,13 @@ class OverridingSlipsController extends Controller
             ->with('parent')
             ->where('is_active', '=', 1)
             ->whereIn('agent_position_id', array_keys($agent_position_lists));
-
-        $period = Input::get('period');
-        $month = Input::get('month');
-        $year = Input::get('year');
-        $isCalculated = CommissionReport::isSlipCalculated($period, $month, $year, Overriding::TYPE);
+        $start_date = Input::get('start_date');
+        $end_date = Input::get('end_date');
+        if($start_date == "" or $end_date == ""){
+            \Flash::error("Overriding report for period $start_date until $end_date is not available");
+            return redirect()->back();
+        }
+        // $isCalculated = CommissionReport::isSlipCalculated($period, $month, $year, Overriding::TYPE);
         $recalc = false;
 
         if(null != Input::get('agent_position_id') && Input::get('agent_position_id') != 'all') {
@@ -134,27 +136,32 @@ class OverridingSlipsController extends Controller
             $builder->where('dist_channel', 'like', '%' . Input::get('dist_channel') . '%');
         }
         $agents = $builder->get();
-
-        if(\Input::has('recalc')) {
-            if(!CommissionReport::isRecalculationAllowed($period, $month, $year) && $isCalculated) {
-                \Flash::error("Recalculation for commission report for period $period, $month $year is not allowed.");
-                return redirect(route('slips.overriding.index'));
-            }
-            $recalc = true;
-        }
+        $recalc = true;
+        // if(\Input::has('recalc')) {
+        //     if(!CommissionReport::isRecalculationAllowed($period, $month, $year) && $isCalculated) {
+        //         \Flash::error("Recalculation for commission report for period $period, $month $year is not allowed.");
+        //         return redirect(route('slips.overriding.index'));
+        //     }
+        //     $recalc = true;
+        // }
 
         $ovrs = [];
+        $allsalecom = 0;
         foreach($agents as $agent) {
-            $ovr = new Overriding($agent, $period, $month, $year);
+            $ovr = new Overriding($agent, $start_date , $end_date);
             if (\Session::has($this->minus_session_name . $agent->id)) {
                 $ovr->minus = \Session::get($this->minus_session_name . $agent->id)['value'];
                 \Session::forget($this->minus_session_name . $agent->id);
             }
             $ovr->calculate($recalc);
             $ovrs[] = $ovr;
+            $allsalecom += count($ovr->sales);
         }
-
-        $html = \View::make('pdf.slips.overriding', compact('ovrs', 'period', 'month', 'year'))->render();
+        if($allsalecom <= 0){
+            \Flash::error("Commission report for period $start_date until $end_date is not available");
+            return redirect()->back();
+        }
+        $html = \View::make('pdf.slips.overriding', compact('ovrs', 'start_date','end_date'))->render();
         $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
         /*
         $pdf = \App::make('dompdf.wrapper');

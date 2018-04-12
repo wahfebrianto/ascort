@@ -86,7 +86,11 @@ class Sale extends Model
         return $query
             ->whereBetween('created_at', [$start_date, $end_date]);
     }
-    
+    public function scopeOfPeriodDateBetween($query, $start_date, $end_date)
+    {
+        return $query
+            ->whereBetween('MGI_start_date', [$start_date, $end_date]);
+    }
     public function scopeMGIBetween($query, $period, $month, $year)
     {
         $arr = \App\CommissionReport::getDatesOfPeriod($period, $month, $year);

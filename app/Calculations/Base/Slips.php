@@ -38,6 +38,9 @@ abstract class Slips
     public $month;
     public $year;
 
+    public $start_date;
+    public $end_date;
+
     public $data; // for save in db (json)
 
     public function __construct()
