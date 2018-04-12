@@ -41,7 +41,7 @@ return [
     ],
 
     'columns'             => [
-        'date'   =>  'Period',
+        'date'   =>  'Periode',
     ],
 
     'button'              => [
