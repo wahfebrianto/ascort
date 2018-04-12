@@ -17,22 +17,21 @@ class Commission extends Slips
 {
     const TYPE = "COMM";
 
-    public function __construct(Agent $agent, $period, $month, $year)
+    public function __construct(Agent $agent, $start_date, $end_date)
     {
         $this->agent = $agent;
-        $this->period = $period;
-        $this->month = $month;
-        $this->year = $year;
+        $this->start_date = Carbon::createFromFormat('d/m/Y H:i:s', $start_date.' 00:00:00');
+        $this->end_date = Carbon::createFromFormat('d/m/Y H:i:s', $end_date.' 23:59:59');
         parent::__construct();
     }
 
     public function calculate($force_calculate = false)
     {
-        if($this->isSaved() && !$force_calculate) {
+        if(!$force_calculate && $this->isSaved()) {
             //$this->rounding();
             $this->load();
         } else {
-            $this->sales = $this->agent->sales()->isActive()->MGIBetween($this->period, $this->month, $this->year)->get();
+            $this->sales = $this->agent->sales()->isActive()->MgiDateBetween($this->start_date, $this->end_date)->get();
             $this->total_nominal = 0;
             $this->total_FYP = 0;
             $this->total_commission = 0;
@@ -60,7 +59,7 @@ class Commission extends Slips
 
             $this->nett_commission = $this->gross_commission - $this->tax;
             //$this->rounding();
-            $this->save();
+            // $this->save();
         }
     }
 

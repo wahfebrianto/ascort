@@ -110,13 +110,13 @@ class CommissionSlipsController extends Controller
         $builder = \App\Agent
             ::with('sales')
             ->with('agent_position')
-            ->where('is_active', '=', 1);
+            ->where('is_active', '=', 1)
+            ->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID());
 
-        $period = Input::get('period');
-        $month = Input::get('month');
-        $year = Input::get('year');
-        $isCalculated = CommissionReport::isSlipCalculated($period, $month, $year, Commission::TYPE);
-        $recalc = false;
+        $start_date = Input::get('start_date');
+        $end_date = Input::get('end_date');
+        // $isCalculated = CommissionReport::isSlipCalculated($period, $month, $year, Commission::TYPE);
+        $recalc = true;
 
         if(null != Input::get('agent_position_id') && Input::get('agent_position_id') != 'all') {
             $builder->where('agent_position_id', '=', Input::get('agent_position_id'));
@@ -129,24 +129,31 @@ class CommissionSlipsController extends Controller
         }
         $agents = $builder->get();
 
-        if(\Input::has('recalc')) {
-            if(!CommissionReport::isRecalculationAllowed($period, $month, $year) && $isCalculated) {
-                \Flash::error("Recalculation for commission report for period $period, $month $year is not allowed.");
-                return redirect(route('slips.commission.index'));
-            }
-            $recalc = true;
-        }
+        // if(\Input::has('recalc')) {
+        //     if(!CommissionReport::isRecalculationAllowed($period, $month, $year) && $isCalculated) {
+        //         \Flash::error("Recalculation for commission report for period $period, $month $year is not allowed.");
+        //         return redirect(route('slips.commission.index'));
+        //     }
+        //     $recalc = true;
+        // }
 
         $commissions = [];
+        $allsalecom = 0;
         foreach($agents as $agent) {
-            $commissions[$agent->id] = new Commission($agent, $period, $month, $year);
+            $commissions[$agent->id] = new Commission($agent, $start_date, $end_date);
             if (\Session::has($this->minus_session_name . $agent->id)) {
                 $commissions[$agent->id]->minus = \Session::get($this->minus_session_name . $agent->id)['value'];
                 \Session::forget($this->minus_session_name . $agent->id);
             }
             $commissions[$agent->id]->calculate($recalc);
+            $allsalecom += count($commissions[$agent->id]->sales);
         }
-        $html = \View::make('pdf.slips.commission', compact('agents', 'commissions', 'period', 'month', 'year'))->render();
+        if($allsalecom <= 0)
+        {
+            \Flash::error("Commission report for period $start_date until $end_date is not available.");
+            return redirect()->back();
+        }
+        $html = \View::make('pdf.slips.commission', compact('agents', 'commissions', 'start_date', 'end_date'))->render();
         // $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
         return $html;
     }

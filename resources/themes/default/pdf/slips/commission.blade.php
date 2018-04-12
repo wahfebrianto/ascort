@@ -16,7 +16,7 @@
                     <!-- <td style="width:150px;">Dist. Channel</td>
                     <td style="width:10px;">:</td>
                     <td>{{ $commission->agent->dist_channel }}</td> -->
-                    <td style="width:150px;">Reporting to</td>
+                    <td style="width:150px;">Dilaporkan Kepada</td>
                     <td style="width:10px;">:</td>
                     <td>{{ $commission->agent->parent_name }}</td>
                 </tr>
@@ -25,9 +25,9 @@
                     <td>:</td>
                     <td>{{ $commission->agent->name }}</td>
                     <td></td>
-                    <!-- <td>Reporting to</td>
+                    <td>Periode</td>
                     <td>:</td>
-                    <td>{{ $commission->agent->parent_name }}</td> -->
+                    <td>{{ $start_date." s/d ".$end_date }}</td>
                 </tr>
                 <tr>
                     <td>Jabatan Agen</td>

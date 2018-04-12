@@ -240,6 +240,16 @@ class Agent extends Model
         return $data;
     }
 
+    public static function getAgents_ForDropDown_ByBranch()
+    {
+        $agents = Agent::isActive()->with('agent_position')->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID())->get();
+        $data = [];
+        foreach($agents as $agent){
+            $data[$agent->id] = $agent->name . " [" . $agent->AgentPositionName . "]";
+        }
+        return $data;
+    }
+
     public static function getAgentsWithPositionName_ForDropDown()
     {
         $agents = Agent::isActive()->with('agent_position')->get();

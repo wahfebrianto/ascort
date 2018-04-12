@@ -40,12 +40,12 @@
                         <div class="col-sm-8">
                             <div class="input-group col-md-6 pull-left">
                                 <span class="input-group-addon">Dari</span>
-                                {!! Form::text('start_date', null, ['class' => 'form-control datepicker', 'data-date-format' => 'dd/mm/yyyy', 'tabindex' => 1]) !!}
+                                {!! Form::text('start_date', null, ['class' => 'form-control datepicker', 'data-date-format' => 'dd/mm/yyyy', 'tabindex' => 1, 'autocomplete' => 'off']) !!}
                                 <span class = "input-group-addon"><span class="fa fa-fw fa-fw fa-calendar"></span>
                             </div>
                             <div class="input-group col-md-6 pull-right">
                                 <span class="input-group-addon">Hingga</span>
-                                {!! Form::text('end_date', null, ['class' => 'form-control datepicker', 'data-date-format' => 'dd/mm/yyyy', 'tabindex' => 2]) !!}
+                                {!! Form::text('end_date', null, ['class' => 'form-control datepicker', 'data-date-format' => 'dd/mm/yyyy', 'tabindex' => 2, 'autocomplete' => 'off']) !!}
                                 <span class = "input-group-addon"><span class="fa fa-fw fa-fw fa-calendar"></span>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                         {!! Form::label('agent_id', trans('sales/general.columns.agent_id'), ['class' => 'control-label col-sm-4'] ) !!}
                         <div class="col-sm-8">
                             <div class="input-group select2-bootstrap-append">
-                                {!! Form::select('agent_id', ['all' => 'All'] + \App\Agent::getAgents_ForDropDown(), 'all', ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 3]) !!}
+                                {!! Form::select('agent_id', ['all' => 'All'] + \App\Agent::getAgents_ForDropDown_ByBranch(), 'all', ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 3]) !!}
                                 <span class="input-group-addon">
                                     <span class="fa fa-fw fa-fw fa-child"></span>
                                 </span>
