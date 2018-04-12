@@ -115,6 +115,13 @@ class CommissionSlipsController extends Controller
 
         $start_date = Input::get('start_date');
         $end_date = Input::get('end_date');
+
+        if($start_date == "" || $end_date == "")
+        {
+          \Flash::error("Commission report for period $start_date until $end_date is not available.");
+          return redirect()->back();
+        }
+
         // $isCalculated = CommissionReport::isSlipCalculated($period, $month, $year, Commission::TYPE);
         $recalc = true;
 
