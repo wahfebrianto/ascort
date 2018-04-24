@@ -97,6 +97,18 @@ class CommissionReport extends Model
         ];
     }
 
+    public static function getDatesOfPeriodBetween($start_date,$end_date) {
+        /*$start_date = Carbon::create($year, $month, self::START_DAYS[$period], 0, 0, 0);
+        if($period == 4)
+            $end_date = Carbon::create($year, $month+1, self::END_DAYS[$period], 23, 59, 59);
+        else
+            $end_date = Carbon::create($year, $month, self::END_DAYS[$period], 23, 59, 59);*/
+        return [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ];
+    }
+
     public static function getPeriodFromDate(Carbon $date) {
         $period = 5;
         for($i=1;$i<=4;$i++) {

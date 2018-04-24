@@ -14,7 +14,7 @@ class Sale extends Model
                             'MGI', 'MGI_month', 'MGI_start_date', 'nominal', 'interest', 'additional',
                             'bank', 'bank_branch', 'account_name', 'account_number', 'branch_office_id'];
     protected $dates = ['MGI_start_date'];
-    protected $appends = ['agent_commission_value', 'FYP', 'customer_name', 'product_name', 'product_code'];
+    protected $appends = ['product_name', 'product_code', 'agent_commission_value', 'FYP', 'customer_name'];
 
     // ---------------------------------------------- RELATIONSHIP --------------------------------------------------
 
@@ -86,7 +86,11 @@ class Sale extends Model
         return $query
             ->whereBetween('created_at', [$start_date, $end_date]);
     }
-
+    public function scopeOfPeriodDateBetween($query, $start_date, $end_date)
+    {
+        return $query
+            ->whereBetween('MGI_start_date', [$start_date, $end_date]);
+    }
     public function scopeMGIBetween($query, $period, $month, $year)
     {
         $arr = \App\CommissionReport::getDatesOfPeriod($period, $month, $year);
@@ -130,7 +134,7 @@ class Sale extends Model
     {
         return $this->agent()->getResults()['name'];
     }
-
+    
     public function getCustomerNameAttribute()
     {
         return $this->customer()->getResults()['name'];
@@ -175,7 +179,7 @@ class Sale extends Model
     public static function getIndexDataProvider($enabledOnly = 1)
     {
         // grids filter and sorting workaround -> https://github.com/Nayjest/Grids/issues/41
-        return new EloquentDataProvider(Sale::join('agents', 'agents.id', '=', 'sales.agent_id')->join('products', 'products.id', '=', 'sales.product_id')->select('sales.*')->addSelect('agents.name')->addSelect('products.product_name')->where('sales.is_active', $enabledOnly)->whereIn('sales.branch_office_id', \App\BranchOffice::getBranchOfficesID()));
+        return new EloquentDataProvider(Sale::join('agents', 'agents.id', '=', 'sales.agent_id')->select('sales.*')->addSelect('agents.name')->where('sales.is_active', $enabledOnly)->whereIn('sales.branch_office_id', \App\BranchOffice::getBranchOfficesID()));
     }
 
     public static function getDashboardDataProvider()

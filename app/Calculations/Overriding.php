@@ -24,13 +24,11 @@ class Overriding extends Slips
     public $sales_ovr_value;
     public $sales_inline_data;
 
-    public function __construct(Agent $agent, $period, $month, $year)
+    public function __construct(Agent $agent, $start_date, $end_date)
     {
         $this->agent = $agent;
-        $this->period = $period;
-        $this->month = $month;
-        $this->year = $year;
-
+        $this->start_date = Carbon::createFromFormat('d/m/Y H:i:s',$start_date.' 00:00:00');
+        $this->end_date = Carbon::createFromFormat('d/m/Y H:i:s',$end_date.' 23:59:59');
         $this->sales_owner = [];
         $this->sales_ovr_percentage = [];
         $this->sales_ovr_value = [];
@@ -48,14 +46,16 @@ class Overriding extends Slips
          * Get all child's sales, do some filter, calc commission from percentage from self's overriding percentage
          */
         $this->sales_inline_data = [];
+        //dd($this->agent->childrenRecursive);
         foreach($this->agent->childrenRecursive as $child) {
             $this->getOverridingSalesRec($child, $child, $this->sales_inline_data, 0);
         }
         for($i = count($this->sales_inline_data)-1; $i >= 0; $i--) {
+            //dd($this->sales_inline_data[$i]['sales'][0]->agent);
             // remove if self sales, and if child is BD
             if ($this->sales_inline_data[$i]['owner']->id == $this->agent->id) {
                 array_splice($this->sales_inline_data, $i, 1);
-            } elseif($this->sales_inline_data[$i]['owner']->agent_position_id == $highest_agent_position->id) { // remove if highest agent position
+            } elseif($this->sales_inline_data[$i]['owner']->agent_position_id == $highest_agent_position->id ) { // remove if highest agent position
                 array_splice($this->sales_inline_data, $i, 1);
             } elseif($this->sales_inline_data[$i]['owner']->agent_position_id < $this->agent->agent_position_id) { // remove if sales owner position_id > than processed agent_position_id
                 array_splice($this->sales_inline_data, $i, 1);
@@ -77,9 +77,10 @@ class Overriding extends Slips
 
         /*
          * Get all myself sales, percentage from my position
-         */
+         *//*
         $agent_positions = $this->agent->getOverrideAgentPositions();
-        $my_sales = $this->agent->sales()->isActive()->ofPeriod($this->period, $this->month, $this->year)->get();
+        $my_sales = $this->agent->sales()->isActive()->ofPeriodDateBetween($this->start_date,$this->end_date)->get();
+
         foreach($agent_positions as $agent_position) {
             $temp = [
                 'sales' => $my_sales,
@@ -93,7 +94,7 @@ class Overriding extends Slips
             foreach ($this->sales_inline_data[$i]['sales'] as $sale) {
                 $this->sales_inline_data[$i]['ovr'][$sale->id] = $sale->FYP * $this->sales_inline_data[$i]['ovr_percentage'] / 100; // overriding value of sale id
             }
-        }
+        }*/
 
         $this->total_nominal = 0;
         $this->total_FYP = 0;
@@ -124,7 +125,8 @@ class Overriding extends Slips
     private function getOverridingSalesRec(Agent $agent, Agent $upper_agent, Array &$arr, $level = 0)
     {
         if (count($agent->childrenRecursive) == 0) {
-            $sales = $agent->sales()->isActive()->ofPeriod($this->period, $this->month, $this->year)->get();
+            $sales = $agent->sales()->isActive()->ofPeriodDateBetween($this->start_date,$this->end_date)->get();
+            //if($level == 0){dd($sales);}
             if(count($sales) != 0) {
                 $temp = [
                     'sales' => $sales,
@@ -135,7 +137,7 @@ class Overriding extends Slips
             }
             return;
         } else {
-            $sales = $agent->sales()->isActive()->ofPeriod($this->period, $this->month, $this->year)->get();
+            $sales = $agent->sales()->isActive()->ofPeriodDateBetween($this->start_date,$this->end_date)->get();
             if(count($sales) != 0) {
                 $temp = [
                     'sales' => $sales,
@@ -151,7 +153,7 @@ class Overriding extends Slips
         }
     }
 
-    public function calculate($force_calculate = false)
+    public function calculate($force_calculate = true)
     {
         if($this->isSaved() && !$force_calculate) {
             //$this->rounding();
@@ -178,7 +180,7 @@ class Overriding extends Slips
 
             $this->nett_commission = $this->gross_commission - $this->tax;
             //$this->rounding();
-            $this->save();
+            //$this->save();
         }
     }
 
@@ -200,9 +202,9 @@ class Overriding extends Slips
         }
     }
 
-    public static function getOverriding($agent, $period, $month, $year, $force_recalculation = false)
+    public static function getOverriding($agent, $start_date, $end_date, $force_recalculation = true)
     {
-        $obj = new Overriding($agent, $period, $month, $year);
+        $obj = new Overriding($agent, $start_date, $end_date);
         $obj->calculate($force_recalculation);
         return $obj;
     }
