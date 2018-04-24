@@ -109,7 +109,7 @@ use Nayjest\Grids\DataRow;
                                     )
                                 ,
                                 (new FieldConfig)
-                                    ->setName('customer.name')
+                                    ->setName('customer_name')
                                     ->setLabel('Nama Investor')
                                     ->setSortable(true)
                                     ->addFilter(

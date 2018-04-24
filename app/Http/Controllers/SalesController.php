@@ -253,7 +253,7 @@ class SalesController extends Controller
             foreach($MGIConfig as $key => $value){
                 $MGIs[$key] = $value[0];
             }
-            $agents = Agent::getAgentsWithPositionName_ForDropDown_ByBranch();
+            $agents = Agent::getAgentsWithPositionName_ForDropDown();
             if($sale->agent == null) $agents = ["-" => "None"] + Agent::getAgentsWithPositionName_ForDropDown_ByBranch();
             $customers = Customer::getCustomers_ForDropDown();
             if($sale->customer == null) $customers = ["-" => "None"] + Customer::getCustomers_ForDropDown();

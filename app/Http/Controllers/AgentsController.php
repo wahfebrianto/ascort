@@ -50,7 +50,7 @@ class AgentsController extends Controller
         $dataProvider = \App\Agent::getIndexDataProvider($enabledOnly);
         $modelColumns = \App\Agent::getColumnsArray();
         $agent_position_lists = \App\AgentPosition::lists('name', 'id');
-		$branch_office_id_lists = \App\BranchOffice::lists('branch_name','id');
+		    $branch_office_id_lists = \App\BranchOffice::lists('branch_name','id');
         return view('agents.index', compact('dataProvider', 'page_title', 'modelColumns', 'agent_position_lists', 'page_description', 'enabledOnly','branch_office_id_lists'));
     }
 

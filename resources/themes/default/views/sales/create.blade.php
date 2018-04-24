@@ -36,7 +36,7 @@
                         {!! Form::label('agent_id', trans('sales/general.columns.agent_id'), ['class' => 'control-label col-sm-2'] ) !!}
                         <div class="col-sm-10">
                             <div class="input-group select2-bootstrap-append">
-                                {!! Form::select('agent_id', [null => "Pilih Agen"] + App\Agent::getAgentsWithPositionName_ForDropDown_ByBranch(), '-', ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 2]) !!}
+                                {!! Form::select('agent_id', [null => "Pilih Agen"] + App\Agent::getAgentsWithPositionName_ForDropDown(), '-', ['class' => 'form-control select2', 'style' => "width: 100%", 'tabindex' => 2]) !!}
                                 <span class="input-group-addon">
                                     <span class="fa fa-fw fa-fw fa-child"></span>
                                 </span>

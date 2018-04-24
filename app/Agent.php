@@ -287,7 +287,8 @@ class Agent extends Model
             ->select('agents.*')
             ->addSelect('agent_positions.name as apname')
             ->addSelect('a.name as aname')
-            ->where('agents.is_active', $enabledOnly));
+            ->where('agents.is_active', $enabledOnly)
+            ->whereIn('agents.branch_office_id', \App\BranchOffice::getBranchOfficesID()));
     }
 
 
