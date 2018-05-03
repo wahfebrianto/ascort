@@ -117,11 +117,17 @@ class TopOverridingSlipsController extends Controller
             ->where('is_active', '=', 1)
             ->where('agent_position_id', '=', \App\AgentPosition::getHighestAgentPosition()->id);
 
-        $period = Input::get('period');
-        $month = Input::get('month');
-        $year = Input::get('year');
-        $isCalculated = CommissionReport::isSlipCalculated($period, $month, $year, TopOverriding::TYPE);
+        $start_date = Input::get('start_date');
+        $end_date = Input::get('end_date');
+        if($start_date == "" or $end_date == ""){
+            \Flash::error("Rec Fee report for period $start_date until $end_date is not available");
+            return redirect()->back();
+        }
+
+
+        // $isCalculated = CommissionReport::isSlipCalculated($period, $month, $year, TopOverriding::TYPE);
         $recalc = false;
+
         if(null != Input::get('agent_id') && Input::get('agent_id') != 'all') {
             $builder->where('id', '=', Input::get('agent_id'));
         }
@@ -131,26 +137,31 @@ class TopOverridingSlipsController extends Controller
 
         $agents = $builder->get();
 
-        if(\Input::has('recalc')) {
-            if(!CommissionReport::isRecalculationAllowed($period, $month, $year) && $isCalculated) {
-                \Flash::error("Recalculation for commission report for period $period, $month $year is not allowed.");
-                return redirect(route('slips.topoverriding.index'));
-            }
-            $recalc = true;
-        }
+        // if(\Input::has('recalc')) {
+        //     if(!CommissionReport::isRecalculationAllowed($period, $month, $year) && $isCalculated) {
+        //         \Flash::error("Recalculation for commission report for period $period, $month $year is not allowed.");
+        //         return redirect(route('slips.topoverriding.index'));
+        //     }
+        //     $recalc = true;
+        // }
 
         $ovrs = [];
+        $allsalecom = 0;
         foreach($agents as $agent) {
-            $ovr = new TopOverriding($agent, $period, $month, $year);
+            $ovr = new TopOverriding($agent, $start_date , $end_date);
             if (\Session::has($this->minus_session_name . $agent->id)) {
                 $ovr->minus = \Session::get($this->minus_session_name . $agent->id)['value'];
                 \Session::forget($this->minus_session_name . $agent->id);
             }
             $ovr->calculate($recalc);
             $ovrs[] = $ovr;
+            $allsalecom += count($ovr->sales);
         }
-
-        $html = \View::make('pdf.slips.topoverriding', compact('ovrs', 'period', 'month', 'year'))->render();
+        if($allsalecom <= 0){
+            \Flash::error("Rec Fee report for period $start_date until $end_date is not available");
+            return redirect()->back();
+        }
+        $html = \View::make('pdf.slips.topoverriding', compact('ovrs', 'start_date','end_date'))->render();
         $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
         /*
         $pdf = \App::make('dompdf.wrapper');

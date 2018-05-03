@@ -24,12 +24,11 @@ class TopOverriding extends Slips
     public $sales_ovr_value;
     public $sales_inline_data;
 
-    public function __construct(Agent $agent, $period, $month, $year)
+    public function __construct(Agent $agent, $start_date, $end_date)
     {
         $this->agent = $agent;
-        $this->period = $period;
-        $this->month = $month;
-        $this->year = $year;
+        $this->start_date = Carbon::createFromFormat('d/m/Y H:i:s',$start_date.' 00:00:00');
+        $this->end_date = Carbon::createFromFormat('d/m/Y H:i:s',$end_date.' 23:59:59');
 
         $this->sales_inline_data = [];
         $this->sales_owner = [];
@@ -94,7 +93,7 @@ class TopOverriding extends Slips
     private function getTopOverridingSalesRec(Agent $agent, Agent $upper_agent, Array &$arr, $level = 0)
     {
         if (count($agent->childrenRecursive) == 0) {
-            $sales = $agent->sales()->isActive()->ofPeriod($this->period, $this->month, $this->year)->get();
+            $sales = $agent->sales()->isActive()->ofPeriodDateBetween($this->start_date,$this->end_date)->get();
             if(count($sales) != 0) {
                 $temp = [
                     'sales' => $sales,
@@ -105,7 +104,7 @@ class TopOverriding extends Slips
             }
             return;
         } else {
-            $sales = $agent->sales()->isActive()->ofPeriod($this->period, $this->month, $this->year)->get();
+            $sales = $agent->sales()->isActive()->ofPeriodDateBetween($this->start_date,$this->end_date)->get();
             if(count($sales) != 0) {
                 $temp = [
                     'sales' => $sales,
@@ -122,7 +121,7 @@ class TopOverriding extends Slips
         }
     }
 
-    public function calculate($force_calculate = false)
+    public function calculate($force_calculate = true)
     {
         if($this->isSaved() && !$force_calculate) {
             //$this->rounding();
@@ -150,7 +149,7 @@ class TopOverriding extends Slips
 
             $this->nett_commission = $this->gross_commission - $this->tax;
             //$this->rounding();
-            $this->save();
+            // $this->save();
         }
     }
 

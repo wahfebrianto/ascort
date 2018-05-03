@@ -197,7 +197,16 @@ use Nayjest\Grids\DataRow;
                                                     ])
                                                 ) . ' ';
                                             }
-                                            return $showAction . $editAction . $enableAction
+                                            $permanentDeleteAction = '';
+                                            if ($row->getCellValue('is_active') == 0) {
+                                                $permanentDeleteAction = html_entity_decode(
+                                                    \Html::link(route('agents.destroy', $id), '<span class="fa fa-trash"></span> ' . trans('general.button.delete-permanent'), [
+                                                            'class' => 'btn btn-sm btn-danger btn-action col-md-12',
+                                                            'onclick' => 'return confirm(\''. trans('general.confirm.delete-permanent', ['ID' => $id]) .'\')',
+                                                    ])
+                                                ) . ' ';
+                                            }
+                                            return $showAction . $editAction . $enableAction . $permanentDeleteAction
                                             ;
                                         }
                                     )

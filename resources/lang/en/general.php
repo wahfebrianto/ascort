@@ -8,6 +8,7 @@ return [
         'save'              => 'Simpan',
         'create'            => 'Create',
         'delete'            => 'Hapus',
+        'delete-permanent'  => 'Hapus Permanen',
         'delete-selected'   => 'Hapus Terpilih',
         'clear'             => 'Bersihkan',
         'edit'              => 'Ubah',
@@ -84,6 +85,7 @@ return [
     'confirm'    => [
         'approve'        => 'Are you sure want to approve data with ID #:ID?',
         'delete'        => 'Are you sure want to delete data with ID #:ID?',
+        'delete-permanent'        => 'Are you sure want to delete data with ID #:ID permanently?',
         'restore'       => 'Are you sure want to restore data with ID #:ID?',
         'delete-selected' => 'Are you sure want to delete all checked/selected data?\nWARNING! This action cannot be undone.',
         'restore-selected' => 'Are you sure want to restore all checked/selected data?\nWARNING! This action cannot be undone.',

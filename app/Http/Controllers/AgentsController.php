@@ -311,6 +311,28 @@ class AgentsController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function destroy($id)
+    {
+        $agent = $this->agent->find($id);
+        $this->deleteRecursively($agent);
+        return redirect()->back();
+    }
+
+    private function deleteRecursively($agent)
+    {
+        foreach ($agent->sales() as $sale) {
+          $sale->delete();
+        }
+        foreach ($agent->children() as $child) {
+          $this->deleteRecursively($child);
+        }
+        $agent->delete();
+    }
+
     public function history()
     {
         Audit::log(Auth::user()->id, request()->ip(), trans('agents/general.audit-log.category'), trans('agents/general.audit-log.msg-history'));

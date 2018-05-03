@@ -280,6 +280,7 @@ Route::group(['middleware' => ['auth', 'authorize']], function () {
         Route::patch('{id}/edit',       ['as' => 'agents.update',                'uses' => 'AgentsController@update']);
         Route::get('enable/{id}',       ['as' => 'agents.enable',                'uses' => 'AgentsController@enable']);
         Route::get('disable/{id}',      ['as' => 'agents.disable',               'uses' => 'AgentsController@disable']);
+        Route::get('delete/{id}',       ['as' => 'agents.destroy',                'uses' => 'AgentsController@destroy']);
     });
 
     Route::group(['prefix' => 'products'], function () {

@@ -4,9 +4,8 @@
     @foreach($ovrs as $ctr => $ovr)
         @if(count($ovr->sales) != 0)
             @include('partials._pdf_logo_header')
-            <h3><strong>Rec Fee Slip</strong></h3>
-            <p><em>Printed on: {{ $ovr->process_date }}</em></p>
-            <p>Period: {{ $month }} {{ $year }} / {{ $period }}</p>
+            <h3><strong>SLIP REC FEE</strong></h3>
+            <p><em>Tanggal Proses : {{ $ovr->process_date }}</em></p>
             <br />
             <table class="info">
                 <tr>
@@ -14,18 +13,18 @@
                     <td style="width:10px;">:</td>
                     <td>{{ $ovr->agent->agent_code }}</td>
                     <td style="width:300px;">&nbsp;</td>
-                    <td style="width:150px;">Dist. Channel</td>
+                    <td style="width:150px;">Reporting to</td>
                     <td style="width:10px;">:</td>
-                    <td>{{ $ovr->agent->dist_channel }}</td>
+                    <td>{{ $ovr->agent->parent_name }}</td>
                 </tr>
                 <tr>
                     <td>Nama Agen</td>
                     <td>:</td>
                     <td>{{ $ovr->agent->name }}</td>
                     <td></td>
-                    <td>Reporting to</td>
-                    <td>:</td>
-                    <td>{{ $ovr->agent->parent_name }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Jabatan Agen</td>
@@ -51,17 +50,14 @@
                 <tr>
                     <th rowspan="2">No.</th>
                     <th rowspan="2">Kode Agen</th>
-                    <th rowspan="2">Nama SBD</th>
+                    <th rowspan="2">Nama Agen</th>
                     <th rowspan="2">No. Penjualan <br />Produk</th>
                     <th rowspan="2">Nama Customer</th>
-                    <th>Nominal</th>
+                    <th rowspan="2">Nominal</th>
                     <th rowspan="2">Tgl. MGI Awal</th>
                     <th rowspan="2">MGI</th>
                     <th rowspan="2">% OVR</th>
                     <th rowspan="2">Total OVR</th>
-                </tr>
-                <tr>
-                    <th>AUMP</th>
                 </tr>
                 <!--<thead>-->
                 <tbody>
@@ -79,14 +75,14 @@
                             <td rowspan="2">{{ $ovr->sales_owner[$key]->name }}</td>
                             <td rowspan="2">{{ $sale->number }} <br />{{ $sale->product_name }} - {{ $sale->product_code }}</td>
                             <td rowspan="2">{{ $sale->customer_name }}</td>
-                            <td class="text-right">{{ \App\Money::format('%(.2n', $sale->nominal) }}</td>
+                            <td rowspan="2" class="text-right">{{ \App\Money::format('%(.2n', $sale->nominal) }}</td>
                             <td rowspan="2" class="text-center">{{ $sale->MGI_start_date }}</td>
                             <td rowspan="2" class="text-center">{{ $sale->MGI }}</td>
                             <td rowspan="2" class="text-center">{{ $ovr->sales_ovr_percentage[$key] }}%</td>
                             <td rowspan="2" class="text-right">{{ \App\Money::format('%(.2n', $ovr->sales_ovr_value[$key]) }}</td>
                         </tr>
                         <tr>
-                            <td class="text-right">{{ \App\Money::format('%(.2n', $sale->FYP) }}</td>
+
                         </tr>
                     @endforeach
                 @endif
@@ -98,7 +94,7 @@
 
                     <td style="width:100px;">&nbsp;</td>
 
-                    <td colspan="3" class="border-bottom-decor" style="width:30%"><strong>Penentuan Tarif Pajak:</strong></td>
+                    <td colspan="3" class="" style="width:30%"><strong></strong></td>
 
                     <td style="width:100px;">&nbsp;</td>
 
@@ -111,13 +107,13 @@
 
                     <td>&nbsp;</td>
 
-                    <td style="width:18%;">Pendapatan YTD Sebelumnya</td>
-                    <td style="width:1%;">:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->last_YTD) }}</td>
+                    <td style="width:18%;"></td>
+                    <td style="width:1%;"></td>
+                    <td class="text-right"></td>
 
                     <td>&nbsp;</td>
 
-                    <td style="width:15%;">Total Nominal</td>
+                    <td style="width:15%;">Total AUM</td>
                     <td style="width:1%;">:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->total_nominal) }}</td>
                 </tr>
@@ -128,15 +124,15 @@
 
                     <td></td>
 
-                    <td>Pendapatan Saat Ini</td>
-                    <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->total_commission) }}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
 
                     <td></td>
 
-                    <td>Total AUMP</td>
+                    <td>Total Komisi Bruto</td>
                     <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->total_FYP) }}</td>
+                    <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $ovr->total_commission) }}</td>
                 </tr>
                 <tr>
                     <td>No. Rekening</td>
@@ -145,15 +141,15 @@
 
                     <td></td>
 
-                    <td>Total YTD Saat Ini</td>
-                    <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->last_YTD + $ovr->gross_commission) }}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
 
                     <td></td>
 
-                    <td>Total Komisi</td>
+                    <td>Pendapatan</td>
                     <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->total_commission) }}</td>
+                    <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->gross_commission) }}</td>
                 </tr>
                 <tr>
                     <td>Atas Nama</td>
@@ -168,9 +164,9 @@
 
                     <td></td>
 
-                    <td>Komisi Hold</td>
-                    <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->commission_hold) }}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -186,13 +182,13 @@
                     <td></td>
 
                     @if($ovr->minus > 0)
-                        <td>Potongan Minus</td>
-                        <td>:</td>
-                        <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $ovr->minus) }}</td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"></td>
                     @else
-                        <td>Additional</td>
-                        <td>:</td>
-                        <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $ovr->minus * -1) }}</td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"></td>
                     @endif
                 </tr>
                 <tr>
@@ -208,9 +204,9 @@
 
                     <td></td>
 
-                    <td>Komisi Bruto</td>
-                    <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->gross_commission) }}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
                 </tr>
                 <tr>
                     <td></td>
