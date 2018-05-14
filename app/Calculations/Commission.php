@@ -81,5 +81,18 @@ class Commission extends Slips
         $comm->calculate($force_recalculation);
         return $comm;
     }
+    public static function getYTDCommissionByAgent($agent,$date,$minus_session_name){
+        //ambil ovr nya
+        $year = explode('/',$date)[2];
+        $start_date = '01/01/'.$year;
+        $end_date = $date;
+        $ovr = new Overriding($agent, $start_date , $end_date);
+        if (\Session::has($minus_session_name . $agent->id)) {
+            $ovr->minus = \Session::get($minus_session_name . $agent->id)['value'];
+            \Session::forget($minus_session_name . $agent->id);
+        }
+        $ovr->calculate(true);
+        return $ovr->gross_commission;
+    }
 
 }

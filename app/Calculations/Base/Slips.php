@@ -145,4 +145,22 @@ abstract class Slips
             ->whereRaw("CONCAT(DATE_FORMAT(`month_year`,'%Y%m'),`period`) = '$period_code'")
             ->count() > 0;
     }
+
+    public static function getLastYTDByAgent($agent,$date,$minus_session_name,$type){
+        $year = explode('/',$date)[2];
+        $start_date = '01/01/'.$year;
+        $end_date = $date;
+        if($type=="OR")
+            $slips = new \App\Calculations\Overriding($agent, $start_date , $end_date);
+        elseif($type == "Commission")
+            $slips = new \App\Calculations\Commission($agent,$start_date,$end_date);
+        else if($type == "TopOverriding")
+            $slips = new \App\Calculations\TopOverriding($agent,$start_date,$end_date);
+        if (\Session::has($minus_session_name . $agent->id)) {
+            $slips->minus = \Session::get($minus_session_name . $agent->id)['value'];
+            \Session::forget($minus_session_name . $agent->id);
+        }
+        $slips->calculate(true);
+        return $slips->gross_commission;
+    }
 }

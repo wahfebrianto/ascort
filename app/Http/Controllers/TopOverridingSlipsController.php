@@ -148,12 +148,15 @@ class TopOverridingSlipsController extends Controller
         $ovrs = [];
         $allsalecom = 0;
         foreach($agents as $agent) {
+            $endoflastytd =Carbon::createFromFormat('d/m/Y H:i:s',$start_date.' 23:59:59')->subDays(1)->format('d/m/Y');
+            $ytd = \App\Calculations\Base\Slips::getLastYTDByAgent($agent,$endoflastytd,$this->minus_session_name,'TopOverriding');
             $ovr = new TopOverriding($agent, $start_date , $end_date);
             if (\Session::has($this->minus_session_name . $agent->id)) {
                 $ovr->minus = \Session::get($this->minus_session_name . $agent->id)['value'];
                 \Session::forget($this->minus_session_name . $agent->id);
             }
             $ovr->calculate($recalc);
+            $ovr->last_YTD = $ytd;
             $ovrs[] = $ovr;
             $allsalecom += count($ovr->sales);
         }

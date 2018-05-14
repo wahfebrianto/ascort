@@ -119,6 +119,7 @@ class OverridingSlipsController extends Controller
             ->whereIn('agent_position_id', array_keys($agent_position_lists));
         $start_date = Input::get('start_date');
         $end_date = Input::get('end_date');
+        
         if($start_date == "" or $end_date == ""){
             \Flash::error("Overriding report for period $start_date until $end_date is not available");
             return redirect()->back();
@@ -148,12 +149,15 @@ class OverridingSlipsController extends Controller
         $ovrs = [];
         $allsalecom = 0;
         foreach($agents as $agent) {
+            $endoflastytd =Carbon::createFromFormat('d/m/Y H:i:s',$start_date.' 23:59:59')->subDays(1)->format('d/m/Y');
+            $ytd = \App\Calculations\Base\Slips::getLastYTDByAgent($agent,$endoflastytd,$this->minus_session_name,'OR');
             $ovr = new Overriding($agent, $start_date , $end_date);
             if (\Session::has($this->minus_session_name . $agent->id)) {
                 $ovr->minus = \Session::get($this->minus_session_name . $agent->id)['value'];
                 \Session::forget($this->minus_session_name . $agent->id);
             }
             $ovr->calculate($recalc);
+            $ovr->last_YTD = $ytd;
             $ovrs[] = $ovr;
             $allsalecom += count($ovr->sales);
         }
