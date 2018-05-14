@@ -77,10 +77,9 @@ class Overriding extends Slips
 
         /*
          * Get all myself sales, percentage from my position
-         *//*
+         */
         $agent_positions = $this->agent->getOverrideAgentPositions();
         $my_sales = $this->agent->sales()->isActive()->ofPeriodDateBetween($this->start_date,$this->end_date)->get();
-
         foreach($agent_positions as $agent_position) {
             $temp = [
                 'sales' => $my_sales,
@@ -94,7 +93,7 @@ class Overriding extends Slips
             foreach ($this->sales_inline_data[$i]['sales'] as $sale) {
                 $this->sales_inline_data[$i]['ovr'][$sale->id] = $sale->FYP * $this->sales_inline_data[$i]['ovr_percentage'] / 100; // overriding value of sale id
             }
-        }*/
+        }
 
         $this->total_nominal = 0;
         $this->total_FYP = 0;
