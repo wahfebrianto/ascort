@@ -8,7 +8,7 @@ use App\Repositories\AuditRepository as Audit;
 use Auth;
 use Input;
 use App\Calculations\Commission;
-
+use Carbon\Carbon;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -148,12 +148,15 @@ class CommissionSlipsController extends Controller
         $commissions = [];
         $allsalecom = 0;
         foreach($agents as $agent) {
+            $endoflastytd =Carbon::createFromFormat('d/m/Y H:i:s',$start_date.' 23:59:59')->subDays(1)->format('d/m/Y');
+            $ytd = \App\Calculations\Base\Slips::getLastYTDByAgent($agent,$endoflastytd,$this->minus_session_name,'Commission');
             $commissions[$agent->id] = new Commission($agent, $start_date, $end_date);
             if (\Session::has($this->minus_session_name . $agent->id)) {
                 $commissions[$agent->id]->minus = \Session::get($this->minus_session_name . $agent->id)['value'];
                 \Session::forget($this->minus_session_name . $agent->id);
             }
             $commissions[$agent->id]->calculate($recalc);
+            $commissions[$agent->id]->last_YTD = $ytd;
             $allsalecom += count($commissions[$agent->id]->sales);
         }
         if($allsalecom <= 0)
