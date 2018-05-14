@@ -164,7 +164,7 @@
 
                     <td></td>
 
-                    <td>Pendapatan</td>
+                    <td>Pendapatan Setelah Pajak</td>
                     <td>:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $ovr->total_commission-$ovr->tax) }}</td>
                 </tr>
