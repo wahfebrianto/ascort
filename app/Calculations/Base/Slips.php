@@ -149,7 +149,7 @@ abstract class Slips
 
     public static function calculateTax($agent, $lastYTD, $profitNow, $level)
     {
-      $percentage = [2.5, 7.5, 12.5, 15];
+      $percentage = [5, 15, 25, 30];
       $bound = [0, 50000000, 250000000, 500000000];
       $percentage = ($agent->NPWP == 0)?$percentage[$level]*120/100:$percentage[$level];
       $bound = ($level == 3)?$lastYTD + $profitNow:$bound[$level+1]-$bound[$level];

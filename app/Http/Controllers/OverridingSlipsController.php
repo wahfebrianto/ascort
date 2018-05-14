@@ -159,7 +159,7 @@ class OverridingSlipsController extends Controller
             }
             $ovr->calculate($recalc);
             $ovr->last_YTD = $ytd;
-            $ovr->tax = \App\Calculations\Base\Slips::calculateTax($agent, $ytd, $ovr->gross_commission, 0);
+            $ovr->tax = \App\Calculations\Base\Slips::calculateTax($agent, $ytd, $ovr->gross_commission/2, 0);
             $ovrs[] = $ovr;
             $allsalecom += count($ovr->sales);
         }

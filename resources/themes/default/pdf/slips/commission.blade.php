@@ -159,7 +159,7 @@
 
                     <td></td>
 
-                    <td>Pendapatan</td>
+                    <td>Pendapatan Setelah Pajak</td>
                     <td>:</td>
                     <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_commission-$commission->tax) }}</td>
                 </tr>
