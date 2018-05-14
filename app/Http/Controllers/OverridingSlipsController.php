@@ -120,7 +120,7 @@ class OverridingSlipsController extends Controller
             ->orderBy('agent_position_id', 'desc');
         $start_date = Input::get('start_date');
         $end_date = Input::get('end_date');
-        
+
         if($start_date == "" or $end_date == ""){
             \Flash::error("Overriding report for period $start_date until $end_date is not available");
             return redirect()->back();
@@ -159,6 +159,7 @@ class OverridingSlipsController extends Controller
             }
             $ovr->calculate($recalc);
             $ovr->last_YTD = $ytd;
+            $ovr->tax = \App\Calculations\Base\Slips::calculateTax($agent, $ytd, $ovr->gross_commission, 0);
             $ovrs[] = $ovr;
             $allsalecom += count($ovr->sales);
         }

@@ -157,6 +157,7 @@ class CommissionSlipsController extends Controller
             }
             $commissions[$agent->id]->calculate($recalc);
             $commissions[$agent->id]->last_YTD = $ytd;
+            $commissions[$agent->id]->tax = \App\Calculations\Base\Slips::calculateTax($agent, $ytd, $commissions[$agent->id]->gross_commission, 0);
             $allsalecom += count($commissions[$agent->id]->sales);
         }
         if($allsalecom <= 0)

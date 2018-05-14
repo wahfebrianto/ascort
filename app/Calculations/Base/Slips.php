@@ -169,6 +169,7 @@ abstract class Slips
           return abs($dif_last) * $percentage / 100 + self::calculateTax($agent, 0, $dif_now, $level + 1);
         }
       }
+    }
 
     public static function getLastYTDByAgent($agent,$date,$minus_session_name,$type){
         $year = explode('/',$date)[2];
@@ -188,4 +189,4 @@ abstract class Slips
         return $slips->gross_commission;
 
     }
-}
+  }
