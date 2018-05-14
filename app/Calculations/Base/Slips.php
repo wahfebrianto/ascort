@@ -145,4 +145,28 @@ abstract class Slips
             ->whereRaw("CONCAT(DATE_FORMAT(`month_year`,'%Y%m'),`period`) = '$period_code'")
             ->count() > 0;
     }
+
+    public static function calculateTax($agent, $lastYTD, $profitNow, $level)
+    {
+      $percentage = [2.5, 7.5, 12.5, 15];
+      $bound = [0, 50000000, 250000000, 500000000];
+      $percentage = ($agent->NPWP == 0)?$percentage[$level]*120/100:$percentage[$level];
+      $bound = ($level == 3)?$lastYTD + $profitNow:$bound[$level+1]-$bound[$level];
+      $dif_last = $lastYTD - $bound;
+      if($dif_last > 0)
+      {
+        return self::calculateTax($agent, $dif_last, $profitNow, $level + 1);
+      }
+      else {
+        if(abs($dif_last) >= $profitNow)
+        {
+          return $profitNow * $percentage / 100;
+        }
+        else
+        {
+          $dif_now = $profitNow - abs($dif_last);
+          return abs($dif_last) * $percentage / 100 + self::calculateTax($agent, 0, $dif_now, $level + 1);
+        }
+      }
+    }
 }

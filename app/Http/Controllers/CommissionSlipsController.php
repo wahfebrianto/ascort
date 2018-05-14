@@ -111,7 +111,8 @@ class CommissionSlipsController extends Controller
             ::with('sales')
             ->with('agent_position')
             ->where('is_active', '=', 1)
-            ->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID());
+            ->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID())
+            ->orderBy('agent_position_id', 'desc');
 
         $start_date = Input::get('start_date');
         $end_date = Input::get('end_date');

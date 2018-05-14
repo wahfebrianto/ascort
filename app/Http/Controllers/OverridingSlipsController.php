@@ -116,7 +116,8 @@ class OverridingSlipsController extends Controller
             ->with('sales')
             ->with('parent')
             ->where('is_active', '=', 1)
-            ->whereIn('agent_position_id', array_keys($agent_position_lists));
+            ->whereIn('agent_position_id', array_keys($agent_position_lists))
+            ->orderBy('agent_position_id', 'desc');
         $start_date = Input::get('start_date');
         $end_date = Input::get('end_date');
         if($start_date == "" or $end_date == ""){
