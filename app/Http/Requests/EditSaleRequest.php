@@ -44,11 +44,12 @@ class EditSaleRequest extends Request
     protected function getValidatorInstance(){
         $validator = parent::getValidatorInstance();
 
-        $validator->sometimes('nominal', 'min:250000000', function($input)
+        $validator->sometimes('nominal', 'min:100000000', function($input)
         {
             $code = $input['nominal'] % 1000;
             if($code == config('sales_ccode.code')) return false; else return true;
         });
+        
         return $validator;
     }
 }

@@ -85,11 +85,61 @@
             </table>
             <table class="info">
                 <tr>
-                    <td colspan="3" class="border-bottom-decor" style="width:20%"><strong>Transfer ke:</strong></td>
+                    <td style="width:150px;" class="border-bottom-decor"><strong>Transfer ke:</strong></td>
+                    <td style="width:10px;">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td style="width:10px;">&nbsp;</td>
+                    <!-- <td style="width:150px;">Dist. Channel</td>
+                    <td style="width:10px;">:</td>
+                    <td>{{ $commission->agent->dist_channel }}</td> -->
+                    <td style="width:200px;" class="border-bottom-decor"><strong>Pendapatan:</strong></td>
+                    <td style="width:10px;">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Bank</td>
+                    <td>:</td>
+                    <td style="width:200px;">{{ $commission->agent->bank }}</td>
+                    <td></td>
+                    <td>Total AUM</td>
+                    <td>:</td>
+                    <td style="width:200px;">{{ \App\Money::format('%(.2n', $commission->total_nominal) }}</td>
+                </tr>
+                <tr>
+                    <td>Cabang</td>
+                    <td>:</td>
+                    <td style="width:200px;">{{ $commission->agent->bank_branch }}</td>
+                    <td></td>
+                    <td>Total Komisi Bruto</td>
+                    <td>:</td>
+                    <td style="width:200px;">{{ \App\Money::format('%(.2n', $commission->gross_commission) }}</td>
+                </tr>
+                <tr>
+                    <td>No Rekening</td>
+                    <td>:</td>
+                    <td style="width:200px;">{{ $commission->agent->account_number }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Atas Nama</td>
+                    <td>:</td>
+                    <td style="width:200px;">{{ $commission->agent->name }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <!--table class="info">
+                <tr>
+                    <td colspan="3" class="border-bottom-decor"><strong>Transfer ke:</strong></td>
 
                     <td style="width:100px;">&nbsp;</td>
 
-                    <td colspan="3" class="border-bottom-decor" style="width:30%"><strong>Penentuan Tarif Pajak:</strong></td>
+                    <td colspan="3" class="" style="width:30%"></td>
 
                     <td style="width:100px;">&nbsp;</td>
 
@@ -102,9 +152,9 @@
 
                     <td>&nbsp;</td>
 
-                    <td style="width:18%;">Pendapatan YTD Sebelumnya</td>
-                    <td style="width:1%;">:</td>
-                    <td class="text-right">{{\App\Money::format('%(.2n', $commission->last_YTD)}}</td>
+                    <td style="width:18%;"></td>
+                    <td style="width:1%;"></td>
+                    <td class="text-right"></td>
 
                     <td>&nbsp;</td>
 
@@ -119,9 +169,9 @@
 
                     <td></td>
 
-                    <td>Pendapatan Saat Ini</td>
-                    <td>:</td>
-                    <td class="text-right border-bottom-decor">{{\App\Money::format('%(.2n', $commission->gross_commission)}}</td>
+                    <td></td>
+                    <td></td>
+                    <td class=""></td>
 
                     <td></td>
 
@@ -136,14 +186,14 @@
 
                     <td></td>
 
-                    <td>Total YTD Saat Ini:</td>
-                    <td>:</td>
-                    <td class="text-right">{{\App\Money::format('%(.2n', $commission->gross_commission+$commission->last_YTD)}}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
 
                     <td></td>
-                    <td>Total Pajak</td>
-                    <td>:</td>
-                    <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $commission->tax) }}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
                     
                 </tr>
                 <tr>
@@ -159,9 +209,9 @@
 
                     <td></td>
 
-                    <td>Pendapatan Setelah Pajak</td>
-                    <td>:</td>
-                    <td class="text-right">{{ \App\Money::format('%(.2n', $commission->total_commission-$commission->tax) }}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -212,11 +262,11 @@
 
                     <td></td>
 
-                    <!--
+                    <
                     <td>Pajak</td>
                     <td>:</td>
                     <td class="text-right border-bottom-decor">{ { \App\Money::format('%(.2n', $ovr->tax) }}</td>
-                    -->
+                    >
                 </tr>
                 <tr>
                     <td></td>
@@ -231,13 +281,13 @@
 
                     <td></td>
 
-                    <!--
+                    <
                     <td>Pendapatan Setelah Pajak</td>
                     <td>:</td>
                     <td class="text-right">{ { \App\Money::format('%(.2n', $ovr->nett_commission) }}</td>
-                    -->
+                    >
                 </tr>
-            </table>
+            </table-->
             <div class="page-break"></div>
         @endif
     @endforeach
