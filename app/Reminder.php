@@ -58,6 +58,13 @@ class Reminder extends Model
             ->get();
     }
 
+    public static function getExpReminders(){
+        return Reminder::getActiveRemindersBuilder()
+            ->where('subject', '=', 'expire')
+            ->where('reminder_for', '=', Auth::user()->roles->first()->branch_office_id)
+            ->get();
+    }
+
     public static function getRolloverReminders(){
         return Reminder::getActiveRemindersForAdminBuilder()
             ->where('subject', '=', 'rollover')

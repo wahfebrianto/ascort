@@ -115,6 +115,9 @@ use Nayjest\Grids\DataRow;
                     @foreach($reminderRollover as $rem)
                         @include('partials._reminder_rollover', ['reminder' => $rem])
                     @endforeach
+                    @foreach($reminderExpire as $rem)
+                        @include('partials._reminder_expire', ['reminder' => $rem])
+                    @endforeach
                     @if($totalApproval != 0)
                         @include('partials._reminder_approval_count', ['total' => $totalApproval])
                     @endif

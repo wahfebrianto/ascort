@@ -43,6 +43,7 @@ class DashboardController extends Controller
         $holidays_date_json = json_encode($holidays_arr);
         $dataProvider = \App\Sale::getDashboardDataProvider();
         $branch_offices = \App\BranchOffice::getBranchOfficesID();
+        $this->addexpiresoonreminder();
         if(!Auth::user()->hasRole('otor') && !Auth::user()->hasRole('owner')){
             $reminderEval = Reminder::getEvalReminders();
             $reminderRollover = Reminder::getRolloverReminders();
@@ -54,10 +55,11 @@ class DashboardController extends Controller
             $reminderApproval = [];
             $totalApproval = Approval::countUnapproved();
         }
-        $reminder_count = count($reminderApproval) + count($reminderRollover) + count($reminderEval) + $totalApproval;
+        $reminderExpire = Reminder::getExpReminders();
+        $reminder_count = count($reminderExpire) + count($reminderApproval) + count($reminderRollover) + count($reminderEval) + $totalApproval;
 
         return view('dashboard', compact('page_title', 'page_description', 'reminderEval', 'totalApproval', 'reminder_count',
-            'reminderRollover', 'reminderApproval', 'count_customers', 'count_agents', 'count_sales', 'current_period', 'branch_offices', 'holidays_date_json', 'dataProvider'));
+            'reminderRollover', 'reminderApproval', 'reminderExpire', 'count_customers', 'count_agents', 'count_sales', 'current_period', 'branch_offices', 'holidays_date_json', 'dataProvider'));
     }
 
     public function changeagent(Request $request){
@@ -81,6 +83,22 @@ class DashboardController extends Controller
         Reminder::inactivateReminder(Reminder::getReminderById($id));
         \Flash::success('Reminder dismissed.');
         return redirect('dashboard');
+    }
+
+    public function addexpiresoonreminder(){
+        $sales = \App\Sale::getExpiredSoonSales();
+        foreach ($sales as $sale) {
+          $branch_target = $sale->branchOffice()->first()->id;
+          Reminder::create([
+              'title' => 'Expired Soon ['.$sale->id.']',
+              'reminder_for' => $branch_target,
+              'start_date' => Carbon::createFromFormat('d/m/Y', $sale->MGI_start_date)->addMonths($sale->MGI)->subWeeks(3)->format('d/m/Y'),
+              'end_date' => Carbon::createFromFormat('d/m/Y', $sale->MGI_start_date)->addMonths($sale->MGI)->format('d/m/Y'),
+              'subject' => 'expire',
+              'content' => json_encode($sale),
+              'respond_link' => '#'
+          ]);
+        }
     }
 
 }
