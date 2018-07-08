@@ -90,15 +90,15 @@
             </table>
             <table class="info">
                 <tr>
-                    <td colspan="3" class="border-bottom-decor" style="width:20%"><strong>Transfer ke:</strong></td>
+                    <td colspan="3" class="border-bottom-decor" style="width:40%"><strong>Transfer ke:</strong></td>
 
                     <td style="width:100px;">&nbsp;</td>
 
-                    <td colspan="3" class="border-bottom-decor" style="width:30%"><strong>Penentuan Tarif Pajak:</strong></td>
+                    <td colspan="3" class="border-bottom-decor" style="width:30%"></td>
 
                     <td style="width:100px;">&nbsp;</td>
 
-                    <td colspan="3" class="border-bottom-decor" style="width:30%"><strong>Pendapatan:</strong></td>
+                    <td colspan="3" class="border-bottom-decor" style="width:60%"><strong>Pendapatan:</strong></td>
                 </tr>
                 <tr>
                     <td style="width:10%;">Bank</td>
@@ -107,9 +107,9 @@
 
                     <td>&nbsp;</td>
 
-                    <td style="width:18%;">Pendapatan YTD Sebelumnya</td>
-                    <td style="width:1%;">:</td>
-                    <td class="text-right">{{\App\Money::format('%(.2n', $ovr->last_YTD)}}</td>
+                    <td style="width:18%;"></td>
+                    <td style="width:1%;"></td>
+                    <td class="text-right"></td>
 
                     <td>&nbsp;</td>
 
@@ -124,9 +124,9 @@
 
                     <td></td>
 
-                    <td>Pendapatan Saat Ini</td>
-                    <td>:</td>
-                    <td class="text-right border-bottom-decor">{{\App\Money::format('%(.2n', $ovr->gross_commission)}}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
 
                     <td></td>
 
@@ -141,9 +141,9 @@
 
                     <td></td>
 
-                    <td>Total YTD Saat Ini:</td>
-                    <td>:</td>
-                    <td class="text-right">{{\App\Money::format('%(.2n', $ovr->gross_commission+$ovr->last_YTD)}}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"></td>
 
                     <td></td>
                     <td>Total Pajak</td>

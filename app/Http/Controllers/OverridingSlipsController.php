@@ -158,8 +158,8 @@ class OverridingSlipsController extends Controller
                 \Session::forget($this->minus_session_name . $agent->id);
             }
             $ovr->calculate($recalc);
-            $ovr->last_YTD = $ytd;
-            $ovr->tax = \App\Calculations\Base\Slips::calculateTax($agent, $ytd, $ovr->gross_commission/2, 0);
+            //$ovr->last_YTD = $ytd;
+            //$ovr->tax = \App\Calculations\Base\Slips::calculateTax($agent, $ytd, $ovr->gross_commission/2, 0);
             $ovrs[] = $ovr;
             $allsalecom += count($ovr->sales);
         }
