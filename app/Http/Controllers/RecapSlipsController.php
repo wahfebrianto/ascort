@@ -68,7 +68,6 @@ class RecapSlipsController extends Controller
         }
 
         $agents = $builder->get();
-        dd($agents);
   			$export->data = $agents;
   			return $export->handleExport();
 
