@@ -39,6 +39,7 @@
         tr { page-break-inside: avoid;  }
     </style>
 </head>
+<link href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
 <body>
 <script type='text/php'>
       if ( isset($pdf) ) {
@@ -49,6 +50,8 @@
         $pdf->page_text($x, $y, 'Page {PAGE_NUM} of {PAGE_COUNT}', $font, $size);
       }
 </script>
+<script src="{{ asset ("/bower_components/admin-lte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset('js/jspdf.min.js') }}"></script>
 <!--
 <div class="header">
     <h5>MLCS PROJECT</h5>
@@ -57,6 +60,7 @@
 
 </div>
 -->
+<button id="downloadPDFAll" class="btn btn-primary text-right">Download All in PDF</button>
 @yield('content')
 </body>
 </html>
