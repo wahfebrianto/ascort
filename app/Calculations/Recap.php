@@ -11,10 +11,10 @@ namespace App\Calculations;
 
 use App\Agent;
 use App\CommissionReport;
-use App\TaxReport;
+use App\RecapReport;
 use Carbon\Carbon;
 
-class Tax
+class Recap
 {
     public $agent;
     public $process_date;
@@ -176,7 +176,7 @@ class Tax
         }
 
         $reports = $builder->get();
-        
+
         $data = [];
         foreach ($reports as $report){
             if($report->total_current_YTD != 0){
@@ -196,10 +196,10 @@ class Tax
                 $data[] = $new_row;
             }
         }
-        
+
         return $data;
     }
-    
+
     public function getTaxForOneAgent($last_YTD, $current_YTD, $NPWP){
         $current_YTD *= 0.5; // discount 50%
         $tax = Tax::taxRecursive($last_YTD, $current_YTD, 0, 0, key(config('tax_percentage')[0]) )[3];
@@ -222,7 +222,7 @@ class Tax
         $percentage = config('tax_percentage')[$categoryNumber][$threshold];
 
         if($sisa_threshold == 0) $sisa_threshold = $threshold;
-        
+
         if($last_taxable - $sisa_threshold > 0){
             // LAST TAXABLE PERCENTAGE CALCULATION
             if($categoryNumber < count(config('tax_percentage'))-1){
@@ -270,7 +270,7 @@ class Tax
             }
 
         }
-        
+
         return [$last_taxable, $taxable, $categoryNumber, $tax, $sisa_threshold];
     }
 }

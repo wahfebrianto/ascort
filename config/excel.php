@@ -58,15 +58,15 @@ return array(
     ),
 
     'properties' => array(
-        'creator'        => 'mlcs',
-        'lastModifiedBy' => 'mlcs',
+        'creator'        => 'AscortPremier',
+        'lastModifiedBy' => 'AscortPremier',
         'title'          => 'Excel export',
         'description'    => 'Default spreadsheet export',
         'subject'        => 'Spreadsheet export',
-        'keywords'       => 'mlcs, excel, export',
+        'keywords'       => 'AscortPremier, excel, export',
         'category'       => 'Excel',
-        'manager'        => 'mlcs',
-        'company'        => 'mlcs',
+        'manager'        => 'AscortPremier',
+        'company'        => 'AscortPremier',
     ),
 
     /*
@@ -106,7 +106,7 @@ return array(
     |
     */
 
-    'creator'    => 'mlcs',
+    'creator'    => 'AscortPremier',
 
     'csv'        => array(
         /*

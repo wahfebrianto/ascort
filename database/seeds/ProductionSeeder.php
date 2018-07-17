@@ -1157,12 +1157,12 @@ class ProductionSeeder extends Seeder
         ]);
 
         Menu::create([
-            'name' => 'slips.tax',
-            'label' => 'Tax',
+            'name' => 'slips.recap',
+            'label' => 'Recap',
             'position' => 40,
             'icon' => 'fa fa-file-o',
             'separator' => false,
-            'url' => '/slips/tax',
+            'url' => '/slips/recap',
             'enabled' => true,
             'parent_id' => $menuSlipParent->id,       // Parent is home.
             'route_id' => null,

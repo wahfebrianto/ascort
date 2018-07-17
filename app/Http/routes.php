@@ -342,10 +342,10 @@ Route::group(['middleware' => ['auth', 'authorize']], function () {
         Route::get('delete_minus',      ['as' => 'slips.topoverriding.delete_minus',          'uses' => 'TopOverridingSlipsController@delete_minus']);
     });
 
-    Route::group(['prefix' => 'slips/tax'], function () {
-        Route::get('/',                 ['as' => 'slips.tax.index',                 'uses' => 'TaxSlipsController@index']);
-        Route::get('index',             ['as' => 'slips.tax.index',                 'uses' => 'TaxSlipsController@index']);
-        Route::get('export',            ['as' => 'slips.tax.export',                'uses' => 'TaxSlipsController@export']);
+    Route::group(['prefix' => 'slips/recap'], function () {
+        Route::get('/',                 ['as' => 'slips.recap.index',                 'uses' => 'RecapSlipsController@index']);
+        Route::get('index',             ['as' => 'slips.recap.index',                 'uses' => 'RecapSlipsController@index']);
+        Route::get('export',            ['as' => 'slips.recap.export',                'uses' => 'RecapSlipsController@export']);
     });
 
     Route::group(['prefix' => 'slips/commissionsummary'], function () {

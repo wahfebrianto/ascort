@@ -303,8 +303,8 @@ use Nayjest\Grids\DataRow;
                     <a class="btn btn-app" href="{!! route('slips.topoverriding.index') !!}">
                         <i class="ion ion-network"></i> Rec Fee
                     </a>
-                    <a class="btn btn-app" href="{!! route('slips.tax.index') !!}">
-                        <i class="ion ion-flag"></i> Tax
+                    <a class="btn btn-app" href="{!! route('slips.recap.index') !!}">
+                        <i class="ion ion-flag"></i> Recap
                     </a>
                 </div>
                 <!-- /.box-body -->

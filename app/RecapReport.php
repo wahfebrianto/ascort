@@ -5,7 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class TaxReport extends Model
+class RecapReport extends Model
 {
     protected $table = "tax_reports";
     protected $fillable = ['agent_id', 'process_date', 'period', 'month_year', 'nominal',

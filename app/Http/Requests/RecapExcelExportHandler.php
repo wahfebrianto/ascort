@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 use Maatwebsite\Excel\Files\ExportHandler;
 use Carbon\Carbon;
 
-class TaxExcelExportHandler implements ExportHandler {
+class RecapExcelExportHandler implements ExportHandler {
 
     public function handle($file)
     {
