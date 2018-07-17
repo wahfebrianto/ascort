@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Nayjest\Grids\EloquentDataProvider;
 use Auth;
+use App\Reminder;
 
 class Sale extends Model
 {
@@ -220,5 +221,17 @@ class Sale extends Model
 
     public static function updateMGIMonth($sale){
         $sale->update(['MGI_month' => config('MGIs.' . $sale->MGI)[1]]);
+    }
+
+    public static function getExpiredSoonSales(){
+      $sale_exp = Sale::where('is_active', '=', 1)->whereRaw('DATE_ADD(MGI_start_date, INTERVAL MGI MONTH) <= NOW()')->get();
+      $sales = [];
+      foreach($sale_exp as $sale){
+        $a = \App\Reminder::where('title', 'like', "%[".$sale->id."]%")->get();
+        if(count($a) == 0){
+          $sales[] = $sale;
+        }
+      }
+      return $sales;
     }
 }
