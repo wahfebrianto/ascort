@@ -48,13 +48,16 @@ class RecapSlipsController extends Controller
 
         $builder = \App\Agent
             ::with('sales.customer')
+            ->with('parent')
+            ->with('branchOffice')
+            ->with('agent_position')
             ->whereHas('sales', function ($query) {
               $start_date = Input::get('start_date');
               $end_date = Input::get('end_date');
                 $query->where('MGI_start_date', '>=', Carbon::createFromFormat('d/m/Y', $start_date))
-                ->where('MGI_start_date', '<=', Carbon::createFromFormat('d/m/Y', $end_date));
+                ->where('MGI_start_date', '<=', Carbon::createFromFormat('d/m/Y', $end_date))
+                ->orderBy('MGI_start_date', 'asc');
             })
-            ->with('agent_position')
             ->where('is_active', '=', 1)
             ->orderBy('agent_position_id', 'desc');
 
@@ -64,13 +67,9 @@ class RecapSlipsController extends Controller
           return redirect()->back();
         }
 
-        if(null != Input::get('agent_id') && Input::get('agent_id') != 'all') {
-            $builder->where('id', '=', Input::get('agent_id'));
-        }
-
         $agents = $builder->get();
         dd($agents);
-  			$export->data = $dataArray;
+  			$export->data = $agents;
   			return $export->handleExport();
 
     }
