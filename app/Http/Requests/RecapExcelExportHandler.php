@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Requests;
 use Maatwebsite\Excel\Files\ExportHandler;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+use Input;
 
 class RecapExcelExportHandler implements ExportHandler
 {
@@ -14,61 +17,48 @@ class RecapExcelExportHandler implements ExportHandler
         $dataSheet3 = $this->getSheetData3($file->data);
         $dataSheet4 = $this->getSheetData4($file->data);
 
-        // work on the exportAgentsExcelExport
-        return Excel::create('RekapKomisiMingguan', function($file) {
+        $start_date = Input::get('start_date');
+        $end_date = Input::get('end_date');
+
+        Excel::create('recap_' . $start_date . '_' . $end_date . '_' . date('YmdHis'), function($file) use($dataSheet1, $dataSheet2, $dataSheet3, $dataSheet4){
 
             // Our first sheet
-            $file->sheet('Summary Komisi', function($sheet) use ($file)
+            $file->sheet('Summary Komisi', function($sheet) use($dataSheet1)
             {
-                $columnCount = count($file->data[0]);
-                $sheet->cells('1', function($cells)
-                {
-                    $cells->setFontSize(12);
-                    $cells->setFontWeight('bold');
-                });
-                $sheet->setBorder('A1:' . chr(64 + $columnCount) . strval(sizeof($file->data) + 1), 'solid');
-                $sheet->setFontSize(12);
-                if (config('global.export_type') == 'pdf') {
-                    $sheet->setOrientation('landscape');
-                }
-                $sheet->fromArray($file->data, null, 'A1', true, true);
-                $sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
-                $sheet->cells('A1:' . chr(64 + $columnCount) . '1', function($cells)
-                {
-                    //$cells->setFontSize(8);
-                    $cells->setBackground('#AAAAAA');
-                    $cells->setAlignment('center');
-                });
+
             });
 
             // Our second sheet
-            $excel->sheet('Second sheet', function($sheet) {
+            $file->sheet('Format Komisi Final', function($sheet) use($dataSheet2) {
+
+            });
+
+            $file->sheet('Rekap Mingguan Investor Baru', function($sheet) use($dataSheet3){
+              $columnCount = count($dataSheet3[0]);
+              $sheet->cells('1', function($cells)
+              {
+                  $cells->setFontSize(12);
+                  $cells->setFontWeight('bold');
+              });
+              $sheet->setBorder('A1:' . chr(64 + $columnCount) . strval(sizeof($dataSheet3) + 1), 'solid');
+              $sheet->setFontSize(12);
+              $sheet->fromArray($dataSheet3, null, 'A1', true, true);
+              $sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
+              $sheet->cells('A1:' . chr(64 + $columnCount) . '1', function($cells)
+              {
+                  $cells->setBackground('#AAAAAA');
+                  $cells->setAlignment('center');
+              });
+            });
+
+            $file->sheet('Rekap Data Agen', function($sheet) use($dataSheet4){
 
             });
 
         })->export('xls');
-        return $file->sheet('agents', function($sheet) use ($file)
-        {
-            $columnCount = count($file->data[0]);
-            $sheet->cells('1', function($cells)
-            {
-                $cells->setFontSize(12);
-                $cells->setFontWeight('bold');
-            });
-            $sheet->setBorder('A1:' . chr(64 + $columnCount) . strval(sizeof($file->data) + 1), 'solid');
-            $sheet->setFontSize(12);
-            if (config('global.export_type') == 'pdf') {
-                $sheet->setOrientation('landscape');
-            }
-            $sheet->fromArray($file->data, null, 'A1', true, true);
-            $sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
-            $sheet->cells('A1:' . chr(64 + $columnCount) . '1', function($cells)
-            {
-                //$cells->setFontSize(8);
-                $cells->setBackground('#AAAAAA');
-                $cells->setAlignment('center');
-            });
-        })->export(config('global.export_type'));
+
+        return redirect()->back();
+
     }
 
     private function getSheetData1($data)
@@ -89,8 +79,18 @@ class RecapExcelExportHandler implements ExportHandler
         foreach ($agent->sales as $sale) {
           $rowData = [];
           $rowData["No"] = $ctr;
-          $rowData["Nama Investor"] = $datum->sales;
-          $rowData["no"] = $ctr;
+          $rowData["Nama Investor"] = $sale->customer_name;
+          $rowData["NPWP"] = ($sale->customer->NPWP == 0)?'NA':$sale->customer->NPWP;
+          $rowData["Alamat"] = $sale->customer->address . ', ' . $sale->customer->city;
+          $rowData["Email Address"] = ($sale->customer->email == '')?'NA':$sale->customer->email;
+          $rowData["Dana Penempatan (Rp)"] = \App\Money::format('%(.2n', $sale->nominal);
+          $rowData["Jk Waktu Investasi"] = $sale->MGI;
+          $rowData["Nama Agent"] = $agent->name;
+          $rowData["Agent Code"] = $agent->agent_code;
+          $rowData["Nama Leader"] = ($agent->parent == NULL)?'NA':$agent->parent->name;
+          $rowData["Leader Code"] = ($agent->parent == NULL)?'NA':$agent->parent->agent_code;
+          $rowData["Bilyet dikirim ke:"] = '';
+          $rowData["Tgl Transfer"] = Carbon::createFromFormat('d/m/Y', $sale->MGI_start_date)->format('d-M-y');
           $result[] = $rowData;
           $ctr++;
         }
