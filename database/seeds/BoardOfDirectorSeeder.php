@@ -12,6 +12,11 @@ use App\Models\Menu;
 use App\BoardOfDirector;
 class BoardOfDirectorSeeder extends Seeder
 {
+	/**
+     * Run the database seeds.
+     *
+     * @return void
+     */
 	public function run(/* User $user, Role $role */)
     {
         ////////////////////////////////////
@@ -32,6 +37,13 @@ class BoardOfDirectorSeeder extends Seeder
             'route_id' => false,
             'permission_id' => 17,                // Get permission from route.
         ]);
+		
+		// Associate manage-menus permissions to routes starting with 'admin.'
+        $manageMenusRoutes = Route::where('name', 'like', "admin.%")->get()->all();
+        foreach ($manageMenusRoutes as $route) {
+            $route->permission()->associate(17);
+            $route->save();
+        }
 
     }
 }

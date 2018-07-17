@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Maatwebsite\Excel\Files\NewExcelFile;
+use Input;
 
 class RecapExcelExport extends NewExcelFile {
 

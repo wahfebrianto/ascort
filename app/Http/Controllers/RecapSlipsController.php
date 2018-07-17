@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Calculations\Recap;
 use App\RecapReport;
-use App\Http\Requests\RecapExport;
 use Illuminate\Http\Request;
 use App\Repositories\AuditRepository as Audit;
 use Auth;
@@ -45,10 +44,10 @@ class RecapSlipsController extends Controller
         Audit::log(Auth::user()->id, request()->ip(), trans('slips/recap/general.audit-log.category'), trans('slips/recap/general.audit-log.msg-export'));
 
         $builder = \App\Agent
-            ::with('sales')
+            ::with('sales.customer')
             ->with('agent_position')
             ->where('is_active', '=', 1)
-            ->whereIn('branch_office_id', \App\BranchOffice::getBranchOfficesID())
+            ->where('id', '<', 4)
             ->orderBy('agent_position_id', 'desc');
 
         $start_date = Input::get('start_date');
@@ -65,9 +64,9 @@ class RecapSlipsController extends Controller
         }
 
         $agents = $builder->get();
-
-        return Excel::download(new RecapExport($agents, $start_date, $end_date), 'recap_' . $start_date . '_' . $end_date . '_' . date('YmdHis') . '.xlsx')
+        dd($agents);
+  			$export->data = $dataArray;
+  			return $export->handleExport();
 
     }
-
 }
