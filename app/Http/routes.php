@@ -228,6 +228,22 @@ Route::group(['middleware' => ['auth', 'authorize']], function () {
             Route::get('disable/{id}',      ['as' => 'admin.branchoffice.disable',               'uses' => 'BranchOfficesController@disable']);
         });
 
+        Route::group(['prefix' => 'boardofdirector'], function () {
+            Route::post('index',            ['as' => 'admin.boardofdirector.store',                 'uses' => 'BoardOfDirectorController@store']);
+            Route::get('/',                 ['as' => 'admin.boardofdirector.index',                 'uses' => 'BoardOfDirectorController@index']);
+            Route::get('index',             ['as' => 'admin.boardofdirector.index',                 'uses' => 'BoardOfDirectorController@index']);
+            Route::get('index/{enabledOnly?}',['as' => 'admin.boardofdirector.index',               'uses' => 'BoardOfDirectorController@index']);
+            Route::get('create',            ['as' => 'admin.boardofdirector.create',                'uses' => 'BoardOfDirectorController@create']);
+            Route::get('enableSelected',    ['as' => 'admin.boardofdirector.enable-selected',       'uses' => 'BoardOfDirectorController@enableSelected']);
+            Route::get('disableSelected',   ['as' => 'admin.boardofdirector.disable-selected',      'uses' => 'BoardOfDirectorController@disableSelected']);
+            Route::get('{id}',              ['as' => 'admin.boardofdirector.show',                  'uses' => 'BoardOfDirectorController@show']);
+            Route::get('{id}/edit',         ['as' => 'admin.boardofdirector.edit',                  'uses' => 'BoardOfDirectorController@edit']);
+            Route::patch('{id}/edit',       ['as' => 'admin.boardofdirector.update',                'uses' => 'BoardOfDirectorController@update']);
+            Route::get('enable/{id}',       ['as' => 'admin.boardofdirector.enable',                'uses' => 'BoardOfDirectorController@enable']);
+            Route::get('disable/{id}',      ['as' => 'admin.boardofdirector.disable',               'uses' => 'BoardOfDirectorController@disable']);
+            Route::get('delete/{id}',       ['as' => 'admin.boardofdirector.destroy',                'uses' => 'BoardOfDirectorController@destroy']);
+        });
+
         Route::group(['prefix' => 'holidays'], function () {
             // admin/mgi routes
             Route::get('/',                 ['as' => 'admin.holidays.index',                 'uses' => 'HolidaysController@index']);
