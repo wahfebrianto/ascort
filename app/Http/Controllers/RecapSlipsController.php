@@ -43,15 +43,20 @@ class RecapSlipsController extends Controller
     {
         Audit::log(Auth::user()->id, request()->ip(), trans('slips/recap/general.audit-log.category'), trans('slips/recap/general.audit-log.msg-export'));
 
-        $builder = \App\Agent
-            ::with('sales.customer')
-            ->with('agent_position')
-            ->where('is_active', '=', 1)
-            ->where('id', '<', 4)
-            ->orderBy('agent_position_id', 'desc');
-
         $start_date = Input::get('start_date');
         $end_date = Input::get('end_date');
+
+        $builder = \App\Agent
+            ::with('sales.customer')
+            ->whereHas('sales', function ($query) {
+              $start_date = Input::get('start_date');
+              $end_date = Input::get('end_date');
+                $query->where('MGI_start_date', '>=', Carbon::createFromFormat('d/m/Y', $start_date))
+                ->where('MGI_start_date', '<=', Carbon::createFromFormat('d/m/Y', $end_date));
+            })
+            ->with('agent_position')
+            ->where('is_active', '=', 1)
+            ->orderBy('agent_position_id', 'desc');
 
         if($start_date == "" || $end_date == "")
         {
