@@ -79,7 +79,7 @@ class RecapExcelExportHandler implements ExportHandler
 
     private function getSheetData3($data)
     {
-      /*$result = [];
+      $result = [];
       $ctr = 1;
       foreach ($data as $agent) {
         foreach ($agent->sales as $sale) {
@@ -101,7 +101,7 @@ class RecapExcelExportHandler implements ExportHandler
           $ctr++;
         }
       }
-      return $result;*/
+      return $result;
     }
 
     private function getSheetData4()
