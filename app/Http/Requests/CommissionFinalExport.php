@@ -4,7 +4,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class InvoicesPerMonthSheet implements FromQuery, WithTitle
+class CommissionFinalExport implements FromQuery, WithTitle
 {
     private $month;
     private $year;
