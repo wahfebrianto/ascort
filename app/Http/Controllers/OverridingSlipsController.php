@@ -162,16 +162,15 @@ class OverridingSlipsController extends Controller
             //$ovr->tax = \App\Calculations\Base\Slips::calculateTax($agent, $ytd, $ovr->gross_commission/2, 0);
             $ovrs[] = $ovr;
             $allsalecom += count($ovr->sales);
-            if($allsalecom > 0){
-                break;
-            }
         }
         if($allsalecom <= 0){
             \Flash::error("Commission report for period $start_date until $end_date is not available");
             return redirect()->back();
         }
-                    
+
         $html = \View::make('pdf.slips.overriding', compact('ovrs', 'start_date','end_date'))->render();
+        return $html;
+
         $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHtml($html);
