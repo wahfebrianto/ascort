@@ -17,13 +17,18 @@ class RecapExcelExportHandler implements ExportHandler
     public function handle($file)
     {
         $ctr = 1;
+        $start_date = Input::get('start_date');
+        $end_date = Input::get('end_date');
         // change all data that need to be formatted
         $dataSheet3 = $this->getSheetData3($file->data);
+        if(count($dataSheet3[0] <= 0))
+        {
+          \Flash::error("Recapitulation report for period $start_date until $end_date is not available.");
+          return redirect()->back();
+        }
         $dataSheet2 = $this->getSheetData2($dataSheet3);
         $dataSheet1 = $this->getSheetData1($dataSheet2);
         $dataSheet4 = $this->getSheetData4();
-        $start_date = Input::get('start_date');
-        $end_date = Input::get('end_date');
 
         Excel::create('recap_' . $start_date . '_' . $end_date . '_' . date('YmdHis'), function($file) use($dataSheet1, $dataSheet2, $dataSheet3, $dataSheet4, $end_date){
 
@@ -32,22 +37,26 @@ class RecapExcelExportHandler implements ExportHandler
             {
                 $sheet->mergeCells('A1:D1');
                 $sheet->cell('A1',function($cell){
-                    $cell->setValue('REKAP SUMMARY KOMISI AGEN');
+                    $cell->setValue('REKAP SUMMARY KOMISI AGEN SERI - ');
                     $cell->setFontWeight('bold');
+                    $cell->setFontSize(16);
                 });
-                $sheet->setFontSize(12);
-                $sheet->fromArray($dataSheet1[0], null, 'A2', true, true);
+                $sheet->setFontSize(11);
+                $sheet->fromArray($dataSheet1[0], null, 'A3', true, true);
                 $sheet->data = [];
-                $rowCount= count($dataSheet1[0]);
+                $rowCount= count($dataSheet1[0]) + 1;
                 $sheet->mergeCells('A'.($rowCount+3).':F'.($rowCount+3));
                 $sheet->mergeCells('J'.($rowCount+3).':M'.($rowCount+3));
                 $sheet->mergeCells('G'.($rowCount+3).':H'.($rowCount+3));
                 $sheet->cell('G'.($rowCount+3),function($cell) use($dataSheet1){
                   $cell->setValue('SUB TOTAL');
+                  $cell->setFontSize(14);
                   $cell->setFontWeight('bold');
                 });
                 $sheet->cell('I'.($rowCount+3),function($cell) use($dataSheet1){
                   $cell->setValue($dataSheet1[3]+$dataSheet1[2]);
+                  $cell->setFontSize(14);
+                  $cell->setFontWeight('bold');
                 });
                 $totalRow = $rowCount+3+count($dataSheet1[1]);
 
@@ -57,19 +66,85 @@ class RecapExcelExportHandler implements ExportHandler
                 $sheet->mergeCells('J'.($totalRow+1).':M'.($totalRow+1));
                 $sheet->cell('G'.($totalRow+1),function($cell) use($dataSheet1){
                   $cell->setValue('TOTAL');
+                  $cell->setFontSize(14);
+                  $cell->setFontWeight('bold');
                 });
                 $sheet->cell('I'.($totalRow+1),function($cell) use($dataSheet1,$rowCount,$totalRow){
                   $cell->setValue('=SUM(I'.($rowCount+3).':I'.($totalRow).')');
+                  $cell->setFontSize(14);
+                  $cell->setFontWeight('bold');
                 });
                 $sheet->cell('G'.($totalRow+3),function($cell) use($dataSheet1){
                   $cell->setValue('Control Cost 8%');
+                  $cell->setFontSize(12);
                   $cell->setFontWeight('bold');
                 });
                 $sheet->cell('I'.($totalRow+3),function($cell) use($dataSheet1,$rowCount,$totalRow){
                   $cell->setValue($dataSheet1[4]);
+                  $cell->setFontSize(12);
                   $cell->setFontWeight('bold');
                 });
                 $sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
+
+                $sheet->cells('A3:M' . ($totalRow + 1), function($cells)
+                {
+                    $cells->setAlignment('center');
+                });
+
+                $sheet->cells('D4:' . 'D' . ($totalRow + 3), function($cells)
+                {
+                    $cells->setAlignment('left');
+                });
+
+                $sheet->cells('E4:' . 'E' . ($totalRow + 3), function($cells)
+                {
+                    $cells->setAlignment('left');
+                });
+
+                $sheet->cells('I4:' . 'I' . ($totalRow + 3), function($cells)
+                {
+                    $cells->setAlignment('right');
+                });
+
+                $sheet->cells('A' . ($rowCount + 3), function($cells)
+                {
+                    $cells->setBackground('#D9D9D9');
+                });
+                $sheet->cells('G' . ($rowCount + 3) . ':I' . ($rowCount + 3), function($cells)
+                {
+                    $cells->setBackground('#FFFF00');
+                });
+                $sheet->cells('J' . ($rowCount + 3), function($cells)
+                {
+                    $cells->setBackground('#D9D9D9');
+                });
+
+                $sheet->cells('A' . ($totalRow + 1), function($cells)
+                {
+                    $cells->setBackground('#D9D9D9');
+                });
+                $sheet->cells('G' . ($totalRow + 1) . ':I' . ($totalRow + 1), function($cells)
+                {
+                    $cells->setBackground('#FFFF00');
+                });
+                $sheet->cells('J' . ($totalRow + 1), function($cells)
+                {
+                    $cells->setBackground('#D9D9D9');
+                });
+
+                $sheet->setColumnFormat(array(
+                    'I4:K' . ($totalRow + 3) => '#,##0'
+                ));
+
+                $sheet->cells('A3:M3', function($cells)
+                {
+                    $cells->setBackground('#DAEEF3');
+                    $cells->setFontWeight('bold');
+                    $cells->setValignment('center');
+                });
+
+                $sheet->setHeight(3, 45);
+                $sheet->setBorder('A3:M' . ($totalRow + 1), 'thin');
             });
 
             // Our second sheet
@@ -177,10 +252,12 @@ class RecapExcelExportHandler implements ExportHandler
                 $sheet->cell('F'.($totalRow+2),function($cell) use($dataSheet2,$rowCount,$totalRow){
                   $cell->setValue('Total Budget Control');
                   $cell->setFontColor('#FF0000');
+                  $cell->setAlignment('center');
                 });
                 $sheet->cell('I'.($totalRow+2),function($cell) use($dataSheet2,$rowCount,$totalRow){
                   $cell->setValue('8% of Total Sales');
                   $cell->setFontColor('#FF0000');
+                  $cell->setAlignment('center');
                 });
 
                 $sheet->cell('K'.($totalRow+3),function($cell) use($dataSheet2,$rowCount,$totalRow){
@@ -257,7 +334,8 @@ class RecapExcelExportHandler implements ExportHandler
                 });
 
                 $sheet->setColumnFormat(array(
-                    'I5:K' . ($totalRow + 1) => '#,##0'
+                    'I5:K' . ($totalRow + 1) => '#,##0',
+                    'K' . ($totalRow + 2) .':K' . ($totalRow + 3) => '#,##0'
                 ));
 
                 $sheet->mergeCells('A'.($totalRow+2).':E'.($totalRow+2));
@@ -331,15 +409,13 @@ class RecapExcelExportHandler implements ExportHandler
                     $cells->setAlignment('center');
                 });
 
-
-
-
-
                 $sheet->setHeight(4, 45);
                 $sheet->setHeight(($rowCount + 4), 22);
                 $sheet->setHeight(($totalRow + 1), 22);
 
                 $sheet->setBorder('A4:O' . ($totalRow + 1), 'thin');
+                $sheet->setBorder('F' . ($totalRow + 2) . ':K' . ($totalRow + 2), 'thin');
+                $sheet->setBorder('K' . ($totalRow + 3), 'thin');
 
                 $sheet->setFreeze('E5');
             });
@@ -517,8 +593,8 @@ class RecapExcelExportHandler implements ExportHandler
       foreach($data[0] as $datum){
         if(isset($datum['Kode Agen'])){
           if(isset($newData[$datum['Kode Agen']])){
-            $intmoney = RecapExcelExportHandler::money2int($datum['TOTAL Sebelum Pajak (IDR)']) + RecapExcelExportHandler::money2int($newData[$datum['Kode Agen']]['TOTAL Sebelum Pajak (IDR)']);
-            $newData[$datum['Kode Agen']]['TOTAL Sebelum Pajak (IDR)'] = \App\Money::format('%(.2n', $intmoney);
+            $intmoney = $datum['TOTAL Sebelum Pajak (IDR)'] + $newData[$datum['Kode Agen']]['TOTAL Sebelum Pajak (IDR)'];
+            $newData[$datum['Kode Agen']]['TOTAL Sebelum Pajak (IDR)'] = $intmoney;
           }else{
             $newData[$datum['Kode Agen']] = array(
               'No' => $ctr++,
@@ -548,6 +624,7 @@ class RecapExcelExportHandler implements ExportHandler
       $norm_nom = str_replace('Rp ','',$str);
       $norm_nom = str_replace(',00', '', $norm_nom);
       $norm_nom = str_replace('.','',$norm_nom);
+      $norm_nom = str_replace('=','',$norm_nom);
       return intval($norm_nom);
     }
     private function getSheetData2($data1)
