@@ -3,6 +3,7 @@
 @section('content')
     @foreach($ovrs as $ctr => $ovr)
         @if(count($ovr->sales) != 0)
+            <div class="wrapperpdf" name="Slip_TopOverriding_{{ $ovr->agent->name }}">
             @include('partials._pdf_logo_header')
             <h3><strong>SLIP REC FEE</strong></h3>
             <p><em>Tanggal Proses : {{ $ovr->process_date }}</em></p>
@@ -243,6 +244,7 @@
                     -->
                 </tr>
             </table>
+            </div>
             <div class="page-break"></div>
         @endif
     @endforeach
