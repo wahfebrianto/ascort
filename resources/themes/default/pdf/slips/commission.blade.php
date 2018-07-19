@@ -3,6 +3,7 @@
 @section('content')
     @foreach($commissions as $ctr => $commission)
         @if(count($commission->sales) != 0)
+            <div class="wrapperpdf" name="Slip_Commission_{{ $commission->agent->name }}">
             @include('partials._pdf_logo_header')
             <h3><strong>SLIP KOMISI MARKETING</strong></h3>
             <p><em>Tanggal Proses: {{ $commission->process_date }}</em></p>
@@ -288,7 +289,9 @@
                     >
                 </tr>
             </table-->
+            </div>
             <div class="page-break"></div>
+
         @endif
     @endforeach
 @endsection('content')

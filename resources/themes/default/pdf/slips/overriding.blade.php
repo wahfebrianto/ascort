@@ -5,7 +5,7 @@
 @section('content')
     @foreach($ovrs as $ctr => $ovr)
         @if(count($ovr->sales) != 0)
-            <div class="wrapper-ovr">
+            <div class="wrapperpdf" name="Slip_Overriding_{{ $ovr->agent->name }}">
             @include('partials._pdf_logo_header')
             <h3><strong>SLIP OVERRIDING</strong></h3>
             <p><em>Tanggal Proses : {{ $ovr->process_date }}</em></p>
@@ -246,25 +246,8 @@
                     -->
                 </tr>
             </table>
-            <div class="page-break"></div>
             </div>
+            <div class="page-break"></div>
         @endif
     @endforeach
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".downloadPDFAll").click(function(){
-            /*$(".wrapper-ovr").each(function(i,obj){
-                var doc = new jsPDF();
-                doc.fromHTML(obj);
-                doc.save('test'+i+'.pdf');
-            });*/
-            var doc = new jsPDF();
-            doc.text(20, 20, 'Hello world!');
-            doc.save('testnice.pdf');
-            
-        });
-
-    });
-</script>
 @endsection('content')

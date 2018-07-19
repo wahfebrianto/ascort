@@ -51,7 +51,8 @@
       }
 </script>
 <script src="{{ asset ("/bower_components/admin-lte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
-<script type="text/javascript" src="{{ asset('js/jspdf.min.js') }}"></script>
+<!--script type="text/javascript" src="{{ asset('js/jspdf.min.js') }}"></script-->
+<script type="text/javascript" src="{{ asset('js/html2pdf.js') }}"></script>
 <!--
 <div class="header">
     <h5>MLCS PROJECT</h5>
@@ -60,7 +61,33 @@
 
 </div>
 -->
-<button id="downloadPDFAll" class="btn btn-primary text-right">Download All in PDF</button>
+<div class="text-right" style="margin:1%">
+    <button id="downloadPDFAll" class="btn btn-primary">Download All in PDF</button>
+</div>
 @yield('content')
 </body>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#downloadPDFAll").click(function(){
+            var today = new Date();
+            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date+'_'+time;
+            var els = document.getElementsByClassName("wrapperpdf");
+            Array.prototype.forEach.call(els, function(el) {
+                    var opt = {
+                      margin:       0.1,
+                      filename:     el.getAttribute('name')+"_"+dateTime+".pdf",
+                      image:        { type: 'jpeg', quality: 1 },
+                      html2canvas:  { scale:1 },
+                      jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+                    };
+                  html2pdf().from(el).set(opt).save();
+            });
+        });
+
+    });
+</script>
 </html>
