@@ -782,7 +782,12 @@ class RecapExcelExportHandler implements ExportHandler
           if($bod->position != 'MP'){
             $mp_nomx2 -= $nom;
           }
-          $agent = Agent::where('NPWP',$bod->NPWP)->first();
+          $npwp2search = str_replace('-','',$bod->NPWP);
+          $npwp2search = str_replace('.', '', $npwp2search);
+          $npwp2search = str_replace('_', '', $npwp2search);
+          $npwp2search = str_replace(',', '', $npwp2search);
+          $npwp2search = str_replace(' ', '', $npwp2search);
+          $agent = Agent::where('NPWP',$npwp2search)->first();
           $newRow = array(
             'No' => $ctr++,
             'Kode Agen' => (is_null($agent)?'':$agent->agent_code),
