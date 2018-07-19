@@ -21,7 +21,7 @@ class RecapExcelExportHandler implements ExportHandler
         $end_date = Input::get('end_date');
         // change all data that need to be formatted
         $dataSheet3 = $this->getSheetData3($file->data);
-        if(count($dataSheet3[0] <= 0))
+        if(count($dataSheet3[0]) <= 0)
         {
           \Flash::error("Recapitulation report for period $start_date until $end_date is not available.");
           return redirect()->back();
