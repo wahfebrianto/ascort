@@ -37,6 +37,12 @@
             border-bottom: 1px solid #ddd;
         }
         tr { page-break-inside: avoid;  }
+
+        @media print{
+            #downloadPDFAll{
+                display:none;
+            }
+        }
     </style>
 </head>
 <link href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
