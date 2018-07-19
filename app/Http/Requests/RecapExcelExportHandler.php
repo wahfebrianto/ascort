@@ -18,9 +18,9 @@ class RecapExcelExportHandler implements ExportHandler
     {
         $ctr = 1;
         // change all data that need to be formatted
-        $dataSheet1 = $this->getSheetData1($file->data);
         $dataSheet3 = $this->getSheetData3($file->data);
-        $dataSheet2 = $this->getSheetData2($dataSheet3[0]);
+        $dataSheet2 = $this->getSheetData2($dataSheet3);
+        $dataSheet1 = $this->getSheetData1($dataSheet2);
         $dataSheet4 = $this->getSheetData4();
         $start_date = Input::get('start_date');
         $end_date = Input::get('end_date');
@@ -30,7 +30,46 @@ class RecapExcelExportHandler implements ExportHandler
             // Our first sheet
             $file->sheet('Summary Komisi', function($sheet) use($dataSheet1)
             {
+                $sheet->mergeCells('A1:D1');
+                $sheet->cell('A1',function($cell){
+                    $cell->setValue('REKAP SUMMARY KOMISI AGEN');
+                    $cell->setFontWeight('bold');
+                });
+                $sheet->setFontSize(12);
+                $sheet->fromArray($dataSheet1[0], null, 'A2', true, true);
+                $sheet->data = [];
+                $rowCount= count($dataSheet1[0]);
+                $sheet->mergeCells('A'.($rowCount+3).':F'.($rowCount+3));
+                $sheet->mergeCells('J'.($rowCount+3).':M'.($rowCount+3));
+                $sheet->mergeCells('G'.($rowCount+3).':H'.($rowCount+3));
+                $sheet->cell('G'.($rowCount+3),function($cell) use($dataSheet1){
+                  $cell->setValue('SUB TOTAL');
+                  $cell->setFontWeight('bold');
+                });
+                $sheet->cell('I'.($rowCount+3),function($cell) use($dataSheet1){
+                  $cell->setValue($dataSheet1[3]+$dataSheet1[2]);
+                });
+                $totalRow = $rowCount+3+count($dataSheet1[1]);
 
+                $sheet->fromArray($dataSheet1[1], null, 'A'.($rowCount+4), true, false);
+                $sheet->mergeCells('A'.($totalRow+1).':F'.($totalRow+1));
+                $sheet->mergeCells('G'.($totalRow+1).':H'.($totalRow+1));
+                $sheet->mergeCells('J'.($totalRow+1).':M'.($totalRow+1));
+                $sheet->cell('G'.($totalRow+1),function($cell) use($dataSheet1){
+                  $cell->setValue('TOTAL');
+                });
+                $sheet->cell('I'.($totalRow+1),function($cell) use($dataSheet1,$rowCount,$totalRow){
+                  $cell->setValue('=SUM(I'.($rowCount+3).':I'.($totalRow).')');
+                });
+                $sheet->cell('G'.($totalRow+3),function($cell) use($dataSheet1){
+                  $cell->setValue('Control Cost 8%');
+                  $cell->setFontWeight('bold');
+                });
+                $sheet->cell('I'.($totalRow+3),function($cell) use($dataSheet1,$rowCount,$totalRow){
+                  $cell->setValue($dataSheet1[4]);
+                  $cell->setFontWeight('bold');
+                });
+                $sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
             });
 
             // Our second sheet
@@ -122,11 +161,31 @@ class RecapExcelExportHandler implements ExportHandler
                   $cell->setValignment('center');
                   $cell->setFontSize(12);
                 });
+
                 $sheet->cell('K'.($totalRow+1),function($cell) use($dataSheet2,$rowCount,$totalRow){
                   $cell->setValue('=SUM(K'.($rowCount+4).':K'.($totalRow).')');
                   $cell->setFontWeight('bold');
                   $cell->setValignment('center');
                   $cell->setFontSize(12);
+                });
+                $sheet->mergeCells('F'.($totalRow+2).':H'.($totalRow+2));
+                $sheet->mergeCells('I'.($totalRow+2).':J'.($totalRow+2));
+                $sheet->cell('K'.($totalRow+2),function($cell) use($dataSheet2,$rowCount,$totalRow){
+                  $cell->setValue($dataSheet2[4]);
+                  $cell->setFontColor('#FF0000');
+                });
+                $sheet->cell('F'.($totalRow+2),function($cell) use($dataSheet2,$rowCount,$totalRow){
+                  $cell->setValue('Total Budget Control');
+                  $cell->setFontColor('#FF0000');
+                });
+                $sheet->cell('I'.($totalRow+2),function($cell) use($dataSheet2,$rowCount,$totalRow){
+                  $cell->setValue('8% of Total Sales');
+                  $cell->setFontColor('#FF0000');
+                });
+
+                $sheet->cell('K'.($totalRow+3),function($cell) use($dataSheet2,$rowCount,$totalRow){
+                  $cell->setValue($dataSheet2[5]);
+                  $cell->setFontWeight('bold');
                 });
                 $sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
 
@@ -453,11 +512,47 @@ class RecapExcelExportHandler implements ExportHandler
 
     private function getSheetData1($data)
     {
-
+      $ctr=1;
+      $newData = array();
+      foreach($data[0] as $datum){
+        if(isset($datum['Kode Agen'])){
+          if(isset($newData[$datum['Kode Agen']])){
+            $intmoney = RecapExcelExportHandler::money2int($datum['TOTAL Sebelum Pajak (IDR)']) + RecapExcelExportHandler::money2int($newData[$datum['Kode Agen']]['TOTAL Sebelum Pajak (IDR)']);
+            $newData[$datum['Kode Agen']]['TOTAL Sebelum Pajak (IDR)'] = \App\Money::format('%(.2n', $intmoney);
+          }else{
+            $newData[$datum['Kode Agen']] = array(
+              'No' => $ctr++,
+              'Kode Agen' => $datum['Kode Agen'],
+              'Tipe' => $datum['Tipe'],
+              'Nama Lengkap' => $datum['Nama Lengkap'],
+              'Email Address' => $datum['Email Address'],
+              'No. Identitas' => $datum['No Identitas'],
+              'NPWP' => $datum['NPWP'],
+              'Jabatan' => $datum['Jabatan'],
+              'TOTAL Sebelum Pajak (IDR)' => $datum['TOTAL Sebelum Pajak (IDR)'],
+              'Nama Bank' => $datum['Nama Bank'],
+              'Cabang' => $datum['Cabang'],
+              'No. Rekening' => $datum['No. Rekening'],
+              'Atas Nama' => $datum['Atas Nama']
+            );
+          }
+        }
+      }
+      foreach($data[1] as &$bod){
+        unset($bod['Total Komisi Personal Selling (IDR)']);
+        unset($bod['Total OR Leader (IDR)']);
+      }
+      return array($newData,$data[1],$data[2],$data[3],$data[4]);
     }
-
-    private function getSheetData2($data)
+    private static function money2int($str){
+      $norm_nom = str_replace('Rp ','',$str);
+      $norm_nom = str_replace(',00', '', $norm_nom);
+      $norm_nom = str_replace('.','',$norm_nom);
+      return intval($norm_nom);
+    }
+    private function getSheetData2($data1)
     {
+        $data = $data1[0];
         $list_ = array();
         $ctr=1;
         $emptyrow = array('-'=>'');
@@ -472,11 +567,7 @@ class RecapExcelExportHandler implements ExportHandler
           $agent = Agent::with('agent_position')
           ->where('agent_code',$datum['Agent Code'])->first();
           $agents[] = $agent;
-          $norm_nom = str_replace('Rp ','',$datum['Dana Penempatan (Rp)']);
-          $norm_nom = str_replace(',00', '', $norm_nom);
-          $norm_nom = str_replace('.','',$norm_nom);
-          $norm_nom = str_replace('=','',$norm_nom);
-          $nominal[] = intval($norm_nom);
+          $nominal[] = RecapExcelExportHandler::money2int($datum['Dana Penempatan (Rp)']);
         }
         foreach($agents as $agent){
           $threeTopAgent = array($agent);
@@ -539,7 +630,7 @@ class RecapExcelExportHandler implements ExportHandler
               'Jabatan' => $agent->agent_position()->get()[0]->name,
               'Total Komisi Personal Selling (IDR)' => $currency,
               'Total OR Leader (IDR)' => $or,
-              'Total Sebelum Pajak (IDR)' => $currency+$or,
+              'TOTAL Sebelum Pajak (IDR)' => $currency+$or,
               'Nama Bank' => $agent->bank,
               'Cabang'  => $agent->bank_branch,
               'No. Rekening'  =>  $agent->account_number,
@@ -552,7 +643,68 @@ class RecapExcelExportHandler implements ExportHandler
         $bods = BoardOfDirector::where('is_active',1)->get();
         $bod_ = array();
         $ctr= 1;
+
+        $totalNom = 0;
+        foreach($data1[1] as $branch){
+          $totalNom += $branch['Nominal'];
+        }
+        $budgetControl = (0.08*$totalNom*0.5);
+        $mp_nomx2 = $budgetControl-($acctps+$accor);
         foreach($bods as $bod){
+          $nom = -1;
+          switch($bod->position){
+            case 'HQ':
+              $nom = $acctps;
+            break;
+            case 'Arranger':
+              $nom = $acctps;
+            break;
+            case 'GM1':
+              $nom = 0.09 * $acctps;
+            break;
+            case 'GM2':
+              $nom = 0.01 * $acctps;
+            break;
+            case 'MP':
+              $nom = 0.08*$totalNom*0.5;
+            break;
+            default:
+              foreach($data1[1] as $branch){
+                switch($bod->position){
+                  case $branch['Sales Office']:
+                    $nom = 0.01*$branch['Nominal']*0.5;
+                  break;
+                }
+              }
+            break;
+          }
+          if($nom == -1){
+            foreach($data1[1] as $branch){
+              switch($bod->position){
+                case 'HQ':
+                  $nom = $acctps;
+                break;
+                case 'Arranger':
+                  $nom = $acctps;
+                break;
+                case 'GM1':
+                  $nom = 0.09 * $acctps;
+                break;
+                case 'GM2':
+                  $nom = 0.01 * $acctps;
+                break;
+                case 'MP':
+                  $nom = 0.5*$budgetControl;
+                break;
+                default:
+                  $nom = 0;
+                break;
+              }
+            }
+          }
+          if($bod->position != 'MP'){
+            $mp_nomx2 -= $nom;
+          }
           $agent = Agent::where('NPWP',$bod->NPWP)->first();
           $newRow = array(
             'No' => $ctr++,
@@ -565,7 +717,7 @@ class RecapExcelExportHandler implements ExportHandler
             'Jabatan' => $bod->position,
             'Total Komisi Personal Selling (IDR)' => '',
             'Total OR Leader (IDR)' => '',
-            'Total Sebelum Pajak (IDR)' => '',
+            'TOTAL Sebelum Pajak (IDR)' => ($bod->position == 'MP'?-1:$nom),
             'Nama Bank' => $bod->bank,
             'Cabang'  => $bod->bank_branch,
             'No. Rekening'  =>  $bod->account_number,
@@ -573,8 +725,13 @@ class RecapExcelExportHandler implements ExportHandler
           );
           $bod_[] = $newRow;
         }
+        foreach($bod_ as &$bod1){
+          if($bod1['TOTAL Sebelum Pajak (IDR)'] == -1){
+            $bod1['TOTAL Sebelum Pajak (IDR)'] = 0.5*$mp_nomx2;
+          }
+        }
         //$result = array_merge($newdata,$bod_);
-        return array($newdata,$bod_,$acctps,$accor);
+        return array($newdata,$bod_,$acctps,$accor,$budgetControl,$mp_nomx2);
     }
 
     private function getSheetData3($data)
