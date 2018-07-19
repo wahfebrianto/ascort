@@ -21,8 +21,8 @@ class CreateBoardOfDirectorTable extends Migration
             $table->string('zipcode', 7);
             $table->string('phone_number', 20);
             $table->string('email', 100);
-            $table->string('type',2);
-            $table->string('identity_number', 30);
+            $table->string('type',15);
+            $table->string('identity_number', 50);
             $table->string('NPWP', 30);
             $table->string('position', 100);
             $table->string('bank', 150);
@@ -31,7 +31,6 @@ class CreateBoardOfDirectorTable extends Migration
             $table->string('account_number', 50);
             $table->tinyInteger('is_active')->default(1); // 1/0
             $table->timestamps();
-            $table->unique(['NPWP']);
         });
     }
 

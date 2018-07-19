@@ -34,59 +34,255 @@ class RecapExcelExportHandler implements ExportHandler
             });
 
             // Our second sheet
-            $file->sheet('Format Komisi Final', function($sheet) use($dataSheet2) {
+            $file->sheet('Format Komisi Final', function($sheet) use($dataSheet2, $end_date) {
                 //dd($dataSheet2);
+                $sheet->setFontSize(11);
+                $sheet->mergeCells('A1:K1');
                 $sheet->mergeCells('A2:K2');
-                $sheet->mergeCells('A3:K3');
-                $sheet->cell('A2',function($cell){
+                $sheet->cell('A1',function($cell){
                     $cell->setValue('REKAPITULASI KOMISI AGEN & MITRA USAHA');
                     $cell->setFontWeight('bold');
                 });
-                $sheet->cell('A3',function($cell){
-                    $cell->setValue('SBIJP ASCORT PREMIER');
+                $sheet->cell('A2',function($cell){
+                    $cell->setValue('SBIJP ASCORT PREMIER - ');
                     $cell->setFontWeight('bold');
                 });
-                $sheet->setFontSize(12);
-                $sheet->fromArray($dataSheet2[0], null, 'A5', true, true);
+                $sheet->fromArray($dataSheet2[0], null, 'A4', true, true);
                 $sheet->data = [];
                 $rowCount= count($dataSheet2[0]);
-                $sheet->mergeCells('A'.($rowCount+5).':E'.($rowCount+5));
-                $sheet->mergeCells('F'.($rowCount+5).':H'.($rowCount+5));
-                $sheet->mergeCells('L'.($rowCount+5).':O'.($rowCount+5));
+                $sheet->mergeCells('A'.($rowCount+4).':E'.($rowCount+4));
+                $sheet->cells('A'.($rowCount+4), function($cells)
+                {
+                    $cells->setBackground('#A6A6A6');
+                });
+                $sheet->mergeCells('F'.($rowCount+4).':H'.($rowCount+4));
+                $sheet->mergeCells('L'.($rowCount+4).':O'.($rowCount+4));
+                $sheet->cells('L'.($rowCount+4), function($cells)
+                {
+                    $cells->setBackground('#A6A6A6');
+                });
 
-                $sheet->cell('I'.($rowCount+5),function($cell) use($dataSheet2){
+                $sheet->cell('I'.($rowCount+4),function($cell) use($dataSheet2){
                   $cell->setValue($dataSheet2[2]);
+                  $cell->setFontWeight('bold');
+                  $cell->setValignment('center');
+                  $cell->setFontSize(12);
                 });
-                $sheet->cell('J'.($rowCount+5),function($cell) use($dataSheet2){
+                $sheet->cell('J'.($rowCount+4),function($cell) use($dataSheet2){
                   $cell->setValue($dataSheet2[3]);
+                  $cell->setFontWeight('bold');
+                  $cell->setValignment('center');
+                  $cell->setFontSize(12);
                 });
-                $sheet->cell('K'.($rowCount+5),function($cell) use($dataSheet2){
+                $sheet->cell('K'.($rowCount+4),function($cell) use($dataSheet2){
                   $cell->setValue($dataSheet2[2]+$dataSheet2[3]);
+                  $cell->setFontWeight('bold');
+                  $cell->setValignment('center');
+                  $cell->setFontSize(12);
                 });
-                $sheet->cell('F'.($rowCount+5),function($cell) use($dataSheet2){
+                $sheet->cell('F'.($rowCount+4),function($cell) use($dataSheet2){
                   $cell->setValue('Sub Total Pembayaran');
+                  $cell->setFontWeight('bold');
+                  $cell->setValignment('center');
+                  $cell->setFontSize(12);
                 });
-                $sheet->cells($rowCount+5,function($cells){
-                  $cells->setFontWeight('bold');
+                $totalRow = $rowCount+4+count($dataSheet2[1]);
+                $sheet->mergeCells('I'.($rowCount+5).':J'.$totalRow);
+                $sheet->cells('I'.($rowCount+5), function($cells)
+                {
+                    $cells->setBackground('#D9D9D9');
                 });
-                $totalRow = $rowCount+5+count($dataSheet2[1]);
-                $sheet->mergeCells('I'.($rowCount+6).':J'.$totalRow);
-                $sheet->fromArray($dataSheet2[1], null, 'A'.($rowCount+6), true, false);
+                $sheet->fromArray($dataSheet2[1], null, 'A'.($rowCount+5), true, false);
                 $sheet->mergeCells('A'.($totalRow+1).':E'.($totalRow+1));
+                $sheet->cells('A'.($totalRow+1), function($cells)
+                {
+                    $cells->setBackground('#808080');
+                });
+                $sheet->cells('L'.($totalRow+1).':O'.($totalRow+1), function($cells)
+                {
+                    $cells->setBackground('#808080');
+                });
                 $sheet->mergeCells('F'.($totalRow+1).':H'.($totalRow+1));
                 $sheet->cell('F'.($totalRow+1),function($cell) use($dataSheet2){
                   $cell->setValue('TOTAL PEMBAYARAN');
+                  $cell->setFontWeight('bold');
+                  $cell->setValignment('center');
+                  $cell->setAlignment('center');
+                  $cell->setFontSize(12);
                 });
                 $sheet->cell('I'.($totalRow+1),function($cell) use($dataSheet2){
                   $cell->setValue($dataSheet2[2]);
+                  $cell->setFontWeight('bold');
+                  $cell->setValignment('center');
+                  $cell->setFontSize(12);
                 });
                 $sheet->cell('J'.($totalRow+1),function($cell) use($dataSheet2){
                   $cell->setValue($dataSheet2[3]);
+                  $cell->setFontWeight('bold');
+                  $cell->setValignment('center');
+                  $cell->setFontSize(12);
                 });
                 $sheet->cell('K'.($totalRow+1),function($cell) use($dataSheet2,$rowCount,$totalRow){
-                  $cell->setValue('=SUM(K'.($rowCount+5).':K'.($totalRow).')');
+                  $cell->setValue('=SUM(K'.($rowCount+4).':K'.($totalRow).')');
+                  $cell->setFontWeight('bold');
+                  $cell->setValignment('center');
+                  $cell->setFontSize(12);
                 });
                 $sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
+
+                $sheet->cells('A4:O' . ($rowCount + 4), function($cells)
+                {
+                    $cells->setAlignment('center');
+                });
+
+                $sheet->cells('D5:' . 'D' . ($rowCount + 4), function($cells)
+                {
+                    $cells->setAlignment('left');
+                });
+
+                $sheet->cells('E5:' . 'E' . ($rowCount + 4), function($cells)
+                {
+                    $cells->setAlignment('left');
+                });
+
+                $sheet->cells('I5:' . 'I' . ($rowCount + 4), function($cells)
+                {
+                    $cells->setAlignment('right');
+                });
+
+                $sheet->cells('J5:' . 'J' . ($rowCount + 4), function($cells)
+                {
+                    $cells->setAlignment('right');
+                });
+
+                $sheet->cells('K5:' . 'K' . ($rowCount + 4), function($cells)
+                {
+                    $cells->setAlignment('right');
+                });
+
+                $sheet->cells('A4:O4', function($cells)
+                {
+                    $cells->setBackground('#DAEEF3');
+                    $cells->setFontWeight('bold');
+                    $cells->setValignment('center');
+                });
+
+                $sheet->cells('A' . ($rowCount + 5) . ':O' . $totalRow, function($cells)
+                {
+                    $cells->setAlignment('center');
+                });
+
+                $sheet->cells('D' . ($rowCount + 5) . ':D' . $totalRow, function($cells)
+                {
+                    $cells->setAlignment('left');
+                });
+
+                $sheet->cells('E' . ($rowCount + 5) . ':E' . $totalRow, function($cells)
+                {
+                    $cells->setAlignment('left');
+                });
+
+                $sheet->cells('I' . ($rowCount + 5) . ':I' . $totalRow, function($cells)
+                {
+                    $cells->setAlignment('right');
+                });
+
+                $sheet->cells('J' . ($rowCount + 5) . ':J' . $totalRow, function($cells)
+                {
+                    $cells->setAlignment('right');
+                });
+
+                $sheet->cells('K' . ($rowCount + 5) . ':K' . $totalRow, function($cells)
+                {
+                    $cells->setAlignment('right');
+                });
+
+                $sheet->setColumnFormat(array(
+                    'I5:K' . ($totalRow + 1) => '#,##0'
+                ));
+
+                $sheet->mergeCells('A'.($totalRow+2).':E'.($totalRow+2));
+                $sheet->cell('A'.($totalRow+2), function($cells)
+                {
+                    $cells->setValue('* Total Komisi/OR adalah perhitungan sebelum dipotong pajak, pajak akan dihitung oleh ASCORT sesuai ketentuan Pajak yang berlaku');
+                    $cells->setFontSize(8);
+                });
+
+                $sheet->mergeCells('A'.($totalRow+3).':E'.($totalRow+3));
+                $sheet->cell('A'.($totalRow+3), function($cells)
+                {
+                    $cells->setValue('** Bukti Potong Pajak harap di-email-kan langsung oleh RISCON ke para penerima saat pembayaran telah dilakukan');
+                    $cells->setFontSize(8);
+                });
+
+
+                $sheet->cell('D'.($totalRow+7), function($cells)
+                {
+                    $cells->setValue('ASCORT Premier Group');
+                    $cells->setFontSize(11);
+                    $cells->setFontWeight('bold');
+                });
+
+                $sheet->cell('D'.($totalRow+9), function($cells)
+                {
+                    $cells->setValue('ttd');
+                    $cells->setFontSize(8);
+                });
+
+                $sheet->cell('D'.($totalRow+11), function($cells)
+                {
+                    $cells->setValue('Robby Chandra');
+                    $cells->setFontSize(11);
+                });
+
+
+                $sheet->cell('I'.($totalRow+6), function($cells) use($end_date)
+                {
+                    $cells->setValue('Jakarta, ' . Carbon::createFromFormat('d/m/Y', $end_date)->format('d/m/Y'));
+                    $cells->setFontSize(11);
+                    $cells->setAlignment('center');
+                });
+
+                $sheet->cell('I'.($totalRow+7), function($cells)
+                {
+                    $cells->setValue('PT ASCORT ASIA INTERNASIONAL');
+                    $cells->setFontSize(11);
+                    $cells->setFontWeight('bold');
+                    $cells->setAlignment('center');
+                });
+
+                $sheet->cell('I'.($totalRow+9), function($cells)
+                {
+                    $cells->setValue('Approved is Signed');
+                    $cells->setFontSize(8);
+                    $cells->setAlignment('center');
+                });
+
+                $sheet->cell('I'.($totalRow+11), function($cells)
+                {
+                    $cells->setValue('Anthony Soewandy');
+                    $cells->setFontSize(11);
+                    $cells->setAlignment('center');
+                });
+
+                $sheet->cell('I'.($totalRow+12), function($cells)
+                {
+                    $cells->setValue('Group CEO & President Director');
+                    $cells->setFontSize(11);
+                    $cells->setAlignment('center');
+                });
+
+
+
+
+
+                $sheet->setHeight(4, 45);
+                $sheet->setHeight(($rowCount + 4), 22);
+                $sheet->setHeight(($totalRow + 1), 22);
+
+                $sheet->setBorder('A4:O' . ($totalRow + 1), 'thin');
+
+                $sheet->setFreeze('E5');
             });
 
             $file->sheet('Rekap Mingguan Investor Baru', function($sheet) use($dataSheet3, $end_date){
@@ -103,7 +299,7 @@ class RecapExcelExportHandler implements ExportHandler
               $sheet->mergeCells('A1:M1');
               $sheet->mergeCells('A2:M2');
               $sheet->cell('A1',function($cell){
-                    $cell->setValue('Rekap Mingguan - Investor Baru Ascort Premier SERI - ');
+                    $cell->setValue('Rekap Mingguan - Investor Baru SBI JP Ascort Premier SERI - ');
                     $cell->setFontWeight('bold');
                 });
               $sheet->cell('A2',function($cell) use($end_date){
@@ -221,15 +417,33 @@ class RecapExcelExportHandler implements ExportHandler
             });
 
             $file->sheet('Rekap Data Agen', function($sheet) use($dataSheet4){
-                $columnCount = count($dataSheet4);
-                $sheet->mergeCells('A5:D5');
-                $sheet->cell('A5',function($cell){
-                    $cell->setValue('REKAP DATA AGEN SERI');
+                $columnCount = count($dataSheet4[0]);
+                $sheet->mergeCells('A1:D1');
+                $sheet->cell('A1',function($cell){
+                    $cell->setValue('REKAP DATA AGEN SERI - ');
                     $cell->setFontWeight('bold');
                 });
                 $sheet->setFontSize(12);
-                $sheet->fromArray($dataSheet4, null, 'A7', true, true);
+                $sheet->fromArray($dataSheet4, null, 'A3', true, true);
                 $sheet->setPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A3);
+
+                $sheet->cells('A3:' . chr(64 + $columnCount) . (count($dataSheet4) + 3), function($cells)
+                {
+                    $cells->setAlignment('center');
+                });
+
+                $sheet->cells('A3:' . chr(64 + $columnCount) . '3', function($cells)
+                {
+                    $cells->setBackground('#AAAAAA');
+                    $cells->setFontWeight('bold');
+                    $cells->setValignment('center');
+                });
+
+                $sheet->setHeight(3, 45);
+
+                $sheet->setBorder('A3:' . chr(64 + $columnCount) . strval(sizeof($dataSheet4) + 3), 'thin');
+
+                $sheet->setFreeze('A4');
             });
 
         })->export('xls');
@@ -261,6 +475,7 @@ class RecapExcelExportHandler implements ExportHandler
           $norm_nom = str_replace('Rp ','',$datum['Dana Penempatan (Rp)']);
           $norm_nom = str_replace(',00', '', $norm_nom);
           $norm_nom = str_replace('.','',$norm_nom);
+          $norm_nom = str_replace('=','',$norm_nom);
           $nominal[] = intval($norm_nom);
         }
         foreach($agents as $agent){
@@ -322,9 +537,9 @@ class RecapExcelExportHandler implements ExportHandler
               'No Identitas'  => $agent->NIK,
               'NPWP'  => $agent->NPWP,
               'Jabatan' => $agent->agent_position()->get()[0]->name,
-              'Total Komisi Personal Selling (IDR)' => \App\Money::format('%(.2n', $currency),
-              'Total OR Leader (IDR)' => \App\Money::format('%(.2n', $or),
-              'Total Sebelum Pajak (IDR)' => \App\Money::format('%(.2n', $currency+$or),
+              'Total Komisi Personal Selling (IDR)' => $currency,
+              'Total OR Leader (IDR)' => $or,
+              'Total Sebelum Pajak (IDR)' => $currency+$or,
               'Nama Bank' => $agent->bank,
               'Cabang'  => $agent->bank_branch,
               'No. Rekening'  =>  $agent->account_number,
@@ -333,6 +548,7 @@ class RecapExcelExportHandler implements ExportHandler
           }
           $newdata[] = $emptyrow;
         }
+        $newdata[] = $emptyrow;
         $bods = BoardOfDirector::where('is_active',1)->get();
         $bod_ = array();
         $ctr= 1;
@@ -385,7 +601,7 @@ class RecapExcelExportHandler implements ExportHandler
           $rowData["NPWP"] = ($sale->customer->NPWP == 0)?'NA':$sale->customer->NPWP;
           $rowData["Alamat"] = $sale->customer->address . ', ' . $sale->customer->city;
           $rowData["Email Address"] = ($sale->customer->email == '')?'NA':$sale->customer->email;
-          $rowData["Dana Penempatan (Rp)"] = $sale->nominal;
+          $rowData["Dana Penempatan (Rp)"] = '=' . $sale->nominal;
           $rowData["Jk Waktu Investasi"] = $sale->MGI;
           $rowData["Nama Agent"] = $agent->name;
           $rowData["Agent Code"] = $agent->agent_code;
