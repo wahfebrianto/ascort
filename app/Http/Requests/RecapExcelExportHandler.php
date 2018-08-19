@@ -830,45 +830,49 @@ class RecapExcelExportHandler implements ExportHandler
       }
 
       $ctr = 1;
-
+      $start_date = Carbon::createFromFormat('d/m/Y',Input::get('start_date'));
+      $end_date = Carbon::createFromFormat('d/m/Y',Input::get('end_date'));
       foreach ($data as $agent) {
         foreach ($agent->sales as $sale) {
-          $rowData = [];
-          $rowData["No"] = $ctr;
-          $rowData["Nama Investor"] = $sale->customer_name;
-          $rowData["No KTP"] = $sale->customer->NIK;
-          $rowData["NPWP"] = ($sale->customer->NPWP == 0)?'NA':$sale->customer->NPWP;
-          $rowData["Alamat"] = $sale->customer->address . ', ' . $sale->customer->city;
-          $rowData["Email Address"] = ($sale->customer->email == '')?'NA':$sale->customer->email;
-          $rowData["Dana Penempatan (Rp)"] = '=' . $sale->nominal;
-          $rowData["Jk Waktu Investasi"] = $sale->MGI;
-          $rowData["Nama Agent"] = $agent->name;
-          $rowData["Agent Code"] = $agent->agent_code;
-          $rowData["Nama Leader"] = ($agent->parent == NULL)?'NA':$agent->parent->name;
-          $rowData["Leader Code"] = ($agent->parent == NULL)?'NA':$agent->parent->agent_code;
-          $rowData["Bilyet dikirim ke:"] = '';
-          $rowData["Tgl Transfer"] = Carbon::createFromFormat('d/m/Y', $sale->MGI_start_date)->format('d-M-y');
-          $result[0][] = $rowData;
-          $ctr++;
-
-          $nemu = false;
-          foreach ($result[1] as &$SO) {
-            if($SO['Kota'] == $sale->customer->city)
-            {
-              $SO['Banyak Investor']++;
-              $SO['Nominal'] += $sale->nominal;
-              $nemu = true;
-              break;
-            }
-          }
-          if(!$nemu)
+          if(Carbon::createFromFormat('d/m/Y', $sale->MGI_start_date)->between($start_date, $end_date))
           {
+            $rowData = [];
+            $rowData["No"] = $ctr;
+            $rowData["Nama Investor"] = $sale->customer_name;
+            $rowData["No KTP"] = $sale->customer->NIK;
+            $rowData["NPWP"] = ($sale->customer->NPWP == 0)?'NA':$sale->customer->NPWP;
+            $rowData["Alamat"] = $sale->customer->address . ', ' . $sale->customer->city;
+            $rowData["Email Address"] = ($sale->customer->email == '')?'NA':$sale->customer->email;
+            $rowData["Dana Penempatan (Rp)"] = '=' . $sale->nominal;
+            $rowData["Jk Waktu Investasi"] = $sale->MGI;
+            $rowData["Nama Agent"] = $agent->name;
+            $rowData["Agent Code"] = $agent->agent_code;
+            $rowData["Nama Leader"] = ($agent->parent == NULL)?'NA':$agent->parent->name;
+            $rowData["Leader Code"] = ($agent->parent == NULL)?'NA':$agent->parent->agent_code;
+            $rowData["Bilyet dikirim ke:"] = '';
+            $rowData["Tgl Transfer"] = Carbon::createFromFormat('d/m/Y', $sale->MGI_start_date)->format('d-M-y');
+            $result[0][] = $rowData;
+            $ctr++;
+
+            $nemu = false;
             foreach ($result[1] as &$SO) {
-              if($SO['Kota'] == $agent->branchOffice->city)
+              if($SO['Kota'] == $sale->customer->city)
               {
                 $SO['Banyak Investor']++;
                 $SO['Nominal'] += $sale->nominal;
+                $nemu = true;
                 break;
+              }
+            }
+            if(!$nemu)
+            {
+              foreach ($result[1] as &$SO) {
+                if($SO['Kota'] == $agent->branchOffice->city)
+                {
+                  $SO['Banyak Investor']++;
+                  $SO['Nominal'] += $sale->nominal;
+                  break;
+                }
               }
             }
           }

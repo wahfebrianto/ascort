@@ -54,7 +54,7 @@ class RecapSlipsController extends Controller
             ->whereHas('sales', function ($query) {
               $start_date = Input::get('start_date');
               $end_date = Input::get('end_date');
-                $query->where('MGI_start_date', '>=', Carbon::createFromFormat('d/m/Y', $start_date))
+                $query->where('MGI_start_date', '>=', Carbon::createFromFormat('d/m/Y', $start_date)->subDay())
                 ->where('MGI_start_date', '<=', Carbon::createFromFormat('d/m/Y', $end_date))
                 ->orderBy('MGI_start_date', 'asc');
             })
