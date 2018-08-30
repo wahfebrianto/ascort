@@ -649,7 +649,18 @@ class RecapExcelExportHandler implements ExportHandler
         foreach($agents as $agent){
           $threeTopAgent = array($agent);
           $now = $agent;
-          for($i=0;$i<3;$i++){
+          $evpCount =0;
+          while($now->hasParent() && $evpCount < 3){
+            $threeTopAgent[] = $now->getParent();
+            
+            if($now->agent_position()->get()[0]->acronym == "EVP"
+                and
+                $now->getParent()->agent_position()->get()[0]->acronym == "EVP"){
+                $evpCount++;
+            }
+            $now = $now->getParent();
+          }
+          /*for($i=0;$i<3;$i++){
             if($now->hasParent()){
               $threeTopAgent[] = $now->getParent();
               $now = $now->getParent();
@@ -657,7 +668,7 @@ class RecapExcelExportHandler implements ExportHandler
             else{
               break;
             }
-          }
+          }*/
           $list_[] = $threeTopAgent;
         }
         $backupdata = $list_;
@@ -675,11 +686,11 @@ class RecapExcelExportHandler implements ExportHandler
             if($j == 0 ) //first agent
             {
               $sales = $agent->sales()->whereBetween('MGI_start_date', [
-                \DateTime::createFromFormat('d/m/Y', $start_date),
-                \DateTime::createFromFormat('d/m/Y', $end_date)
+                \DateTime::createFromFormat('d/m/Y H:i:s', $start_date.' 00:00:00'),
+                \DateTime::createFromFormat('d/m/Y H:i:s', $end_date.' 23:59:59')
               ])->get();
               foreach($sales as $sale){
-                $totalPersonalSelling += 0.01*config('global.zpercentage')*($nominal[$i] * ($sale->MGI_month/12));
+                $totalPersonalSelling = 0.01*config('global.zpercentage')*($nominal[$i] * ($sale->MGI_month/12));
               }
             }
             $or = 0;
@@ -830,11 +841,13 @@ class RecapExcelExportHandler implements ExportHandler
       }
 
       $ctr = 1;
-      $start_date = Carbon::createFromFormat('d/m/Y',Input::get('start_date'));
-      $end_date = Carbon::createFromFormat('d/m/Y',Input::get('end_date'));
+      $start_date = Carbon::createFromFormat('d/m/Y H:i:s',Input::get('start_date').' 00:00:00');
+      $end_date = Carbon::createFromFormat('d/m/Y H:i:s',Input::get('end_date').' 23:59:59');
+  
       foreach ($data as $agent) {
         foreach ($agent->sales as $sale) {
-          if(Carbon::createFromFormat('d/m/Y', $sale->MGI_start_date)->between($start_date, $end_date))
+          if(Carbon::createFromFormat('d/m/Y', $sale->MGI_start_date)->between($start_date, $end_date)
+          )
           {
             $rowData = [];
             $rowData["No"] = $ctr;
@@ -886,8 +899,8 @@ class RecapExcelExportHandler implements ExportHandler
 
     private function getSheetData4()
     {
-        $start_date = Carbon::createFromFormat('d/m/Y',Input::get('start_date'));
-        $end_date = Carbon::createFromFormat('d/m/Y',Input::get('end_date'));
+        $start_date = Carbon::createFromFormat('d/m/Y H:i:s',Input::get('start_date').' 00:00:00');
+        $end_date = Carbon::createFromFormat('d/m/Y H:i:s',Input::get('end_date').' 23:59:59');
         $agents = Agent::where('join_date','<=',$end_date)
         ->where('join_date','>=',$start_date)
         ->where('is_active',1)
