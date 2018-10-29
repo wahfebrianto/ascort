@@ -45,7 +45,6 @@ class RecapSlipsController extends Controller
 
         $start_date = Input::get('start_date');
         $end_date = Input::get('end_date');
-
         $builder = \App\Agent
             ::with('sales.customer')
             ->with('parent')

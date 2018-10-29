@@ -167,16 +167,9 @@ class OverridingSlipsController extends Controller
             \Flash::error("Commission report for period $start_date until $end_date is not available");
             return redirect()->back();
         }
-
+                    
         $html = \View::make('pdf.slips.overriding', compact('ovrs', 'start_date','end_date'))->render();
         return $html;
-
-        $html = str_replace('id=', 'class=', $html); // DOMPDF workaround -> https://github.com/barryvdh/laravel-dompdf/issues/96
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHtml($html);
-        $pdf->setPaper('A4');
-        $pdf->setOrientation('portrait');
-        return $pdf->stream();
         //$mpdf = new \mPDF("en", "A4-L", "12");
         //dd($html);
         //$mpdf->WriteHTML($html);

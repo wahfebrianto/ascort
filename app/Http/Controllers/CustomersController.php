@@ -138,13 +138,13 @@ class CustomersController extends Controller
      */
     public function edit($id)
     {
-        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('owner') || Auth::user()->hasRole('super-admin')) {
+        /*if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('owner') || Auth::user()->hasRole('super-admin')) {
             if(!Input::has('token') || Input::get('token') != md5(\Session::getId() . 'customer')) {
                 \App::abort(403, 'Access denied');
             } else {
                 $id = Input::get('id');
             }
-        }
+        }*/
 
         $customer = \App\Customer::getCustomerFromId($id);
         if($customer != null){

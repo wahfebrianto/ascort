@@ -132,6 +132,7 @@ class SalesController extends Controller
                   $newApproval = Approval::create($approvalAttributes);
                   $newApproval->save($approvalAttributes);
                 }
+                //dd($newSale);
 
                 $newSale->save($attributes);
 				Sale::updateMGIMonth($newSale);

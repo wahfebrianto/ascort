@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link href="{{ asset("css/bootstrap-print.css") }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
     <style>
 		body {
 			font-size: 10px;
@@ -37,15 +38,14 @@
             border-bottom: 1px solid #ddd;
         }
         tr { page-break-inside: avoid;  }
-
         @media print{
-            #downloadPDFAll{
-                display:none;
+            .downloadPDFAll {
+            	display: none;
             }
         }
     </style>
 </head>
-<link href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
+
 <body>
 <script type='text/php'>
       if ( isset($pdf) ) {
@@ -68,7 +68,7 @@
 </div>
 -->
 <div class="text-right" style="margin:1%">
-    <button id="downloadPDFAll" class="btn btn-primary">Download All in PDF</button>
+    <button class="downloadPDFAll btn btn-primary">Download All in PDF</button>
 </div>
 @yield('content')
 </body>
@@ -76,12 +76,13 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#downloadPDFAll").click(function(){
+        $(".downloadPDFAll").click(function(){
             var today = new Date();
             var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
             var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
             var dateTime = date+'_'+time;
             var els = document.getElementsByClassName("wrapperpdf");
+            var i = 1;
             Array.prototype.forEach.call(els, function(el) {
                     var opt = {
                       margin:       0.1,
@@ -90,10 +91,10 @@
                       html2canvas:  { scale:1 },
                       jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
                     };
-                  html2pdf().from(el).set(opt).save();
+                  setTimeout(function(){html2pdf().from(el).set(opt).save();}, i*1000);
+                  i++;
             });
         });
-
     });
 </script>
 </html>

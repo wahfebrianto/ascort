@@ -232,7 +232,7 @@ class AgentsController extends Controller
                 unset($attributes['agent_position_id']);
             }
         } else if(\Auth::user()->hasRole('owner')) {
-            if($attributes['parent_id'] != $oldParentId) {
+            /*if($attributes['parent_id'] != $oldParentId) {
                 $newParentId = $attributes['parent_id'];
                 Action::create([
                     'action' => "UPDATE agents SET parent_id = '$newParentId' WHERE id = '$id'",
@@ -240,8 +240,8 @@ class AgentsController extends Controller
                 ]);
                 $message .= trans('agents/general.audit-log.msg-update-delay', ['ID' => $attributes['id'], 'key' => 'parent_id']);
                 unset($attributes['parent_id']);
-            }
-            if($attributes['agent_position_id'] != $oldAgentPositionId) {
+            }*/
+            /*if($attributes['agent_position_id'] != $oldAgentPositionId) {
                 $newAgentPositionId = $attributes['agent_position_id'];
                 $old_agent_position = \App\AgentPosition::find($oldAgentPositionId);
                 $new_agent_position = \App\AgentPosition::find($newAgentPositionId);
@@ -267,7 +267,7 @@ class AgentsController extends Controller
                 ]);
                 $message .= trans('agents/general.audit-log.msg-update-delay', ['ID' => $attributes['id'], 'key' => 'agent_position_id']);
                 unset($attributes['agent_position_id']);
-            }
+            }*/
         }
 
         $agent->update($attributes);
