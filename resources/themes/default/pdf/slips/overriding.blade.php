@@ -8,7 +8,7 @@
             <div class="wrapperpdf" name="Slip_Overriding_{{ $ovr->agent->name }}">
             @include('partials._pdf_logo_header')
             <h3><strong>SLIP OVERRIDING</strong></h3>
-            <p><em>Tanggal Proses : {{ $ovr->process_date }}</em></p>
+            <p><em></em></p>
             <br />
             <table class="info">
                 <tr>
@@ -85,7 +85,7 @@
                                 <td rowspan="2" class="text-right">{{ \App\Money::format('%(.2n', $ovr->sales_ovr_value[$key]) }}</td>
                             </tr>
                             <tr>
-                                
+
                             </tr>
                         @endforeach
                     @endif
@@ -152,7 +152,7 @@
                     <td>Total Pajak</td>
                     <td>:</td>
                     <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $ovr->tax) }}</td>
-                    
+
                 </tr>
                 <tr>
                     <td>Atas Nama</td>
@@ -186,7 +186,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    
+
                 </tr>
                 <tr>
                     <td></td>
@@ -205,7 +205,7 @@
 
                     <td></td>
 
-                    
+
                 </tr>
                 <tr>
                     <td></td>

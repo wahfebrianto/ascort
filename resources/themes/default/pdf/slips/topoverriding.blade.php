@@ -6,7 +6,7 @@
             <div class="wrapperpdf" name="Slip_TopOverriding_{{ $ovr->agent->name }}">
             @include('partials._pdf_logo_header')
             <h3><strong>SLIP REC FEE</strong></h3>
-            <p><em>Tanggal Proses : {{ $ovr->process_date }}</em></p>
+            <p><em></em></p>
             <br />
             <table class="info">
                 <tr>
@@ -150,7 +150,7 @@
                     <td>Total Pajak</td>
                     <td>:</td>
                     <td class="text-right border-bottom-decor">{{ \App\Money::format('%(.2n', $ovr->tax) }}</td>
-                    
+
                 </tr>
                 <tr>
                     <td>Atas Nama</td>
@@ -184,7 +184,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    
+
                 </tr>
                 <tr>
                     <td></td>
@@ -203,7 +203,7 @@
 
                     <td></td>
 
-                    
+
                 </tr>
                 <tr>
                     <td></td>

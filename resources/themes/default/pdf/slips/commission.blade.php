@@ -6,7 +6,7 @@
             <div class="wrapperpdf" name="Slip_Commission_{{ $commission->agent->name }}">
             @include('partials._pdf_logo_header')
             <h3><strong>SLIP KOMISI MARKETING</strong></h3>
-            <p><em>Tanggal Proses: {{ $commission->process_date }}</em></p>
+            <p><em></em></p>
             <br />
             <table class="info">
                 <tr>
@@ -195,7 +195,7 @@
                     <td></td>
                     <td></td>
                     <td class="text-right"></td>
-                    
+
                 </tr>
                 <tr>
                     <td>Atas Nama</td>
@@ -229,7 +229,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    
+
                 </tr>
                 <tr>
                     <td></td>
@@ -248,7 +248,7 @@
 
                     <td></td>
 
-                    
+
                 </tr>
                 <tr>
                     <td></td>
